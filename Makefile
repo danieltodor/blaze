@@ -6,7 +6,7 @@ INCLUDE_DIR = ./include
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS = -I$(INCLUDE_DIR)
+CXXFLAGS = -I $(INCLUDE_DIR)
 LDFLAGS =
 
 SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
