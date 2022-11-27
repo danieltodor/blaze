@@ -19,9 +19,15 @@ DEPS = $(patsubst %.o, %.d, $(OBJS))
 
 objdump = false
 verbose = false
+debug = false
+
 CMD_PREFIX = @
 ifeq ($(verbose),true)
 	CMD_PREFIX =
+endif
+
+ifeq ($(debug),true)
+	CXXFLAGS += -g
 endif
 
 all: $(BIN_DIR)/$(BINARY)
