@@ -1,12 +1,14 @@
 BINARY = blaze
-OBJ_DIR = ./obj
-BIN_DIR = ./bin
+BUILD_DIR = ./build
+OBJ_DIR = $(BUILD_DIR)/obj
+BIN_DIR = $(BUILD_DIR)/bin
 SRC_DIR = ./src
-INCLUDE_DIR = ./include
+INCLUDE_DIRS = ./include
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS = -I $(INCLUDE_DIR)
+CXXFLAGS =
+CXXFLAGS += $(addprefix -I , $(INCLUDE_DIRS))
 LDFLAGS =
 
 SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
@@ -23,8 +25,7 @@ all: $(BIN_DIR)/$(BINARY)
 
 clean:
 	@echo "Removing files and directories..."
-	$(CMD_PREFIX)rm -r $(OBJ_DIR)
-	$(CMD_PREFIX)rm -r $(BIN_DIR)
+	$(CMD_PREFIX)rm -rf $(BUILD_DIR)
 
 info:
 	@echo "Source files:"
