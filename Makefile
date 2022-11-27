@@ -8,7 +8,7 @@ INCLUDE_DIRS = include
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS =
+CXXFLAGS = -std=gnu++14 -Wall -Wextra
 CXXFLAGS += $(addprefix -I , $(INCLUDE_DIRS))
 LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
