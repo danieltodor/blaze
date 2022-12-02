@@ -3,6 +3,7 @@ BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 ASM_DIR = $(BUILD_DIR)/asm
 BIN_DIR = $(BUILD_DIR)/bin
+INSTALL_DIR = ~/.local/bin
 SRC_DIR = src
 INCLUDE_DIRS = include
 
@@ -31,6 +32,14 @@ ifeq ($(debug),true)
 endif
 
 all: $(BIN_DIR)/$(BINARY)
+
+install:
+	@echo "Installing to $(INSTALL_DIR)"
+	$(CMD_PREFIX)cp $(BIN_DIR)/$(BINARY) $(INSTALL_DIR)
+
+uninstall:
+	@echo "Removing from $(INSTALL_DIR)"
+	$(CMD_PREFIX)rm -f $(INSTALL_DIR)/$(BINARY)
 
 clean:
 	@echo "Removing files and directories..."
