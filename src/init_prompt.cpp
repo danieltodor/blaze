@@ -39,7 +39,7 @@ void set_ps0()
 
 void set_ps1()
 {
-    std::cout << "PS1='$(~/Documents/Programming/blaze/build/bin/blaze $(get_start_time) $(get_finish_time))'\n";
+    std::cout << "PS1='$(blaze $(get_start_time) $(get_finish_time))'\n";
 }
 
 void init_prompt()
