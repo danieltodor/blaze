@@ -1,20 +1,30 @@
 #include <string>
+#include <unordered_map>
 
-#include "init_prompt.hpp"
+#include "init_shell.hpp"
 #include "draw_prompt.hpp"
 
 int main(int argc, char *argv[])
 {
-    (void)argc;
-    std::string first = argv[1];
-    std::string second = argv[2];
+    std::unordered_map<int, std::string *> args;
+    std::string first, second, third;
+    args[1] = &first;
+    args[2] = &second;
+    args[3] = &third;
+    for (int i = 1; i < argc; i++)
+    {
+        *args[i] = argv[i];
+    }
+
     if (first == "init")
     {
-        init_prompt();
-        return 0;
+        init_shell(second);
     }
-    double start_time = std::stod(first);
-    double finish_time = std::stod(second);
-    draw_prompt(start_time, finish_time);
+    else
+    {
+        double start_time = std::stod(first);
+        double finish_time = std::stod(second);
+        draw_prompt(start_time, finish_time);
+    }
     return 0;
 }

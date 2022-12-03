@@ -1,5 +1,3 @@
-#include <string>
-
 // Settings
 #define SEGMENT_CONNECTOR_CHAR '─'
 #define EXECUTION_TIME_PRECISION 1

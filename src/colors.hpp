@@ -1,5 +1,3 @@
-#include <string>
-
 // Colors
 #define RESET 0
 #define BLACK 30
