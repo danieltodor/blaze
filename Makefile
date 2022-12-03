@@ -57,17 +57,17 @@ info:
 
 $(BIN_DIR)/$(BINARY): $(OBJS)
 	@echo "Linking..."
-	$(CMD_PREFIX)mkdir -p $(BIN_DIR)
+	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(CXX) $(OBJS) $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
-	$(CMD_PREFIX)mkdir -p $(OBJ_DIR)
+	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
 
 ifeq ($(objdump),true)
-	$(CMD_PREFIX)mkdir -p $(OBJ_DUMP_DIR)
 	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
+	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
 	$(CMD_PREFIX)touch $(filename)
 	$(CMD_PREFIX)objdump $(OBJDUMPFLAGS) $@ > $(filename)
 endif
