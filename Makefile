@@ -1,7 +1,7 @@
 BINARY = blaze
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
-ASM_DIR = $(BUILD_DIR)/asm
+OBJ_DUMP_DIR = $(BUILD_DIR)/dump
 BIN_DIR = $(BUILD_DIR)/bin
 INSTALL_DIR = ~/.local/bin
 SRC_DIR = src
@@ -66,8 +66,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	$(CMD_PREFIX)$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
 
 ifeq ($(objdump),true)
-	$(CMD_PREFIX)mkdir -p $(ASM_DIR)
-	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(ASM_DIR)/%.s, $@))
+	$(CMD_PREFIX)mkdir -p $(OBJ_DUMP_DIR)
+	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
 	$(CMD_PREFIX)touch $(filename)
 	$(CMD_PREFIX)objdump $(OBJDUMPFLAGS) $@ > $(filename)
 endif
