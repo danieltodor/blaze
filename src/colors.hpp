@@ -1,5 +1,5 @@
-#ifndef BLAZE_COLORS_H
-#define BLAZE_COLORS_H
+#ifndef BLAZE_COLORS_HPP_INCLUDED
+#define BLAZE_COLORS_HPP_INCLUDED
 
 // Colors
 #define RESET 0
