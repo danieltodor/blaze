@@ -1,3 +1,6 @@
+#ifndef BLAZE_DRAW_PROMPT_H
+#define BLAZE_DRAW_PROMPT_H
+
 // Settings
 #define SEGMENT_CONNECTOR_CHAR '─'
 #define EXECUTION_TIME_PRECISION 1
@@ -13,3 +16,5 @@ std::string current_dir();
 std::string execution_time(double start_time, double finish_time);
 std::string prompt();
 void draw_prompt(double start_time, double finish_time);
+
+#endif

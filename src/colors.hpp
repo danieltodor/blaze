@@ -1,3 +1,6 @@
+#ifndef BLAZE_COLORS_H
+#define BLAZE_COLORS_H
+
 // Colors
 #define RESET 0
 #define BLACK 30
@@ -18,3 +21,5 @@ std::string color(int text_type, int color_code);
 std::string bg(int color_code);
 std::string fg(int color_code, int text_type=NORMAL);
 std::string reset();
+
+#endif
