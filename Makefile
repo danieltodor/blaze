@@ -5,7 +5,7 @@ OBJ_DUMP_DIR = $(BUILD_DIR)/dump
 BIN_DIR = $(BUILD_DIR)/bin
 INSTALL_DIR = ~/.local/bin
 SRC_DIR = src
-INCLUDE_DIRS = include
+INCLUDE_DIRS = .
 
 CXX = g++
 CPPFLAGS = -MMD -MP
