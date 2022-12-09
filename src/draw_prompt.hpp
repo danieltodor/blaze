@@ -1,6 +1,8 @@
 #ifndef BLAZE_DRAW_PROMPT_HPP_INCLUDED
 #define BLAZE_DRAW_PROMPT_HPP_INCLUDED
 
+#include <string>
+
 // Settings
 #define SEGMENT_CONNECTOR_CHAR '─'
 #define EXECUTION_TIME_PRECISION 1

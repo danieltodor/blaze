@@ -1,5 +1,3 @@
-#include <string>
-
 #include "colors.hpp"
 
 std::string color(int text_type, int color_code)

@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "init_bash.hpp"
+
 void init_bash()
 {
     std::cout << R"d(

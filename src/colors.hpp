@@ -1,6 +1,8 @@
 #ifndef BLAZE_COLORS_HPP_INCLUDED
 #define BLAZE_COLORS_HPP_INCLUDED
 
+#include <string>
+
 // Colors
 #define RESET 0
 #define BLACK 30
