@@ -1,11 +1,40 @@
 #include <iostream>
-#include <iterator>
 #include <cmath>
+#include <sys/ioctl.h>
 
 #include "draw_prompt.hpp"
 #include "colors.hpp"
 
-std::string current_dir()
+std::string artist::pre()
+{
+    std::string result = "";
+    result += reset();
+    if (this->conf.prev_sgm.end_char == "")
+    {
+        result += bg(this->conf.prev_sgm.background);
+    }
+    result += fg(this->conf.current_sgm.background);
+    result += this->conf.current_sgm.start_char;
+    result += bg(this->conf.current_sgm.background);
+    result += fg(this->conf.current_sgm.foreground);
+    return result;
+}
+
+std::string artist::post()
+{
+    std::string result = "";
+    result += reset();
+    if (this->conf.next_sgm.start_char == "")
+    {
+        result += bg(this->conf.next_sgm.background);
+    }
+    result += fg(this->conf.current_sgm.background);
+    result += this->conf.current_sgm.end_char;
+    result += reset();
+    return result;
+}
+
+std::string artist::current_dir()
 {
     std::string result = "";
     std::string PWD = std::getenv("PWD");
@@ -14,17 +43,13 @@ std::string current_dir()
     {
         PWD.replace(0, HOME.length(), "~");
     }
-    result += bg(BLUE);
-    result += fg(BLACK);
+    result += this->pre();
     result += ' ' + PWD + ' ';
-    result += reset();
-    result += fg(BLUE);
-    result += "";
-    result += reset();
+    result += this->post();
     return result;
 }
 
-std::string execution_time(double start_time, double finish_time)
+std::string artist::execution_time(double start_time, double finish_time)
 {
     auto subtract_time = [](double &from, int unit)
     {
@@ -63,36 +88,122 @@ std::string execution_time(double start_time, double finish_time)
         {
             stime += std::to_string(fractional).substr(1, EXECUTION_TIME_PRECISION + 1);
         }
-        stime += 's';
+        stime += "s ";
     }
     if (fractional && !hours && !minutes && !seconds)
     {
-        stime += std::to_string(fractional).substr(1, EXECUTION_TIME_PRECISION + 1) + 's';
+        stime += std::to_string(fractional).substr(1, EXECUTION_TIME_PRECISION + 1) + "s ";
     }
-
-    result += fg(YELLOW);
+    result += this->pre();
     result += " took ";
     result += stime;
+    result += this->post();
+    return result;
+}
+
+std::string artist::prompt()
+{
+    std::string result = "";
+    if ('\n' == this->conf.prompt.fixed[0])
+    {
+        result += '\n';
+        this->conf.prompt.fixed = this->conf.prompt.fixed.substr(1);
+    }
+    result += bg(this->conf.prompt.background);
+    result += fg(this->conf.prompt.foreground);
+    result += this->conf.prompt.fixed;
     result += reset();
     return result;
 }
 
-std::string prompt()
+artist::artist(std::string shell, config conf)
 {
-    return "\n❯ ";
+    this->shell = shell;
+    this->conf = conf;
 }
 
-void draw_prompt(double start_time, double finish_time)
+unsigned short get_col()
 {
-    std::string segments[] = {
-        current_dir(),
-        execution_time(start_time, finish_time),
-        prompt()
-    };
+    winsize w;
+    ioctl(0, TIOCGWINSZ, &w);
+    return w.ws_col;
+}
+
+void draw_prompt(std::string shell, double start_time, double finish_time)
+{
+    config conf;
+    artist art(shell, conf);
     std::string result;
-    for (std::size_t i = 0; i < std::size(segments); i++)
+    std::string temp;
+    std::string left;
+    std::string right;
+    std::string func;
+    unsigned short length = 0;
+    unsigned short extra_length = 0;
+    auto get_prev = [](int i, artist art)
     {
-        result += segments[i];
+        segment prev;
+        std::string current_side = art.conf.current_sgm.side;
+        i--;
+        for (; i >= 0; i--)
+        {
+            if (art.conf.segments[i].side == current_side)
+            {
+                prev = art.conf.segments[i];
+                break;
+            }
+        }
+        return prev;
+    };
+    auto get_next = [](int i, artist art)
+    {
+        segment next;
+        std::string current_side = art.conf.current_sgm.side;
+        i++;
+        for (; i < SEGMENT_COUNT; i++)
+        {
+            if (art.conf.segments[i].side == current_side)
+            {
+                next = art.conf.segments[i];
+                break;
+            }
+        }
+        return next;
+    };
+    for (int i = 0; i < SEGMENT_COUNT; i++)
+    {
+        if (art.conf.segments[i].name == "")
+        {
+            break;
+        }
+        art.conf.current_sgm = art.conf.segments[i];
+        art.conf.prev_sgm = get_prev(i, art);
+        art.conf.next_sgm = get_next(i, art);
+        func = art.conf.current_sgm.name;
+        if (func == "current_dir")
+        {
+            temp += art.current_dir();
+        }
+        else if (func == "execution_time")
+        {
+            temp += art.execution_time(start_time, finish_time);
+        }
+        if (art.conf.current_sgm.side == "right")
+        {
+            right += temp;
+        }
+        else
+        {
+            left += temp;
+        }
+        if (art.conf.current_sgm.start_char != ""){extra_length++;};
+        if (art.conf.current_sgm.end_char != ""){extra_length++;};
+        length += temp.length() - art.pre().length() - art.post().length();
+        temp = "";
     }
+    result += left;
+    result += std::string(get_col() - length - extra_length, '-');
+    result += right;
+    result += art.prompt();
     std::cout << result;
 }

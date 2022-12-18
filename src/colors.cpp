@@ -1,5 +1,20 @@
 #include "colors.hpp"
 
+std::unordered_map<std::string, int> color_map()
+{
+    std::unordered_map<std::string, int> map;
+    map["none"] = RESET;
+    map["black"] = BLACK;
+    map["red"] = RED;
+    map["green"] = GREEN;
+    map["yellow"] = YELLOW;
+    map["blue"] = BLUE;
+    map["magenta"] = MAGENTA;
+    map["cyan"] = CYAN;
+    map["white"] = WHITE;
+    return map;
+}
+
 std::string color(int text_type, int color_code)
 {
     std::string result = "\033[";

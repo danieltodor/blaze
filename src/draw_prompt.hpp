@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "config.hpp"
+
 // Settings
 #define SEGMENT_CONNECTOR_CHAR '─'
 #define EXECUTION_TIME_PRECISION 1
@@ -14,9 +16,19 @@
 #define MINUTE 60
 #define SECOND 1
 
-std::string current_dir();
-std::string execution_time(double start_time, double finish_time);
-std::string prompt();
-void draw_prompt(double start_time, double finish_time);
+void draw_prompt(std::string shell, double start_time, double finish_time);
+
+class artist
+{
+public:
+    artist(std::string shell, config conf);
+    std::string shell;
+    config conf;
+    std::string pre();
+    std::string post();
+    std::string current_dir();
+    std::string execution_time(double start_time, double finish_time);
+    std::string prompt();
+};
 
 #endif

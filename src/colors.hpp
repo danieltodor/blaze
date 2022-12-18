@@ -2,6 +2,7 @@
 #define BLAZE_COLORS_HPP_INCLUDED
 
 #include <string>
+#include <unordered_map>
 
 // Colors
 #define RESET 0
@@ -19,6 +20,7 @@
 #define BOLD 1
 #define UNDERLINED 4
 
+std::unordered_map<std::string, int> color_map();
 std::string color(int text_type, int color_code);
 std::string bg(int color_code);
 std::string fg(int color_code, int text_type=NORMAL);

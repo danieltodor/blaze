@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        double start_time = std::stod(first);
-        double finish_time = std::stod(second);
-        draw_prompt(start_time, finish_time);
+        double start_time = std::stod(second);
+        double finish_time = std::stod(third);
+        draw_prompt(first, start_time, finish_time);
     }
     return 0;
 }
