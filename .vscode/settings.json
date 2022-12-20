@@ -28,6 +28,11 @@
         "iomanip": "cpp",
         "iosfwd": "cpp",
         "streambuf": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "cwchar": "cpp",
+        "exception": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp"
     },
 }
