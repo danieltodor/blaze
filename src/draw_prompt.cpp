@@ -140,45 +140,11 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
     std::string func;
     unsigned short length = 0;
     unsigned short extra_length = 0;
-    auto get_prev = [](int i, artist art)
+    for (std::size_t i = 0; i < art.conf.segments.size(); i++)
     {
-        segment prev;
-        std::string current_side = art.conf.current_sgm.side;
-        i--;
-        for (; i >= 0; i--)
-        {
-            if (art.conf.segments[i].side == current_side)
-            {
-                prev = art.conf.segments[i];
-                break;
-            }
-        }
-        return prev;
-    };
-    auto get_next = [](int i, artist art)
-    {
-        segment next;
-        std::string current_side = art.conf.current_sgm.side;
-        i++;
-        for (; i < SEGMENT_COUNT; i++)
-        {
-            if (art.conf.segments[i].side == current_side)
-            {
-                next = art.conf.segments[i];
-                break;
-            }
-        }
-        return next;
-    };
-    for (int i = 0; i < SEGMENT_COUNT; i++)
-    {
-        if (art.conf.segments[i].name == "")
-        {
-            break;
-        }
         art.conf.current_sgm = art.conf.segments[i];
-        art.conf.prev_sgm = get_prev(i, art);
-        art.conf.next_sgm = get_next(i, art);
+        art.conf.prev_sgm = art.conf.get_previous_segment();
+        art.conf.next_sgm = art.conf.get_next_segment();
         func = art.conf.current_sgm.name;
         if (func == "current_dir")
         {
@@ -196,8 +162,8 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         {
             left += temp;
         }
-        if (art.conf.current_sgm.start_char != ""){extra_length++;};
-        if (art.conf.current_sgm.end_char != ""){extra_length++;};
+        if (art.conf.current_sgm.start_char != ""){extra_length++;}
+        if (art.conf.current_sgm.end_char != ""){extra_length++;}
         length += temp.length() - art.pre().length() - art.post().length();
         temp = "";
     }
