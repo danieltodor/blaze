@@ -33,8 +33,9 @@ public:
     sprompt prompt;
     config();
     void parse_config();
-    segment get_previous_segment();
-    segment get_next_segment();
+    void sort_segments();
+    segment get_previous_segment(std::size_t current_index);
+    segment get_next_segment(std::size_t current_index);
 };
 
 #endif

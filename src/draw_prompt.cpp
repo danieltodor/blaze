@@ -143,8 +143,8 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
     for (std::size_t i = 0; i < art.conf.segments.size(); i++)
     {
         art.conf.current_sgm = art.conf.segments[i];
-        art.conf.prev_sgm = art.conf.get_previous_segment();
-        art.conf.next_sgm = art.conf.get_next_segment();
+        art.conf.prev_sgm = art.conf.get_previous_segment(i);
+        art.conf.next_sgm = art.conf.get_next_segment(i);
         func = art.conf.current_sgm.name;
         if (func == "current_dir")
         {

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "config.hpp"
 #include "toml.hpp"
@@ -49,35 +50,57 @@ void config::parse_config()
     this->prompt.foreground = colors[tbl["prompt"]["foreground"].value_or("none")];
 }
 
+void config::sort_segments()
+{
+    std::unordered_map<std::string, int> sides;
+    sides["left"] = 1;
+    sides["right"] = 2;
+    auto compare = [&sides](segment a, segment b)
+    {
+        std::string a_value, b_value = "";
+        a_value += a.level;
+        a_value += sides[a.side];
+        a_value += a.position;
+        b_value += b.level;
+        b_value += sides[b.side];
+        b_value += b.position;
+        return a_value < b_value;
+    };
+    std::sort(this->segments.begin(), this->segments.end(), compare);
+}
+
 config::config()
 {
     this->parse_config();
+    this->sort_segments();
 }
 
-segment config::get_previous_segment()
+segment config::get_previous_segment(std::size_t current_index)
 {
-    segment prev;
-    for (std::size_t i = 0; i < this->segments.size(); i++)
+    segment previous;
+    if (current_index == 0)
     {
-        segment current = this->segments[i];
-        if (current.level == this->current_sgm.level && current.side == this->current_sgm.side && current.position == this->current_sgm.position - 1)
-        {
-            prev = this->segments[i];
-        }
+        return previous;
     }
-    return prev;
+    segment tmp = this->segments.at(current_index - 1);
+    if (tmp.level == this->current_sgm.level && tmp.side == this->current_sgm.side)
+    {
+        previous = tmp;
+    }
+    return previous;
 }
 
-segment config::get_next_segment()
+segment config::get_next_segment(std::size_t current_index)
 {
     segment next;
-    for (std::size_t i = 0; i < this->segments.size(); i++)
+    if (current_index == this->segments.size() - 1)
     {
-        segment current = this->segments[i];
-        if (current.level == this->current_sgm.level && current.side == this->current_sgm.side && current.position == this->current_sgm.position + 1)
-        {
-            next = this->segments[i];
-        }
+        return next;
+    }
+    segment tmp = this->segments.at(current_index + 1);
+    if (tmp.level == this->current_sgm.level && tmp.side == this->current_sgm.side)
+    {
+        next = tmp;
     }
     return next;
 }
