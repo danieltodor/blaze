@@ -139,6 +139,16 @@ unsigned short get_col()
     return w.ws_col;
 }
 
+bool level_changes(std::size_t i, config c)
+{
+    return i < c.segments.size() - 1 && c.segments[i + 1].level > c.current_sgm.level ? true : false;
+}
+
+bool end_reached(std::size_t i, config c)
+{
+    return i == c.segments.size() - 1 ? true : false;
+}
+
 void draw_prompt(std::string shell, double start_time, double finish_time)
 {
     config conf;
@@ -176,10 +186,24 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         if (art.conf.current_sgm.end_char != ""){extra_length++;}
         length += temp.length() - art.pre().length() - art.post().length();
         temp = "";
+        if (level_changes(i, art.conf) || end_reached(i, art.conf))
+        {
+            result += left;
+            left = "";
+            if (right != "")
+            {
+                result += multiple(get_col() - length - extra_length, "─");
+                result += right;
+                right = "";
+            }
+            length = 0;
+            extra_length = 0;
+            if (level_changes(i, art.conf))
+            {
+                result += '\n';
+            }
+        }
     }
-    result += left;
-    result += multiple(get_col() - length - extra_length, "─");
-    result += right;
     result += art.prompt();
     std::cout << result;
 }
