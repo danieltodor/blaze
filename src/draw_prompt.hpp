@@ -10,7 +10,7 @@ void draw_prompt(std::string shell, double start_time, double finish_time);
 class artist
 {
 public:
-    artist(std::string shell, config conf);
+    artist(std::string shell);
     std::string shell;
     config conf;
     std::string pre();

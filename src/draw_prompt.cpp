@@ -59,10 +59,11 @@ std::string artist::prompt()
     return result;
 }
 
-artist::artist(std::string shell, config conf)
+artist::artist(std::string shell)
 {
-    this->shell = shell;
+    config conf;
     this->conf = conf;
+    this->shell = shell;
 }
 
 unsigned short get_col()
@@ -84,8 +85,7 @@ bool end_reached(std::size_t i, config c)
 
 void draw_prompt(std::string shell, double start_time, double finish_time)
 {
-    config conf;
-    artist art(shell, conf);
+    artist art(shell);
     std::string result;
     std::string temp;
     std::string left;
