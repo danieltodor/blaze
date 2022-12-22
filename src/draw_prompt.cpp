@@ -5,6 +5,16 @@
 #include "draw_prompt.hpp"
 #include "colors.hpp"
 
+std::string multiple(int n, std::string c)
+{
+    std::string result = "";
+    for (int i = 0; i < n; i++)
+    {
+        result += c;
+    }
+    return result;
+}
+
 std::string artist::pre()
 {
     std::string result = "";
@@ -168,7 +178,7 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         temp = "";
     }
     result += left;
-    result += std::string(get_col() - length - extra_length, '-');
+    result += multiple(get_col() - length - extra_length, "─");
     result += right;
     result += art.prompt();
     std::cout << result;
