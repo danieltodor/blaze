@@ -22,11 +22,18 @@ struct prompt
     int foreground = 0;
 };
 
+struct connector
+{
+    std::string character = "";
+    int foreground = 0;
+};
+
 class config
 {
 public:
     std::vector<segment> segments;
     prompt ps1;
+    connector conn;
     config();
     void parse_config();
     void sort_segments();

@@ -6,16 +6,6 @@
 #include "colors.hpp"
 #include "segments/segments.hpp"
 
-std::string multiple(int n, std::string c)
-{
-    std::string result = "";
-    for (int i = 0; i < n; i++)
-    {
-        result += c;
-    }
-    return result;
-}
-
 std::string pre(segment current_segment, segment previous_segment)
 {
     std::string result = "";
@@ -28,6 +18,25 @@ std::string pre(segment current_segment, segment previous_segment)
     result += current_segment.start_char;
     result += bg(current_segment.background);
     result += fg(current_segment.foreground);
+    return result;
+}
+
+std::string middle(config conf, int length)
+{
+    auto multiple = [](int n, std::string c)
+    {
+        std::string result = "";
+        for (int i = 0; i < n; i++)
+        {
+            result += c;
+        }
+        return result;
+    };
+    std::string result = "";
+    result += reset();
+    result += fg(conf.conn.foreground);
+    result += multiple(length, conf.conn.character);
+    result += reset();
     return result;
 }
 
@@ -111,7 +120,7 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
             left = "";
             if (right != "")
             {
-                result += multiple(get_col() - length - extra_length, "─");
+                result += middle(conf, get_col() - length - extra_length);
                 result += right;
                 right = "";
             }
