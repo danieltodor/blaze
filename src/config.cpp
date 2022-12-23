@@ -23,7 +23,8 @@ void config::parse_config()
     }
     catch (const toml::parse_error &err)
     {
-        std::cout << "Failed to parse config: " << err;
+        this->set_default_config();
+        return;
     }
     std::unordered_map<std::string, int> colors = color_map();
     int i = 0;
@@ -102,4 +103,29 @@ segment config::get_next_segment(std::size_t current_index)
         next = tmp;
     }
     return next;
+}
+
+void config::set_default_config()
+{
+    segment current_dir;
+    current_dir.name = "current_dir";
+    current_dir.level = 1;
+    current_dir.position = 1;
+    current_dir.side = "left";
+    current_dir.background = BLUE;
+    current_dir.foreground = BLACK;
+    current_dir.end_char = "";
+    this->segments.push_back(current_dir);
+
+    segment execution_time;
+    execution_time.name = "execution_time";
+    execution_time.level = 1;
+    execution_time.position = 2;
+    execution_time.side = "left";
+    execution_time.foreground = YELLOW;
+    this->segments.push_back(execution_time);
+
+    prompt ps1;
+    ps1.string = "\n❯ ";
+    this->ps1 = ps1;
 }

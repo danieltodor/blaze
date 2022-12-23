@@ -30,6 +30,7 @@ public:
     config();
     void parse_config();
     void sort_segments();
+    void set_default_config();
     segment get_previous_segment(std::size_t current_index);
     segment get_next_segment(std::size_t current_index);
 };
