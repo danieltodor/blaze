@@ -45,9 +45,8 @@ void config::parse_config()
         this->segments.push_back(current);
         i++;
     }
-    this->prompt.fixed = tbl["prompt"]["fixed"].value_or(" ");
-    this->prompt.background = colors[tbl["prompt"]["background"].value_or("none")];
-    this->prompt.foreground = colors[tbl["prompt"]["foreground"].value_or("none")];
+    this->ps1.string = tbl["prompt"]["string"].value_or(" ");
+    this->ps1.foreground = colors[tbl["prompt"]["foreground"].value_or("none")];
 }
 
 void config::sort_segments()
@@ -82,8 +81,8 @@ segment config::get_previous_segment(std::size_t current_index)
     {
         return previous;
     }
-    segment tmp = this->segments.at(current_index - 1);
-    if (tmp.level == this->current_sgm.level && tmp.side == this->current_sgm.side)
+    segment tmp = this->segments[current_index - 1];
+    if (tmp.level == this->segments[current_index].level && tmp.side == this->segments[current_index].side)
     {
         previous = tmp;
     }
@@ -97,8 +96,8 @@ segment config::get_next_segment(std::size_t current_index)
     {
         return next;
     }
-    segment tmp = this->segments.at(current_index + 1);
-    if (tmp.level == this->current_sgm.level && tmp.side == this->current_sgm.side)
+    segment tmp = this->segments[current_index + 1];
+    if (tmp.level == this->segments[current_index].level && tmp.side == this->segments[current_index].side)
     {
         next = tmp;
     }

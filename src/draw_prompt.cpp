@@ -2,6 +2,7 @@
 #include <sys/ioctl.h>
 
 #include "draw_prompt.hpp"
+#include "config.hpp"
 #include "colors.hpp"
 #include "segments/segments.hpp"
 
@@ -15,55 +16,47 @@ std::string multiple(int n, std::string c)
     return result;
 }
 
-std::string artist::pre()
+std::string pre(segment current_segment, segment previous_segment)
 {
     std::string result = "";
     result += reset();
-    if (this->conf.prev_sgm.end_char == "")
+    if (previous_segment.end_char == "")
     {
-        result += bg(this->conf.prev_sgm.background);
+        result += bg(previous_segment.background);
     }
-    result += fg(this->conf.current_sgm.background);
-    result += this->conf.current_sgm.start_char;
-    result += bg(this->conf.current_sgm.background);
-    result += fg(this->conf.current_sgm.foreground);
+    result += fg(current_segment.background);
+    result += current_segment.start_char;
+    result += bg(current_segment.background);
+    result += fg(current_segment.foreground);
     return result;
 }
 
-std::string artist::post()
+std::string post(segment current_segment, segment next_segment)
 {
     std::string result = "";
     result += reset();
-    if (this->conf.next_sgm.start_char == "")
+    if (next_segment.start_char == "")
     {
-        result += bg(this->conf.next_sgm.background);
+        result += bg(next_segment.background);
     }
-    result += fg(this->conf.current_sgm.background);
-    result += this->conf.current_sgm.end_char;
+    result += fg(current_segment.background);
+    result += current_segment.end_char;
     result += reset();
     return result;
 }
 
-std::string artist::prompt()
+std::string ps1(config conf)
 {
     std::string result = "";
-    if ('\n' == this->conf.prompt.fixed[0])
+    if ('\n' == conf.ps1.string[0])
     {
         result += '\n';
-        this->conf.prompt.fixed = this->conf.prompt.fixed.substr(1);
+        conf.ps1.string = conf.ps1.string.substr(1);
     }
-    result += bg(this->conf.prompt.background);
-    result += fg(this->conf.prompt.foreground);
-    result += this->conf.prompt.fixed;
+    result += fg(conf.ps1.foreground);
+    result += conf.ps1.string;
     result += reset();
     return result;
-}
-
-artist::artist(std::string shell)
-{
-    config conf;
-    this->conf = conf;
-    this->shell = shell;
 }
 
 unsigned short get_col()
@@ -75,7 +68,7 @@ unsigned short get_col()
 
 bool level_changes(std::size_t i, config c)
 {
-    return i < c.segments.size() - 1 && c.segments[i + 1].level > c.current_sgm.level ? true : false;
+    return i < c.segments.size() - 1 && c.segments[i + 1].level > c.segments[i].level ? true : false;
 }
 
 bool end_reached(std::size_t i, config c)
@@ -85,22 +78,22 @@ bool end_reached(std::size_t i, config c)
 
 void draw_prompt(std::string shell, double start_time, double finish_time)
 {
-    artist art(shell);
+    config conf;
     std::string result;
     std::string temp;
     std::string left;
     std::string right;
     unsigned short length = 0;
     unsigned short extra_length = 0;
-    for (std::size_t i = 0; i < art.conf.segments.size(); i++)
+    for (std::size_t i = 0; i < conf.segments.size(); i++)
     {
-        art.conf.current_sgm = art.conf.segments[i];
-        art.conf.prev_sgm = art.conf.get_previous_segment(i);
-        art.conf.next_sgm = art.conf.get_next_segment(i);
-        temp += art.pre();
-        temp += execute_segment(art.conf.current_sgm.name, start_time, finish_time);
-        temp += art.post();
-        if (art.conf.current_sgm.side == "right")
+        segment current_sgm = conf.segments[i];
+        segment prev_sgm = conf.get_previous_segment(i);
+        segment next_sgm = conf.get_next_segment(i);
+        temp += pre(current_sgm, prev_sgm);
+        temp += execute_segment(current_sgm.name, start_time, finish_time);
+        temp += post(current_sgm, next_sgm);
+        if (current_sgm.side == "right")
         {
             right += temp;
         }
@@ -108,11 +101,11 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         {
             left += temp;
         }
-        if (art.conf.current_sgm.start_char != ""){extra_length++;}
-        if (art.conf.current_sgm.end_char != ""){extra_length++;}
-        length += temp.length() - art.pre().length() - art.post().length();
+        if (current_sgm.start_char != ""){extra_length++;}
+        if (current_sgm.end_char != ""){extra_length++;}
+        length += temp.length() - pre(current_sgm, prev_sgm).length() - post(current_sgm, next_sgm).length();
         temp = "";
-        if (level_changes(i, art.conf) || end_reached(i, art.conf))
+        if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;
             left = "";
@@ -124,12 +117,12 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
             }
             length = 0;
             extra_length = 0;
-            if (level_changes(i, art.conf))
+            if (level_changes(i, conf))
             {
                 result += '\n';
             }
         }
     }
-    result += art.prompt();
+    result += ps1(conf);
     std::cout << result;
 }

@@ -16,10 +16,9 @@ struct segment
     int foreground = 0;
 };
 
-struct sprompt
+struct prompt
 {
-    std::string fixed = "";
-    int background = 0;
+    std::string string = "";
     int foreground = 0;
 };
 
@@ -27,10 +26,7 @@ class config
 {
 public:
     std::vector<segment> segments;
-    segment current_sgm;
-    segment prev_sgm;
-    segment next_sgm;
-    sprompt prompt;
+    prompt ps1;
     config();
     void parse_config();
     void sort_segments();
