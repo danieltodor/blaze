@@ -8,6 +8,10 @@
 
 int main(int argc, char *argv[])
 {
+    if (argc == 1)
+    {
+        return 0;
+    }
     std::unordered_map<int, std::string *> args;
     std::string first, second, third;
     args[1] = &first;
