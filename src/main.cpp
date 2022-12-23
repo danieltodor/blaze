@@ -4,6 +4,8 @@
 #include "init_shell.hpp"
 #include "draw_prompt.hpp"
 
+#define MAX_ARG_COUNT 3
+
 int main(int argc, char *argv[])
 {
     std::unordered_map<int, std::string *> args;
@@ -11,7 +13,7 @@ int main(int argc, char *argv[])
     args[1] = &first;
     args[2] = &second;
     args[3] = &third;
-    for (int i = 1; i < argc; i++)
+    for (int i = 1; i < argc && i < MAX_ARG_COUNT + 1; i++)
     {
         *args[i] = argv[i];
     }
