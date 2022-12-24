@@ -13,15 +13,18 @@ void config::parse_config()
         "/etc/blaze.toml"
     };
     toml::table tbl;
-    try
+    bool config_parsed = false;
+    for (std::size_t i = 0; i < std::size(paths); i++)
     {
-        for (std::size_t i = 0; i < std::size(paths); i++)
+        try
         {
             tbl = toml::parse_file(paths[i]);
+            config_parsed = true;
             break;
         }
+        catch (const toml::parse_error &err) {}
     }
-    catch (const toml::parse_error &err)
+    if (!config_parsed)
     {
         this->set_default_config();
         return;
