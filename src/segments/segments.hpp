@@ -6,7 +6,7 @@
 #include "current_dir.hpp"
 #include "execution_time.hpp"
 
-std::string execute_segment(std::string name, double start_time, double finish_time)
+std::string call_segment(std::string name, double start_time, double finish_time)
 {
     std::string result = "";
     if (name == "current_dir"){result = current_dir();}
@@ -14,7 +14,7 @@ std::string execute_segment(std::string name, double start_time, double finish_t
     return result;
 }
 
-std::string call_segment(std::string command)
+std::string execute_segment(std::string command)
 {
     std::string result = "";
     char buffer[128];
