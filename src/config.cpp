@@ -41,6 +41,7 @@ void config::parse_config()
         current.position = tbl["segment"][i]["position"].value_or(1);
         current.level = tbl["segment"][i]["level"].value_or(1);
         current.name = tbl["segment"][i]["name"].value_or("");
+        current.execute = tbl["segment"][i]["execute"].value_or("");
         current.side = tbl["segment"][i]["side"].value_or("left");
         current.start_char = tbl["segment"][i]["start_char"].value_or("");
         current.end_char = tbl["segment"][i]["end_char"].value_or("");

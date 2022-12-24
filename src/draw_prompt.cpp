@@ -100,7 +100,14 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         segment prev_sgm = conf.get_previous_segment(i);
         segment next_sgm = conf.get_next_segment(i);
         temp += pre(current_sgm, prev_sgm);
-        temp += execute_segment(current_sgm.name, start_time, finish_time);
+        if (current_sgm.name != "")
+        {
+            temp += execute_segment(current_sgm.name, start_time, finish_time);
+        }
+        else if (current_sgm.execute != "")
+        {
+            temp += call_segment(current_sgm.execute);
+        }
         temp += post(current_sgm, next_sgm);
         if (current_sgm.side == "right")
         {

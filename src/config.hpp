@@ -9,6 +9,7 @@ struct segment
     int position = 0;
     int level = 0;
     std::string name = "";
+    std::string execute = "";
     std::string side = "";
     std::string start_char = "";
     std::string end_char = "";

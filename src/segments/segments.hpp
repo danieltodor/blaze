@@ -14,4 +14,21 @@ std::string execute_segment(std::string name, double start_time, double finish_t
     return result;
 }
 
+std::string call_segment(std::string command)
+{
+    std::string result = "";
+    char buffer[128];
+    FILE *pipe = popen(command.c_str(), "r");
+    if (!pipe)
+    {
+        return result;
+    }
+    while (fgets(buffer, sizeof(buffer), pipe) != NULL)
+    {
+        result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
+
 #endif
