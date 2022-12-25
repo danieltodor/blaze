@@ -6,29 +6,36 @@
 void init_bash()
 {
     std::cout << R"d(
-save_start_time() {
-    date +%s.%N > "/dev/shm/${USER}.bashtime.${SESSION}"
-}
-
-get_start_time() {
-    echo "$(cat /dev/shm/${USER}.bashtime.${SESSION})"
-}
-
-get_finish_time() {
+blaze_get_current_time() {
     echo "$(date +%s.%N)"
 }
 
-run_on_exit() {
-    rm /dev/shm/${USER}.bashtime.${SESSION}
+blaze_save_start_time() {
+    echo $(blaze_get_current_time) > $BLAZE_TIME_FILE
 }
-trap run_on_exit EXIT
 
-SESSION=$BASHPID
-save_start_time
+blaze_get_start_time() {
+    echo "$(cat $BLAZE_TIME_FILE)"
+}
+
+blaze_run_on_exit() {
+    rm $BLAZE_TIME_FILE
+}
+trap blaze_run_on_exit EXIT
+
+BLAZE_TIME_FILE_NAME=${USER}.bashtime.${BASHPID}
+
+if [[ -d "/dev/shm" ]]; then
+    BLAZE_TIME_FILE="/dev/shm/$BLAZE_TIME_FILE_NAME"
+else
+    BLAZE_TIME_FILE="/tmp/$BLAZE_TIME_FILE_NAME"
+fi
+
+blaze_save_start_time
 
 PROMPT_COMMAND="echo"
-PS0='$(save_start_time)'
-PS1='$(blaze bash $(get_start_time) $(get_finish_time))'
+PS0='$(blaze_save_start_time)'
+PS1='$(blaze bash $(blaze_get_start_time) $(blaze_get_current_time))'
     )d";
 }
 
