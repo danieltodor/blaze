@@ -23,7 +23,7 @@ blaze_run_on_exit() {
 }
 trap blaze_run_on_exit EXIT
 
-BLAZE_TIME_FILE_NAME=${USER}.bashtime.${BASHPID}
+BLAZE_TIME_FILE_NAME=${USER}_bashtime_${BASHPID}
 
 if [[ -d "/dev/shm" ]]; then
     BLAZE_TIME_FILE="/dev/shm/$BLAZE_TIME_FILE_NAME"
