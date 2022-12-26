@@ -6,7 +6,7 @@
 
 // Settings
 #define EXECUTION_TIME_PRECISION 1
-#define EXECUTION_TIME_DISPLAY_FROM 1
+#define EXECUTION_TIME_DISPLAY_FROM 0
 #define EXECUTION_TIME_DISPLAY_FRACTIONAL_UNTIL 10
 
 // Times in seconds
@@ -40,26 +40,26 @@ std::string execution_time(double start_time, double finish_time)
 
     if (hours)
     {
-        stime += std::to_string(hours) + "h ";
+        stime += ' ' + std::to_string(hours) + 'h';
     }
     if (minutes)
     {
-        stime += std::to_string(minutes) + "m ";
+        stime += ' ' + std::to_string(minutes) + 'm';
     }
     if (seconds)
     {
-        stime += std::to_string(seconds);
+        stime += ' ' + std::to_string(seconds);
         if (fractional && !hours && !minutes && seconds < EXECUTION_TIME_DISPLAY_FRACTIONAL_UNTIL)
         {
-            stime += std::to_string(fractional).substr(1, EXECUTION_TIME_PRECISION + 1);
+            stime += std::to_string(fractional).substr(1, 1 + EXECUTION_TIME_PRECISION);
         }
-        stime += "s ";
+        stime += 's';
     }
     if (fractional && !hours && !minutes && !seconds)
     {
-        stime += std::to_string(fractional).substr(1, EXECUTION_TIME_PRECISION + 1) + "s ";
+        stime += ' ' + std::to_string(fractional).substr(0, 2 + EXECUTION_TIME_PRECISION) + 's';
     }
-    result += " took ";
+    result += "took";
     result += stime;
     return result;
 }

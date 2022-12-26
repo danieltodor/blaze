@@ -12,7 +12,7 @@ std::string current_dir()
     {
         PWD.replace(0, HOME.length(), "~");
     }
-    result += ' ' + PWD + ' ';
+    result += PWD;
     return result;
 }
 
