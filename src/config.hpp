@@ -35,6 +35,7 @@ public:
     std::vector<segment> segments;
     prompt ps1;
     connector conn;
+    std::string padding;
     config();
     void parse_config();
     void sort_segments();

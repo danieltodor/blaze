@@ -6,7 +6,7 @@
 #include "colors.hpp"
 #include "segments/segments.hpp"
 
-std::string pre(segment current_segment, segment previous_segment)
+std::string pre(config conf, segment current_segment, segment previous_segment)
 {
     std::string result = "";
     result += reset();
@@ -18,6 +18,7 @@ std::string pre(segment current_segment, segment previous_segment)
     result += current_segment.start_char;
     result += bg(current_segment.background);
     result += fg(current_segment.foreground);
+    result += conf.padding;
     return result;
 }
 
@@ -40,9 +41,10 @@ std::string middle(config conf, int length)
     return result;
 }
 
-std::string post(segment current_segment, segment next_segment)
+std::string post(config conf, segment current_segment, segment next_segment)
 {
     std::string result = "";
+    result += conf.padding;
     result += reset();
     if (next_segment.start_char == "")
     {
@@ -93,13 +95,12 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
     std::string left;
     std::string right;
     unsigned short length = 0;
-    unsigned short extra_length = 0;
     for (std::size_t i = 0; i < conf.segments.size(); i++)
     {
         segment current_sgm = conf.segments[i];
         segment prev_sgm = conf.get_previous_segment(i);
         segment next_sgm = conf.get_next_segment(i);
-        temp += pre(current_sgm, prev_sgm);
+        temp += pre(conf, current_sgm, prev_sgm);
         if (current_sgm.name != "")
         {
             temp += call_segment(current_sgm.name, start_time, finish_time);
@@ -108,7 +109,7 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         {
             temp += execute_segment(current_sgm.execute);
         }
-        temp += post(current_sgm, next_sgm);
+        temp += post(conf, current_sgm, next_sgm);
         if (current_sgm.side == "right")
         {
             right += temp;
@@ -117,27 +118,27 @@ void draw_prompt(std::string shell, double start_time, double finish_time)
         {
             left += temp;
         }
-        if (current_sgm.start_char != ""){extra_length++;}
-        if (current_sgm.end_char != ""){extra_length++;}
-        length += temp.length() - pre(current_sgm, prev_sgm).length() - post(current_sgm, next_sgm).length();
-        temp = "";
+        length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
+        if (current_sgm.start_char != "") {length += current_sgm.start_char.length() - 2;}
+        if (current_sgm.end_char != "") {length += current_sgm.end_char.length() - 2;}
+        if (conf.padding != "") {length += conf.padding.length() * 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;
             left = "";
             if (right != "")
             {
-                result += middle(conf, get_col() - length - extra_length);
+                result += middle(conf, get_col() - length);
                 result += right;
                 right = "";
             }
             length = 0;
-            extra_length = 0;
-            if (level_changes(i, conf))
-            {
-                result += '\n';
-            }
         }
+        if (level_changes(i, conf))
+        {
+            result += '\n';
+        }
+        temp = "";
     }
     result += ps1(conf);
     std::cout << result;

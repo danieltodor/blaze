@@ -54,6 +54,7 @@ void config::parse_config()
     this->ps1.foreground = colors[tbl["prompt"]["foreground"].value_or("none")];
     this->conn.character = tbl["connector"]["character"].value_or("─");
     this->conn.foreground = colors[tbl["connector"]["foreground"].value_or("none")];
+    this->padding = tbl["padding"].value_or(" ");
 }
 
 void config::sort_segments()
@@ -134,4 +135,6 @@ void config::set_default_config()
     prompt ps1;
     ps1.string = "\n❯ ";
     this->ps1 = ps1;
+
+    this->padding = " ";
 }
