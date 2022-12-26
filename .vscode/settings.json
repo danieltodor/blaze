@@ -33,6 +33,8 @@
         "exception": "cpp",
         "istream": "cpp",
         "new": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp"
     },
 }
