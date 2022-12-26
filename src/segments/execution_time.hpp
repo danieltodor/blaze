@@ -55,7 +55,7 @@ std::string execution_time(double start_time, double finish_time)
         }
         stime += 's';
     }
-    if (fractional && !hours && !minutes && !seconds)
+    if (!hours && !minutes && !seconds)
     {
         stime += ' ' + std::to_string(fractional).substr(0, 2 + EXECUTION_TIME_PRECISION) + 's';
     }
