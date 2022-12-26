@@ -87,7 +87,7 @@ bool end_reached(std::size_t i, config c)
     return i == c.segments.size() - 1 ? true : false;
 }
 
-void draw_prompt(std::string shell, double start_time, double finish_time)
+void draw_prompt(double start_time, double finish_time)
 {
     config conf;
     std::string result;

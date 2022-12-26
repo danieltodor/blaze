@@ -4,7 +4,7 @@
 #include "init_shell.hpp"
 #include "draw_prompt.hpp"
 
-#define MAX_ARG_COUNT 3
+#define MAX_ARG_COUNT 2
 
 int main(int argc, char *argv[])
 {
@@ -13,10 +13,9 @@ int main(int argc, char *argv[])
         return 0;
     }
     std::unordered_map<int, std::string *> args;
-    std::string first, second, third;
+    std::string first, second;
     args[1] = &first;
     args[2] = &second;
-    args[3] = &third;
     for (int i = 1; i < argc && i < MAX_ARG_COUNT + 1; i++)
     {
         *args[i] = argv[i];
@@ -28,9 +27,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        double start_time = std::stod(second);
-        double finish_time = std::stod(third);
-        draw_prompt(first, start_time, finish_time);
+        double start_time = std::stod(first);
+        double finish_time = std::stod(second);
+        draw_prompt(start_time, finish_time);
     }
     return 0;
 }
