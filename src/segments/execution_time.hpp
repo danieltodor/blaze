@@ -4,17 +4,14 @@
 #include <string>
 #include <cmath>
 
-// Settings
-#define EXECUTION_TIME_PRECISION 1
-#define EXECUTION_TIME_DISPLAY_FROM 0
-#define EXECUTION_TIME_DISPLAY_FRACTIONAL_UNTIL 10
+#include "src/config.hpp"
 
 // Times in seconds
 #define HOUR 3600
 #define MINUTE 60
 #define SECOND 1
 
-std::string execution_time(double start_time, double finish_time)
+std::string execution_time(config conf, double start_time, double finish_time)
 {
     auto subtract_time = [](double &from, int unit)
     {
@@ -24,9 +21,9 @@ std::string execution_time(double start_time, double finish_time)
     };
 
     std::string result = "";
-    float precision = std::pow(10, -EXECUTION_TIME_PRECISION);
+    float precision = std::pow(10, -conf.execution_time_precision);
     double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < EXECUTION_TIME_DISPLAY_FROM)
+    if (diff < conf.execution_time_display_from)
     {
         return result;
     }
@@ -49,15 +46,15 @@ std::string execution_time(double start_time, double finish_time)
     if (seconds)
     {
         stime += ' ' + std::to_string(seconds);
-        if (fractional && !hours && !minutes && seconds < EXECUTION_TIME_DISPLAY_FRACTIONAL_UNTIL)
+        if (fractional && !hours && !minutes && seconds < conf.execution_time_display_fractional_until)
         {
-            stime += std::to_string(fractional).substr(1, 1 + EXECUTION_TIME_PRECISION);
+            stime += std::to_string(fractional).substr(1, 1 + conf.execution_time_precision);
         }
         stime += 's';
     }
     if (!hours && !minutes && !seconds)
     {
-        stime += ' ' + std::to_string(fractional).substr(0, 2 + EXECUTION_TIME_PRECISION) + 's';
+        stime += ' ' + std::to_string(fractional).substr(0, 2 + conf.execution_time_precision) + 's';
     }
     result += "took";
     result += stime;

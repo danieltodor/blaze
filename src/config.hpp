@@ -36,6 +36,9 @@ public:
     prompt ps1;
     connector conn;
     std::string padding;
+    int execution_time_precision;
+    int execution_time_display_from;
+    int execution_time_display_fractional_until;
     config();
     void parse_config();
     void sort_segments();

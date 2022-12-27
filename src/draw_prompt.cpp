@@ -103,7 +103,7 @@ void draw_prompt(double start_time, double finish_time)
         temp += pre(conf, current_sgm, prev_sgm);
         if (current_sgm.name != "")
         {
-            temp += call_segment(current_sgm.name, start_time, finish_time);
+            temp += call_segment(current_sgm.name, conf, start_time, finish_time);
         }
         else if (current_sgm.execute != "")
         {

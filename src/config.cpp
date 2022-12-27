@@ -55,6 +55,9 @@ void config::parse_config()
     this->conn.character = tbl["connector"]["character"].value_or("─");
     this->conn.foreground = colors[tbl["connector"]["foreground"].value_or("none")];
     this->padding = tbl["padding"].value_or(" ");
+    this->execution_time_precision = tbl["execution_time_precision"].value_or(1);
+    this->execution_time_display_from = tbl["execution_time_display_from"].value_or(0);
+    this->execution_time_display_fractional_until = tbl["execution_time_display_fractional_until"].value_or(10);
 }
 
 void config::sort_segments()
@@ -137,4 +140,7 @@ void config::set_default_config()
     this->ps1 = ps1;
 
     this->padding = " ";
+    this->execution_time_precision = 1;
+    this->execution_time_display_from = 2;
+    this->execution_time_display_fractional_until = 10;
 }
