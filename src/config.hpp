@@ -10,7 +10,7 @@ struct segment
     int level = 0;
     std::string name = "";
     std::string execute = "";
-    std::string side = "";
+    std::string align = "";
     std::string prefix = "";
     std::string suffix = "";
     int background = 0;

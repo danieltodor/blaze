@@ -42,7 +42,7 @@ void config::parse_config()
         current.level = tbl["segment"][i]["level"].value_or(1);
         current.name = tbl["segment"][i]["name"].value_or("");
         current.execute = tbl["segment"][i]["execute"].value_or("");
-        current.side = tbl["segment"][i]["side"].value_or("left");
+        current.align = tbl["segment"][i]["align"].value_or("left");
         current.prefix = tbl["segment"][i]["prefix"].value_or("");
         current.suffix = tbl["segment"][i]["suffix"].value_or("");
         current.background = colors[tbl["segment"][i]["background"].value_or("none")];
@@ -66,10 +66,10 @@ void config::sort_segments()
     {
         std::string a_value, b_value = "";
         a_value += a.level;
-        a_value += sides[a.side];
+        a_value += sides[a.align];
         a_value += a.position;
         b_value += b.level;
-        b_value += sides[b.side];
+        b_value += sides[b.align];
         b_value += b.position;
         return a_value < b_value;
     };
@@ -90,7 +90,7 @@ segment config::get_previous_segment(std::size_t current_index)
         return previous;
     }
     segment tmp = this->segments[current_index - 1];
-    if (tmp.level == this->segments[current_index].level && tmp.side == this->segments[current_index].side)
+    if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
     {
         previous = tmp;
     }
@@ -105,7 +105,7 @@ segment config::get_next_segment(std::size_t current_index)
         return next;
     }
     segment tmp = this->segments[current_index + 1];
-    if (tmp.level == this->segments[current_index].level && tmp.side == this->segments[current_index].side)
+    if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
     {
         next = tmp;
     }
@@ -118,7 +118,7 @@ void config::set_default_config()
     current_dir.name = "current_dir";
     current_dir.level = 1;
     current_dir.position = 1;
-    current_dir.side = "left";
+    current_dir.align = "left";
     current_dir.background = BLUE;
     current_dir.foreground = BLACK;
     current_dir.suffix = "";
@@ -128,7 +128,7 @@ void config::set_default_config()
     execution_time.name = "execution_time";
     execution_time.level = 1;
     execution_time.position = 2;
-    execution_time.side = "left";
+    execution_time.align = "left";
     execution_time.foreground = YELLOW;
     this->segments.push_back(execution_time);
 

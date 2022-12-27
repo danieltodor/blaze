@@ -110,7 +110,7 @@ void draw_prompt(double start_time, double finish_time)
             temp += execute_segment(current_sgm.execute);
         }
         temp += post(conf, current_sgm, next_sgm);
-        if (current_sgm.side == "right")
+        if (current_sgm.align == "right")
         {
             right += temp;
         }
