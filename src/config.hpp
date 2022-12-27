@@ -11,8 +11,8 @@ struct segment
     std::string name = "";
     std::string execute = "";
     std::string side = "";
-    std::string start_char = "";
-    std::string end_char = "";
+    std::string prefix = "";
+    std::string suffix = "";
     int background = 0;
     int foreground = 0;
 };

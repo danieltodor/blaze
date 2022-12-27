@@ -10,12 +10,12 @@ std::string pre(config conf, segment current_segment, segment previous_segment)
 {
     std::string result = "";
     result += reset();
-    if (previous_segment.end_char == "")
+    if (previous_segment.suffix == "")
     {
         result += bg(previous_segment.background);
     }
     result += fg(current_segment.background);
-    result += current_segment.start_char;
+    result += current_segment.prefix;
     result += bg(current_segment.background);
     result += fg(current_segment.foreground);
     result += conf.padding;
@@ -46,12 +46,12 @@ std::string post(config conf, segment current_segment, segment next_segment)
     std::string result = "";
     result += conf.padding;
     result += reset();
-    if (next_segment.start_char == "")
+    if (next_segment.prefix == "")
     {
         result += bg(next_segment.background);
     }
     result += fg(current_segment.background);
-    result += current_segment.end_char;
+    result += current_segment.suffix;
     result += reset();
     return result;
 }
@@ -119,8 +119,8 @@ void draw_prompt(double start_time, double finish_time)
             left += temp;
         }
         length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
-        if (current_sgm.start_char != "") {length += current_sgm.start_char.length() - 2;}
-        if (current_sgm.end_char != "") {length += current_sgm.end_char.length() - 2;}
+        if (current_sgm.prefix != "") {length += current_sgm.prefix.length() - 2;}
+        if (current_sgm.suffix != "") {length += current_sgm.suffix.length() - 2;}
         if (conf.padding != "") {length += conf.padding.length() * 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {

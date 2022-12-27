@@ -43,8 +43,8 @@ void config::parse_config()
         current.name = tbl["segment"][i]["name"].value_or("");
         current.execute = tbl["segment"][i]["execute"].value_or("");
         current.side = tbl["segment"][i]["side"].value_or("left");
-        current.start_char = tbl["segment"][i]["start_char"].value_or("");
-        current.end_char = tbl["segment"][i]["end_char"].value_or("");
+        current.prefix = tbl["segment"][i]["prefix"].value_or("");
+        current.suffix = tbl["segment"][i]["suffix"].value_or("");
         current.background = colors[tbl["segment"][i]["background"].value_or("none")];
         current.foreground = colors[tbl["segment"][i]["foreground"].value_or("none")];
         this->segments.push_back(current);
@@ -121,7 +121,7 @@ void config::set_default_config()
     current_dir.side = "left";
     current_dir.background = BLUE;
     current_dir.foreground = BLACK;
-    current_dir.end_char = "";
+    current_dir.suffix = "";
     this->segments.push_back(current_dir);
 
     segment execution_time;
