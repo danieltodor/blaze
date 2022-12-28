@@ -35,7 +35,7 @@ blaze_save_start_time
 
 PROMPT_COMMAND="echo"
 PS0='$(blaze_save_start_time)'
-PS1='$(blaze $(blaze_get_start_time) $(blaze_get_current_time))'
+PS1='$(blaze -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
     )d";
 }
 

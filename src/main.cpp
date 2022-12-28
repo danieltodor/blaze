@@ -1,10 +1,15 @@
 #include <string>
-#include <unordered_map>
 
 #include "init_shell.hpp"
 #include "draw_prompt.hpp"
+#include "external/argparse.hpp"
 
-#define MAX_ARG_COUNT 2
+struct blaze_args : public argparse::Args
+{
+    std::string &init = kwarg("i,init", "Which shell to init").set_default("");
+    std::string &start_time = kwarg("s,start_time", "Time when the command was started").set_default("");
+    std::string &finish_time = kwarg("f,finish_time", "Time when the command was finished").set_default("");
+};
 
 int main(int argc, char *argv[])
 {
@@ -12,23 +17,15 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-    std::unordered_map<int, std::string *> args;
-    std::string first, second;
-    args[1] = &first;
-    args[2] = &second;
-    for (int i = 1; i < argc && i < MAX_ARG_COUNT + 1; i++)
+    blaze_args args = argparse::parse<blaze_args>(argc, argv);
+    if (args.init != "")
     {
-        *args[i] = argv[i];
-    }
-
-    if (first == "init")
-    {
-        init_shell(second);
+        init_shell(args.init);
     }
     else
     {
-        double start_time = std::stod(first);
-        double finish_time = std::stod(second);
+        double start_time = std::stod(args.start_time);
+        double finish_time = std::stod(args.finish_time);
         draw_prompt(start_time, finish_time);
     }
     return 0;
