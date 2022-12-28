@@ -35,6 +35,9 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "fstream": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "cstddef": "cpp",
+        "limits": "cpp",
+        "version": "cpp"
     },
 }
