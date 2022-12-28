@@ -67,13 +67,13 @@ void config::sort_segments()
     sides["right"] = 2;
     auto compare = [&sides](segment a, segment b)
     {
-        std::string a_value, b_value = "";
-        a_value += a.level;
-        a_value += sides[a.align];
-        a_value += a.position;
-        b_value += b.level;
-        b_value += sides[b.align];
-        b_value += b.position;
+        std::string a_value = "", b_value = "";
+        a_value += std::to_string(a.level);
+        a_value += std::to_string(sides[a.align]);
+        a_value += std::to_string(a.position);
+        b_value += std::to_string(b.level);
+        b_value += std::to_string(sides[b.align]);
+        b_value += std::to_string(b.position);
         return a_value < b_value;
     };
     std::sort(this->segments.begin(), this->segments.end(), compare);
