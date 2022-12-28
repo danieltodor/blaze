@@ -52,7 +52,7 @@ void config::parse_config()
     }
     this->ps1.string = tbl["prompt"]["string"].value_or(" ");
     this->ps1.foreground = colors[tbl["prompt"]["foreground"].value_or("none")];
-    this->conn.character = tbl["connector"]["character"].value_or("─");
+    this->conn.character = tbl["connector"]["character"].value_or(" ");
     this->conn.foreground = colors[tbl["connector"]["foreground"].value_or("none")];
     this->padding = tbl["padding"].value_or(" ");
     this->execution_time_precision = tbl["execution_time_precision"].value_or(1);
