@@ -35,6 +35,7 @@ all: $(BIN_DIR)/$(BINARY)
 
 install:
 	@echo "Installing to $(INSTALL_DIR)"
+	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)
 	$(CMD_PREFIX)cp $(BIN_DIR)/$(BINARY) $(INSTALL_DIR)
 
 uninstall:
