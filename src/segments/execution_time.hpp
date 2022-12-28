@@ -46,7 +46,7 @@ std::string execution_time(config conf, double start_time, double finish_time)
     if (seconds)
     {
         stime += ' ' + std::to_string(seconds);
-        if (fractional && !hours && !minutes && seconds < conf.execution_time_display_fractional_until)
+        if (seconds + minutes * MINUTE + hours * HOUR < conf.execution_time_display_fractional_until)
         {
             stime += std::to_string(fractional).substr(1, 1 + conf.execution_time_precision);
         }
