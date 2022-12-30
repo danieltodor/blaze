@@ -1,5 +1,7 @@
 #include "colors.hpp"
 
+const std::string csi = "\033["; // Control Sequence Introducer
+
 std::unordered_map<std::string, int> color_map()
 {
     std::unordered_map<std::string, int> map;
@@ -15,27 +17,31 @@ std::unordered_map<std::string, int> color_map()
     return map;
 }
 
-std::string color(int text_type, int color_code)
+std::string graphics(int code)
 {
-    std::string result = "\033[";
-    result += std::to_string(text_type);
-    result += std::to_string(color_code);
+    std::string result = csi;
+    result += std::to_string(code);
     result += 'm';
     return result;
 }
 
-std::string bg(int color_code)
+std::string text_mode(int code)
 {
-    int bg_color_code = color_code + 10;
-    return color(NORMAL, bg_color_code);
+    return graphics(code);
 }
 
-std::string fg(int color_code, int text_type)
+std::string background(int color_code)
 {
-    return color(text_type, color_code);
+    int bg_color_code = color_code + 10;
+    return graphics(bg_color_code);
+}
+
+std::string foreground(int color_code)
+{
+    return graphics(color_code);
 }
 
 std::string reset()
 {
-    return color(NORMAL, RESET);
+    return graphics(RESET);
 }

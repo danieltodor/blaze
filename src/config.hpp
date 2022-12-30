@@ -6,15 +6,19 @@
 
 struct segment
 {
-    int position = 0;
-    int level = 0;
     std::string name = "";
     std::string execute = "";
+    int level = 0;
+    int position = 0;
     std::string align = "";
     std::string prefix = "";
     std::string suffix = "";
     int background = 0;
     int foreground = 0;
+    bool bold = false;
+    bool dim = false;
+    bool italic = false;
+    bool underline = false;
 };
 
 struct prompt

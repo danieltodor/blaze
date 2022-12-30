@@ -4,8 +4,9 @@
 #include <string>
 #include <unordered_map>
 
-// Colors
 #define RESET 0
+
+// Colors
 #define BLACK 30
 #define RED 31
 #define GREEN 32
@@ -16,14 +17,16 @@
 #define WHITE 37
 
 // Text types
-#define NORMAL 0
 #define BOLD 1
-#define UNDERLINED 4
+#define DIM 2
+#define ITALIC 3
+#define UNDERLINE 4
 
 std::unordered_map<std::string, int> color_map();
-std::string color(int text_type, int color_code);
-std::string bg(int color_code);
-std::string fg(int color_code, int text_type=NORMAL);
+std::string graphics(int code);
+std::string text_mode(int code);
+std::string background(int color_code);
+std::string foreground(int color_code);
 std::string reset();
 
 #endif

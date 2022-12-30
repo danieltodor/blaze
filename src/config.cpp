@@ -38,15 +38,19 @@ void config::parse_config()
             break;
         }
         segment current;
-        current.position = tbl["segment"][i]["position"].value_or(1);
-        current.level = tbl["segment"][i]["level"].value_or(1);
         current.name = tbl["segment"][i]["name"].value_or("");
         current.execute = tbl["segment"][i]["execute"].value_or("");
+        current.level = tbl["segment"][i]["level"].value_or(1);
+        current.position = tbl["segment"][i]["position"].value_or(1);
         current.align = tbl["segment"][i]["align"].value_or("left");
         current.prefix = tbl["segment"][i]["prefix"].value_or("");
         current.suffix = tbl["segment"][i]["suffix"].value_or("");
         current.background = colors[tbl["segment"][i]["background"].value_or("none")];
         current.foreground = colors[tbl["segment"][i]["foreground"].value_or("none")];
+        current.bold = tbl["segment"][i]["bold"].value_or(false);
+        current.dim = tbl["segment"][i]["dim"].value_or(false);
+        current.italic = tbl["segment"][i]["italic"].value_or(false);
+        current.underline = tbl["segment"][i]["underline"].value_or(false);
         this->segments.push_back(current);
         i++;
     }

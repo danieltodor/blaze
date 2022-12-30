@@ -12,13 +12,29 @@ std::string pre(config conf, segment current_segment, segment previous_segment)
     result += reset();
     if (previous_segment.suffix == "")
     {
-        result += bg(previous_segment.background);
+        result += background(previous_segment.background);
     }
-    result += fg(current_segment.background);
+    result += foreground(current_segment.background);
     result += current_segment.prefix;
-    result += bg(current_segment.background);
-    result += fg(current_segment.foreground);
+    result += background(current_segment.background);
+    result += foreground(current_segment.foreground);
     result += conf.padding;
+    if (current_segment.bold)
+    {
+        result += text_mode(BOLD);
+    }
+    if (current_segment.dim)
+    {
+        result += text_mode(DIM);
+    }
+    if (current_segment.italic)
+    {
+        result += text_mode(ITALIC);
+    }
+    if (current_segment.underline)
+    {
+        result += text_mode(UNDERLINE);
+    }
     return result;
 }
 
@@ -35,7 +51,7 @@ std::string middle(config conf, int length)
     };
     std::string result = "";
     result += reset();
-    result += fg(conf.conn.foreground);
+    result += foreground(conf.conn.foreground);
     result += multiple(length, conf.conn.character);
     result += reset();
     return result;
@@ -44,13 +60,16 @@ std::string middle(config conf, int length)
 std::string post(config conf, segment current_segment, segment next_segment)
 {
     std::string result = "";
+    result += reset();
+    result += background(current_segment.background);
+    result += foreground(current_segment.foreground);
     result += conf.padding;
     result += reset();
     if (next_segment.prefix == "")
     {
-        result += bg(next_segment.background);
+        result += background(next_segment.background);
     }
-    result += fg(current_segment.background);
+    result += foreground(current_segment.background);
     result += current_segment.suffix;
     result += reset();
     return result;
@@ -64,7 +83,7 @@ std::string ps1(config conf)
         result += '\n';
         conf.ps1.string = conf.ps1.string.substr(1);
     }
-    result += fg(conf.ps1.foreground);
+    result += foreground(conf.ps1.foreground);
     result += conf.ps1.string;
     result += reset();
     return result;
