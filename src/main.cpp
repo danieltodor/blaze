@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     blaze_args args = argparse::parse<blaze_args>(argc, argv);
-    if (args.init != "")
+    if (!args.init.empty())
     {
         init_shell(args.init);
     }

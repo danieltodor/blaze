@@ -10,7 +10,7 @@ std::string pre(config conf, segment current_segment, segment previous_segment)
 {
     std::string result = "";
     result += reset();
-    if (previous_segment.suffix == "")
+    if (previous_segment.suffix.empty())
     {
         result += background(previous_segment.background);
     }
@@ -65,7 +65,7 @@ std::string post(config conf, segment current_segment, segment next_segment)
     result += foreground(current_segment.foreground);
     result += conf.padding;
     result += reset();
-    if (next_segment.prefix == "")
+    if (next_segment.prefix.empty())
     {
         result += background(next_segment.background);
     }
@@ -120,11 +120,11 @@ void draw_prompt(double start_time, double finish_time)
         segment prev_sgm = conf.get_previous_segment(i);
         segment next_sgm = conf.get_next_segment(i);
         temp += pre(conf, current_sgm, prev_sgm);
-        if (current_sgm.name != "")
+        if (!current_sgm.name.empty())
         {
             temp += call_segment(current_sgm.name, conf, start_time, finish_time);
         }
-        else if (current_sgm.execute != "")
+        else if (!current_sgm.execute.empty())
         {
             temp += execute_segment(current_sgm.execute);
         }
@@ -138,14 +138,14 @@ void draw_prompt(double start_time, double finish_time)
             left += temp;
         }
         length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
-        if (current_sgm.prefix != "") {length += current_sgm.prefix.length() - 2;}
-        if (current_sgm.suffix != "") {length += current_sgm.suffix.length() - 2;}
-        if (conf.padding != "") {length += conf.padding.length() * 2;}
+        if (!current_sgm.prefix.empty()) {length += current_sgm.prefix.length() - 2;}
+        if (!current_sgm.suffix.empty()) {length += current_sgm.suffix.length() - 2;}
+        if (!conf.padding.empty()) {length += conf.padding.length() * 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;
             left = "";
-            if (right != "")
+            if (!right.empty())
             {
                 result += middle(conf, get_col() - length);
                 result += right;
