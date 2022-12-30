@@ -22,11 +22,11 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::unordered_map<std::string, int> color_map();
-std::string graphics(int code);
+std::unordered_map<std::string, std::string> color_map();
+std::string graphics(std::string code);
 std::string text_mode(int code);
-std::string background(int color_code);
-std::string foreground(int color_code);
+std::string background(std::string color_code);
+std::string foreground(std::string color_code);
 std::string reset();
 
 #endif

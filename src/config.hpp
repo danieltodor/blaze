@@ -13,8 +13,8 @@ struct segment
     std::string align = "";
     std::string prefix = "";
     std::string suffix = "";
-    int background = 0;
-    int foreground = 0;
+    std::string background = "";
+    std::string foreground = "";
     bool bold = false;
     bool dim = false;
     bool italic = false;
@@ -24,13 +24,13 @@ struct segment
 struct prompt
 {
     std::string string = "";
-    int foreground = 0;
+    std::string foreground = "";
 };
 
 struct connector
 {
     std::string character = "";
-    int foreground = 0;
+    std::string foreground = "";
 };
 
 class config
