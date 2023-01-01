@@ -29,6 +29,11 @@ std::string execute_segment(std::string command)
         result += buffer;
     }
     pclose(pipe);
+    // Remove trailing newline
+    if (result[result.length() - 1] == '\n')
+    {
+        result = result.substr(0, result.length() - 1);
+    }
     return result;
 }
 
