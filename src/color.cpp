@@ -1,6 +1,6 @@
 #include <unordered_map>
 
-#include "colors.hpp"
+#include "color.hpp"
 
 const std::string csi = "\033["; // Control Sequence Introducer
 const std::string rgb_background_prefix = "48;2;";

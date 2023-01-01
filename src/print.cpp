@@ -1,10 +1,10 @@
 #include <iostream>
 #include <sys/ioctl.h>
 
-#include "draw_prompt.hpp"
+#include "print.hpp"
 #include "config.hpp"
-#include "colors.hpp"
-#include "segments/segments.hpp"
+#include "color.hpp"
+#include "segment.hpp"
 
 std::string pre(config conf, segment current_segment, segment previous_segment)
 {
@@ -106,7 +106,7 @@ bool end_reached(std::size_t i, config c)
     return i == c.segments.size() - 1 ? true : false;
 }
 
-void draw_prompt(double start_time, double finish_time)
+void print_all(double start_time, double finish_time)
 {
     config conf;
     std::string result;

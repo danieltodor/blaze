@@ -1,7 +1,7 @@
 #include <string>
 
-#include "init_shell.hpp"
-#include "draw_prompt.hpp"
+#include "init.hpp"
+#include "print.hpp"
 #include "external/argparse.hpp"
 
 struct blaze_args : public argparse::Args
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     {
         double start_time = std::stod(args.start_time);
         double finish_time = std::stod(args.finish_time);
-        draw_prompt(start_time, finish_time);
+        print_all(start_time, finish_time);
     }
     return 0;
 }

@@ -1,5 +1,5 @@
-#include "init_shell.hpp"
-#include "init/init_bash.hpp"
+#include "init.hpp"
+#include "init/bash.hpp"
 
 void init_shell(std::string shell)
 {

@@ -1,17 +1,12 @@
-#ifndef BLAZE_SEGMENTS_HPP_INCLUDED
-#define BLAZE_SEGMENTS_HPP_INCLUDED
-
-#include <string>
-
-#include "current_dir.hpp"
-#include "execution_time.hpp"
-#include "src/config.hpp"
+#include "segment.hpp"
+#include "segments/current_dir.hpp"
+#include "segments/execution_time.hpp"
 
 std::string call_segment(std::string name, config conf, double start_time, double finish_time)
 {
     std::string result = "";
-    if (name == "current_dir"){result = current_dir();}
-    else if (name == "execution_time"){result = execution_time(conf, start_time, finish_time);}
+    if (name == "current_dir") {result = current_dir();}
+    else if (name == "execution_time") {result = execution_time(conf, start_time, finish_time);}
     return result;
 }
 
@@ -36,5 +31,3 @@ std::string execute_segment(std::string command)
     }
     return result;
 }
-
-#endif
