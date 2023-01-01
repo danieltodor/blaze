@@ -1,9 +1,9 @@
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
 
 #include "config.hpp"
 #include "toml.hpp"
-#include "colors.hpp"
 
 void config::parse_config()
 {
@@ -29,7 +29,6 @@ void config::parse_config()
         this->set_default_config();
         return;
     }
-    std::unordered_map<std::string, std::string> colors = color_map();
     int i = 0;
     while (true)
     {
@@ -45,8 +44,8 @@ void config::parse_config()
         current.align = tbl["segment"][i]["align"].value_or("left");
         current.prefix = tbl["segment"][i]["prefix"].value_or("");
         current.suffix = tbl["segment"][i]["suffix"].value_or("");
-        current.background = colors[tbl["segment"][i]["background"].value_or("")];
-        current.foreground = colors[tbl["segment"][i]["foreground"].value_or("")];
+        current.background = tbl["segment"][i]["background"].value_or("");
+        current.foreground = tbl["segment"][i]["foreground"].value_or("");
         current.bold = tbl["segment"][i]["bold"].value_or(false);
         current.dim = tbl["segment"][i]["dim"].value_or(false);
         current.italic = tbl["segment"][i]["italic"].value_or(false);
@@ -55,9 +54,9 @@ void config::parse_config()
         i++;
     }
     this->ps1.string = tbl["prompt"]["string"].value_or(" ");
-    this->ps1.foreground = colors[tbl["prompt"]["foreground"].value_or("")];
+    this->ps1.foreground = tbl["prompt"]["foreground"].value_or("");
     this->conn.character = tbl["connector"]["character"].value_or(" ");
-    this->conn.foreground = colors[tbl["connector"]["foreground"].value_or("")];
+    this->conn.foreground = tbl["connector"]["foreground"].value_or("");
     this->padding = tbl["padding"].value_or(" ");
     this->execution_time_precision = tbl["execution_time_precision"].value_or(1);
     this->execution_time_display_from = tbl["execution_time_display_from"].value_or(0);
@@ -126,8 +125,8 @@ void config::set_default_config()
     current_dir.level = 1;
     current_dir.position = 1;
     current_dir.align = "left";
-    current_dir.background = std::to_string(BLUE);
-    current_dir.foreground = std::to_string(BLACK);
+    current_dir.background = "blue";
+    current_dir.foreground = "black";
     current_dir.suffix = "";
     this->segments.push_back(current_dir);
 
@@ -136,7 +135,7 @@ void config::set_default_config()
     execution_time.level = 1;
     execution_time.position = 2;
     execution_time.align = "left";
-    execution_time.foreground = std::to_string(YELLOW);
+    execution_time.foreground = "yellow";
     this->segments.push_back(execution_time);
 
     prompt ps1;

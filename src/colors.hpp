@@ -2,7 +2,6 @@
 #define BLAZE_COLORS_HPP_INCLUDED
 
 #include <string>
-#include <unordered_map>
 
 #define RESET 0
 
@@ -22,11 +21,9 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::unordered_map<std::string, std::string> color_map();
-std::string graphics(std::string code);
 std::string text_mode(int code);
-std::string background(std::string color_code);
-std::string foreground(std::string color_code);
+std::string background(std::string color);
+std::string foreground(std::string color);
 std::string reset();
 
 #endif
