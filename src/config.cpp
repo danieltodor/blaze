@@ -125,9 +125,8 @@ void config::set_default_config()
     current_dir.level = 1;
     current_dir.position = 1;
     current_dir.align = "left";
-    current_dir.background = "blue";
-    current_dir.foreground = "black";
-    current_dir.suffix = "";
+    current_dir.foreground = "blue";
+    current_dir.bold = true;
     this->segments.push_back(current_dir);
 
     segment execution_time;
@@ -135,6 +134,7 @@ void config::set_default_config()
     execution_time.level = 1;
     execution_time.position = 2;
     execution_time.align = "left";
+    execution_time.prefix = " ";
     execution_time.foreground = "yellow";
     this->segments.push_back(execution_time);
 
@@ -142,7 +142,6 @@ void config::set_default_config()
     ps1.string = "\n❯ ";
     this->ps1 = ps1;
 
-    this->padding = " ";
     this->execution_time_precision = 1;
     this->execution_time_display_from = 2;
     this->execution_time_display_fractional_until = 10;
