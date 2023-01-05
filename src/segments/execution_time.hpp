@@ -21,9 +21,9 @@ std::string execution_time(config conf, double start_time, double finish_time)
     };
 
     std::string result = "";
-    float precision = std::pow(10, -conf.execution_time_precision);
+    float precision = std::pow(10, -conf.glob.execution_time_precision);
     double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < conf.execution_time_display_from)
+    if (diff < conf.glob.execution_time_display_from)
     {
         return result;
     }
@@ -46,15 +46,15 @@ std::string execution_time(config conf, double start_time, double finish_time)
     if (seconds)
     {
         stime += ' ' + std::to_string(seconds);
-        if (seconds + minutes * MINUTE + hours * HOUR < conf.execution_time_display_fractional_until)
+        if (seconds + minutes * MINUTE + hours * HOUR < conf.glob.execution_time_display_fractional_until)
         {
-            stime += std::to_string(fractional).substr(1, 1 + conf.execution_time_precision);
+            stime += std::to_string(fractional).substr(1, 1 + conf.glob.execution_time_precision);
         }
         stime += 's';
     }
     if (!hours && !minutes && !seconds)
     {
-        stime += ' ' + std::to_string(fractional).substr(0, 2 + conf.execution_time_precision) + 's';
+        stime += ' ' + std::to_string(fractional).substr(0, 2 + conf.glob.execution_time_precision) + 's';
     }
     result += "took";
     result += stime;

@@ -29,13 +29,20 @@ void config::parse_config()
         this->set_default_config();
         return;
     }
-    int i = 0;
-    while (true)
+
+    this->glob.padding = tbl["global"]["padding"].value_or(" ");
+    this->glob.execution_time_precision = tbl["global"]["execution_time_precision"].value_or(1);
+    this->glob.execution_time_display_from = tbl["global"]["execution_time_display_from"].value_or(0);
+    this->glob.execution_time_display_fractional_until = tbl["global"]["execution_time_display_fractional_until"].value_or(10);
+
+    this->ps1.string = tbl["prompt"]["string"].value_or(" ");
+    this->ps1.foreground = tbl["prompt"]["foreground"].value_or("");
+
+    this->conn.character = tbl["connector"]["character"].value_or(" ");
+    this->conn.foreground = tbl["connector"]["foreground"].value_or("");
+
+    for (int i = 0; tbl["segment"][i]; i++)
     {
-        if (!tbl["segment"][i])
-        {
-            break;
-        }
         segment current;
         current.name = tbl["segment"][i]["name"].value_or("");
         current.execute = tbl["segment"][i]["execute"].value_or("");
@@ -51,16 +58,7 @@ void config::parse_config()
         current.italic = tbl["segment"][i]["italic"].value_or(false);
         current.underline = tbl["segment"][i]["underline"].value_or(false);
         this->segments.push_back(current);
-        i++;
     }
-    this->ps1.string = tbl["prompt"]["string"].value_or(" ");
-    this->ps1.foreground = tbl["prompt"]["foreground"].value_or("");
-    this->conn.character = tbl["connector"]["character"].value_or(" ");
-    this->conn.foreground = tbl["connector"]["foreground"].value_or("");
-    this->padding = tbl["padding"].value_or(" ");
-    this->execution_time_precision = tbl["execution_time_precision"].value_or(1);
-    this->execution_time_display_from = tbl["execution_time_display_from"].value_or(0);
-    this->execution_time_display_fractional_until = tbl["execution_time_display_fractional_until"].value_or(10);
 }
 
 void config::sort_segments()
@@ -120,6 +118,14 @@ segment config::get_next_segment(std::size_t current_index)
 
 void config::set_default_config()
 {
+    this->glob.execution_time_precision = 1;
+    this->glob.execution_time_display_from = 2;
+    this->glob.execution_time_display_fractional_until = 10;
+
+    prompt ps1;
+    ps1.string = "\n❯ ";
+    this->ps1 = ps1;
+
     segment current_dir;
     current_dir.name = "current_dir";
     current_dir.level = 1;
@@ -137,12 +143,4 @@ void config::set_default_config()
     execution_time.prefix = " ";
     execution_time.foreground = "yellow";
     this->segments.push_back(execution_time);
-
-    prompt ps1;
-    ps1.string = "\n❯ ";
-    this->ps1 = ps1;
-
-    this->execution_time_precision = 1;
-    this->execution_time_display_from = 2;
-    this->execution_time_display_fractional_until = 10;
 }

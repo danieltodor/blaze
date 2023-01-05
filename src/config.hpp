@@ -4,6 +4,26 @@
 #include <string>
 #include <vector>
 
+struct global
+{
+    std::string padding = "";
+    int execution_time_precision = 0;
+    int execution_time_display_from = 0;
+    int execution_time_display_fractional_until = 0;
+};
+
+struct prompt
+{
+    std::string string = "";
+    std::string foreground = "";
+};
+
+struct connector
+{
+    std::string character = "";
+    std::string foreground = "";
+};
+
 struct segment
 {
     std::string name = "";
@@ -21,28 +41,13 @@ struct segment
     bool underline = false;
 };
 
-struct prompt
-{
-    std::string string = "";
-    std::string foreground = "";
-};
-
-struct connector
-{
-    std::string character = "";
-    std::string foreground = "";
-};
-
 class config
 {
 public:
+    global glob;
     std::vector<segment> segments;
-    prompt ps1;
     connector conn;
-    std::string padding;
-    int execution_time_precision;
-    int execution_time_display_from;
-    int execution_time_display_fractional_until;
+    prompt ps1;
     config();
     void parse_config();
     void sort_segments();

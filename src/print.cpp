@@ -18,7 +18,7 @@ std::string pre(config conf, segment current_segment, segment previous_segment)
     result += current_segment.prefix;
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
-    result += conf.padding;
+    result += conf.glob.padding;
     if (current_segment.bold)
     {
         result += text_mode(BOLD);
@@ -63,7 +63,7 @@ std::string post(config conf, segment current_segment, segment next_segment)
     result += reset();
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
-    result += conf.padding;
+    result += conf.glob.padding;
     result += reset();
     if (next_segment.prefix.empty())
     {
@@ -140,7 +140,7 @@ void print_all(double start_time, double finish_time)
         length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
         if (!current_sgm.prefix.empty()) {length += current_sgm.prefix.length() - 2;}
         if (!current_sgm.suffix.empty()) {length += current_sgm.suffix.length() - 2;}
-        if (!conf.padding.empty()) {length += conf.padding.length() * 2;}
+        if (!conf.glob.padding.empty()) {length += conf.glob.padding.length() * 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;
