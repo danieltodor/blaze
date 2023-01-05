@@ -78,11 +78,7 @@ std::string post(config conf, segment current_segment, segment next_segment)
 std::string ps1(config conf)
 {
     std::string result = "";
-    if ('\n' == conf.ps1.string[0])
-    {
-        result += '\n';
-        conf.ps1.string = conf.ps1.string.substr(1);
-    }
+    result += reset();
     result += foreground(conf.ps1.foreground);
     result += conf.ps1.string;
     result += reset();
