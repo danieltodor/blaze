@@ -2,7 +2,7 @@
 
 #include "color.hpp"
 
-const std::string csi = "\033["; // Control Sequence Introducer
+const std::string csi = "\001\033["; // Control Sequence Introducer
 const std::string rgb_background_prefix = "48;2;";
 const std::string rgb_foreground_prefix = "38;2;";
 
@@ -32,7 +32,7 @@ std::string graphics(std::string code)
 {
     std::string result = csi;
     result += code;
-    result += 'm';
+    result += "m\002";
     return result;
 }
 
