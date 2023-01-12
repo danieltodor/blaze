@@ -6,21 +6,21 @@
 
 struct global
 {
-    std::string padding = "";
-    int execution_time_precision = 0;
+    std::string padding = " ";
+    int execution_time_precision = 1;
     int execution_time_display_from = 0;
-    int execution_time_display_fractional_until = 0;
+    int execution_time_display_fractional_until = 10;
 };
 
 struct prompt
 {
-    std::string string = "";
+    std::string string = " ";
     std::string foreground = "";
 };
 
 struct connector
 {
-    std::string character = "";
+    std::string character = " ";
     std::string foreground = "";
 };
 
@@ -28,9 +28,9 @@ struct segment
 {
     std::string name = "";
     std::string execute = "";
-    int level = 0;
-    int position = 0;
-    std::string align = "";
+    int level = 1;
+    int position = 1;
+    std::string align = "left";
     std::string prefix = "";
     std::string suffix = "";
     std::string background = "";
