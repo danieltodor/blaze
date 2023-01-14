@@ -31,8 +31,10 @@ struct segment
     int level = 1;
     int position = 1;
     std::string align = "left";
-    std::string prefix = "";
-    std::string suffix = "";
+    std::string inner_prefix = "";
+    std::string outer_prefix = "";
+    std::string inner_suffix = "";
+    std::string outer_suffix = "";
     std::string background = "";
     std::string foreground = "";
     bool bold = false;

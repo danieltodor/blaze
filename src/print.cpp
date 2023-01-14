@@ -10,12 +10,12 @@ std::string pre(config conf, segment current_segment, segment previous_segment)
 {
     std::string result = "";
     result += reset();
-    if (previous_segment.suffix.empty())
+    if (previous_segment.outer_suffix.empty())
     {
         result += background(previous_segment.background);
     }
     result += foreground(current_segment.background);
-    result += current_segment.prefix;
+    result += current_segment.outer_prefix;
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
     result += conf.glob.padding;
@@ -65,12 +65,12 @@ std::string post(config conf, segment current_segment, segment next_segment)
     result += foreground(current_segment.foreground);
     result += conf.glob.padding;
     result += reset();
-    if (next_segment.prefix.empty())
+    if (next_segment.outer_prefix.empty())
     {
         result += background(next_segment.background);
     }
     result += foreground(current_segment.background);
-    result += current_segment.suffix;
+    result += current_segment.outer_suffix;
     result += reset();
     return result;
 }
@@ -116,6 +116,7 @@ void print_all(double start_time, double finish_time)
         segment prev_sgm = conf.get_previous_segment(i);
         segment next_sgm = conf.get_next_segment(i);
         temp += pre(conf, current_sgm, prev_sgm);
+        temp += current_sgm.inner_prefix;
         if (!current_sgm.name.empty())
         {
             temp += call_segment(current_sgm.name, conf, start_time, finish_time);
@@ -124,6 +125,7 @@ void print_all(double start_time, double finish_time)
         {
             temp += execute_segment(current_sgm.execute);
         }
+        temp += current_sgm.inner_suffix;
         temp += post(conf, current_sgm, next_sgm);
         if (current_sgm.align == "right")
         {
@@ -134,9 +136,11 @@ void print_all(double start_time, double finish_time)
             left += temp;
         }
         length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
-        if (!current_sgm.prefix.empty()) {length += current_sgm.prefix.length() - 2;}
-        if (!current_sgm.suffix.empty()) {length += current_sgm.suffix.length() - 2;}
         if (!conf.glob.padding.empty()) {length += conf.glob.padding.length() * 2;}
+        if (!current_sgm.inner_prefix.empty()) {length += current_sgm.inner_prefix.length() - 2;}
+        if (!current_sgm.outer_prefix.empty()) {length += current_sgm.outer_prefix.length() - 2;}
+        if (!current_sgm.inner_suffix.empty()) {length += current_sgm.inner_suffix.length() - 2;}
+        if (!current_sgm.outer_suffix.empty()) {length += current_sgm.outer_suffix.length() - 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;

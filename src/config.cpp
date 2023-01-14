@@ -64,8 +64,10 @@ void config::parse_config()
                 set_value(segment_data, current.level, "level");
                 set_value(segment_data, current.position, "position");
                 set_value(segment_data, current.align, "align");
-                set_value(segment_data, current.prefix, "prefix");
-                set_value(segment_data, current.suffix, "suffix");
+                set_value(segment_data, current.inner_prefix, "inner_prefix");
+                set_value(segment_data, current.outer_prefix, "outer_prefix");
+                set_value(segment_data, current.inner_suffix, "inner_suffix");
+                set_value(segment_data, current.outer_suffix, "outer_suffix");
                 set_value(segment_data, current.background, "background");
                 set_value(segment_data, current.foreground, "foreground");
                 set_value(segment_data, current.bold, "bold");
@@ -158,7 +160,7 @@ void config::set_default_config()
     execution_time.level = 1;
     execution_time.position = 2;
     execution_time.align = "left";
-    execution_time.prefix = " ";
+    execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
     this->segments.push_back(execution_time);
 }
