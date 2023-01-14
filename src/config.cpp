@@ -23,20 +23,18 @@ void config::parse_config()
         "/etc/blaze.toml"
     };
     toml::value data;
-    bool config_parsed = false;
     for (std::size_t i = 0; i < std::size(paths); i++)
     {
         try
         {
             data = toml::parse(paths[i]);
-            config_parsed = true;
             break;
         }
         catch (const std::runtime_error &err) {}
     }
-    if (!config_parsed)
+    this->set_default_config();
+    if (data.is_uninitialized())
     {
-        this->set_default_config();
         return;
     }
 
@@ -51,28 +49,33 @@ void config::parse_config()
     set_value(data, this->conn.character, "connector", "character");
     set_value(data, this->conn.foreground, "connector", "foreground");
 
-    toml::array &segment_array = toml::find(data, "segment").as_array();
     try
     {
-        for (int i = 0;; i++)
+        toml::array &segment_array = toml::find(data, "segment").as_array();
+        this->segments.clear();
+        try
         {
-            toml::value &segment_data = segment_array.at(i);
-            segment current;
-            set_value(segment_data, current.name, "name");
-            set_value(segment_data, current.execute, "execute");
-            set_value(segment_data, current.level, "level");
-            set_value(segment_data, current.position, "position");
-            set_value(segment_data, current.align, "align");
-            set_value(segment_data, current.prefix, "prefix");
-            set_value(segment_data, current.suffix, "suffix");
-            set_value(segment_data, current.background, "background");
-            set_value(segment_data, current.foreground, "foreground");
-            set_value(segment_data, current.bold, "bold");
-            set_value(segment_data, current.dim, "dim");
-            set_value(segment_data, current.italic, "italic");
-            set_value(segment_data, current.underline, "underline");
-            this->segments.push_back(current);
+            for (int i = 0;; i++)
+            {
+                toml::value &segment_data = segment_array.at(i);
+                segment current;
+                set_value(segment_data, current.name, "name");
+                set_value(segment_data, current.execute, "execute");
+                set_value(segment_data, current.level, "level");
+                set_value(segment_data, current.position, "position");
+                set_value(segment_data, current.align, "align");
+                set_value(segment_data, current.prefix, "prefix");
+                set_value(segment_data, current.suffix, "suffix");
+                set_value(segment_data, current.background, "background");
+                set_value(segment_data, current.foreground, "foreground");
+                set_value(segment_data, current.bold, "bold");
+                set_value(segment_data, current.dim, "dim");
+                set_value(segment_data, current.italic, "italic");
+                set_value(segment_data, current.underline, "underline");
+                this->segments.push_back(current);
+            }
         }
+        catch (const std::out_of_range &err) {}
     }
     catch (const std::out_of_range &err) {}
 }
