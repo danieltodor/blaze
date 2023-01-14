@@ -4,7 +4,7 @@
 #include "print.hpp"
 #include "external/argparse.hpp"
 
-struct blaze_args : public argparse::Args
+struct Args : public argparse::Args
 {
     std::string &init = kwarg("i,init", "Which shell to init").set_default("");
     std::string &start_time = kwarg("s,start_time", "Time when the command was started").set_default("");
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-    blaze_args args = argparse::parse<blaze_args>(argc, argv);
+    Args args = argparse::parse<Args>(argc, argv);
     if (!args.init.empty())
     {
         init_shell(args.init);

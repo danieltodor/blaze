@@ -15,7 +15,7 @@ void set_value(toml::value data, T &target, Keys&&... keys)
     catch (const std::out_of_range &err) {}
 }
 
-void config::parse_config()
+void Config::parse_config()
 {
     std::string HOME = std::getenv("HOME");
     std::string paths[] = {
@@ -38,16 +38,16 @@ void config::parse_config()
         return;
     }
 
-    set_value(data, this->glob.padding, "global", "padding");
-    set_value(data, this->glob.execution_time_precision, "global", "execution_time_precision");
-    set_value(data, this->glob.execution_time_display_from, "global", "execution_time_display_from");
-    set_value(data, this->glob.execution_time_display_fractional_until, "global", "execution_time_display_fractional_until");
+    set_value(data, this->global.padding, "global", "padding");
+    set_value(data, this->global.execution_time_precision, "global", "execution_time_precision");
+    set_value(data, this->global.execution_time_display_from, "global", "execution_time_display_from");
+    set_value(data, this->global.execution_time_display_fractional_until, "global", "execution_time_display_fractional_until");
 
-    set_value(data, this->ps1.string, "prompt", "string");
-    set_value(data, this->ps1.foreground, "prompt", "foreground");
+    set_value(data, this->prompt.string, "prompt", "string");
+    set_value(data, this->prompt.foreground, "prompt", "foreground");
 
-    set_value(data, this->conn.character, "connector", "character");
-    set_value(data, this->conn.foreground, "connector", "foreground");
+    set_value(data, this->connector.character, "connector", "character");
+    set_value(data, this->connector.foreground, "connector", "foreground");
 
     try
     {
@@ -58,15 +58,15 @@ void config::parse_config()
             for (int i = 0;; i++)
             {
                 toml::value &segment_data = segment_array.at(i);
-                segment current;
+                Segment current;
                 set_value(segment_data, current.name, "name");
                 set_value(segment_data, current.execute, "execute");
                 set_value(segment_data, current.level, "level");
                 set_value(segment_data, current.position, "position");
                 set_value(segment_data, current.align, "align");
                 set_value(segment_data, current.inner_prefix, "inner_prefix");
-                set_value(segment_data, current.outer_prefix, "outer_prefix");
                 set_value(segment_data, current.inner_suffix, "inner_suffix");
+                set_value(segment_data, current.outer_prefix, "outer_prefix");
                 set_value(segment_data, current.outer_suffix, "outer_suffix");
                 set_value(segment_data, current.background, "background");
                 set_value(segment_data, current.foreground, "foreground");
@@ -82,12 +82,12 @@ void config::parse_config()
     catch (const std::out_of_range &err) {}
 }
 
-void config::sort_segments()
+void Config::sort_segments()
 {
     std::unordered_map<std::string, int> sides;
     sides["left"] = 1;
     sides["right"] = 2;
-    auto compare = [&sides](segment a, segment b)
+    auto compare = [&sides](Segment a, Segment b)
     {
         std::string a_value = "", b_value = "";
         a_value += std::to_string(a.level);
@@ -101,20 +101,20 @@ void config::sort_segments()
     std::sort(this->segments.begin(), this->segments.end(), compare);
 }
 
-config::config()
+Config::Config()
 {
     this->parse_config();
     this->sort_segments();
 }
 
-segment config::get_previous_segment(std::size_t current_index)
+Segment Config::get_previous_segment(std::size_t current_index)
 {
-    segment previous;
+    Segment previous;
     if (current_index == 0)
     {
         return previous;
     }
-    segment tmp = this->segments[current_index - 1];
+    Segment tmp = this->segments[current_index - 1];
     if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
     {
         previous = tmp;
@@ -122,14 +122,14 @@ segment config::get_previous_segment(std::size_t current_index)
     return previous;
 }
 
-segment config::get_next_segment(std::size_t current_index)
+Segment Config::get_next_segment(std::size_t current_index)
 {
-    segment next;
+    Segment next;
     if (current_index == this->segments.size() - 1)
     {
         return next;
     }
-    segment tmp = this->segments[current_index + 1];
+    Segment tmp = this->segments[current_index + 1];
     if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
     {
         next = tmp;
@@ -137,16 +137,16 @@ segment config::get_next_segment(std::size_t current_index)
     return next;
 }
 
-void config::set_default_config()
+void Config::set_default_config()
 {
-    this->glob.padding = "";
-    this->glob.execution_time_display_from = 2;
+    this->global.padding = "";
+    this->global.execution_time_display_from = 2;
 
-    prompt ps1;
-    ps1.string = "\n❯ ";
-    this->ps1 = ps1;
+    Prompt prompt;
+    prompt.string = "\n❯ ";
+    this->prompt = prompt;
 
-    segment current_dir;
+    Segment current_dir;
     current_dir.name = "current_dir";
     current_dir.level = 1;
     current_dir.position = 1;
@@ -155,7 +155,7 @@ void config::set_default_config()
     current_dir.bold = true;
     this->segments.push_back(current_dir);
 
-    segment execution_time;
+    Segment execution_time;
     execution_time.name = "execution_time";
     execution_time.level = 1;
     execution_time.position = 2;

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-struct global
+struct Global
 {
     std::string padding = " ";
     int execution_time_precision = 1;
@@ -12,19 +12,19 @@ struct global
     int execution_time_display_fractional_until = 10;
 };
 
-struct prompt
+struct Prompt
 {
     std::string string = " ";
     std::string foreground = "";
 };
 
-struct connector
+struct Connector
 {
     std::string character = " ";
     std::string foreground = "";
 };
 
-struct segment
+struct Segment
 {
     std::string name = "";
     std::string execute = "";
@@ -32,8 +32,8 @@ struct segment
     int position = 1;
     std::string align = "left";
     std::string inner_prefix = "";
-    std::string outer_prefix = "";
     std::string inner_suffix = "";
+    std::string outer_prefix = "";
     std::string outer_suffix = "";
     std::string background = "";
     std::string foreground = "";
@@ -43,19 +43,19 @@ struct segment
     bool underline = false;
 };
 
-class config
+class Config
 {
 public:
-    global glob;
-    std::vector<segment> segments;
-    connector conn;
-    prompt ps1;
-    config();
+    Global global;
+    std::vector<Segment> segments;
+    Connector connector;
+    Prompt prompt;
+    Config();
     void parse_config();
     void sort_segments();
     void set_default_config();
-    segment get_previous_segment(std::size_t current_index);
-    segment get_next_segment(std::size_t current_index);
+    Segment get_previous_segment(std::size_t current_index);
+    Segment get_next_segment(std::size_t current_index);
 };
 
 #endif
