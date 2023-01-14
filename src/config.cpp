@@ -137,9 +137,8 @@ segment config::get_next_segment(std::size_t current_index)
 
 void config::set_default_config()
 {
-    this->glob.execution_time_precision = 1;
+    this->glob.padding = "";
     this->glob.execution_time_display_from = 2;
-    this->glob.execution_time_display_fractional_until = 10;
 
     prompt ps1;
     ps1.string = "\n❯ ";
