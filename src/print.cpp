@@ -19,6 +19,7 @@ std::string pre(Config conf, Segment current_segment, Segment previous_segment)
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
     result += conf.global.padding;
+    result += current_segment.inner_prefix;
     if (current_segment.bold)
     {
         result += text_mode(BOLD);
@@ -63,6 +64,7 @@ std::string post(Config conf, Segment current_segment, Segment next_segment)
     result += reset();
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
+    result += current_segment.inner_suffix;
     result += conf.global.padding;
     result += reset();
     if (next_segment.outer_prefix.empty())
@@ -112,22 +114,29 @@ void print_all(double start_time, double finish_time)
     unsigned short length = 0;
     for (std::size_t i = 0; i < conf.segments.size(); i++)
     {
-        Segment current_sgm = conf.segments[i];
-        Segment prev_sgm = conf.get_previous_segment(i);
-        Segment next_sgm = conf.get_next_segment(i);
-        temp += pre(conf, current_sgm, prev_sgm);
-        temp += current_sgm.inner_prefix;
-        if (!current_sgm.name.empty())
+        Segment current_segment = conf.segments[i];
+        Segment previous_segment = conf.get_previous_segment(i);
+        Segment next_segment = conf.get_next_segment(i);
+        if (!current_segment.name.empty())
         {
-            temp += call_segment(current_sgm.name, conf, start_time, finish_time);
+            temp += call_segment(current_segment.name, conf, start_time, finish_time);
         }
-        else if (!current_sgm.execute.empty())
+        else if (!current_segment.execute.empty())
         {
-            temp += execute_segment(current_sgm.execute);
+            temp += execute_segment(current_segment.execute);
         }
-        temp += current_sgm.inner_suffix;
-        temp += post(conf, current_sgm, next_sgm);
-        if (current_sgm.align == "right")
+        if (!temp.empty())
+        {
+            length += temp.length();
+            length += conf.global.padding.length() * 2;
+            length += current_segment.inner_prefix.length();
+            length += current_segment.inner_suffix.length();
+            length += current_segment.outer_prefix.length();
+            length += current_segment.outer_suffix.length();
+            temp.insert(0, pre(conf, current_segment, previous_segment));
+            temp.insert(temp.length(), post(conf, current_segment, next_segment));
+        }
+        if (current_segment.align == "right")
         {
             right += temp;
         }
@@ -135,12 +144,6 @@ void print_all(double start_time, double finish_time)
         {
             left += temp;
         }
-        length += temp.length() - pre(conf, current_sgm, prev_sgm).length() - post(conf, current_sgm, next_sgm).length();
-        if (!conf.global.padding.empty()) {length += conf.global.padding.length() * 2;}
-        if (!current_sgm.inner_prefix.empty()) {length += current_sgm.inner_prefix.length() - 2;}
-        if (!current_sgm.inner_suffix.empty()) {length += current_sgm.inner_suffix.length() - 2;}
-        if (!current_sgm.outer_prefix.empty()) {length += current_sgm.outer_prefix.length() - 2;}
-        if (!current_sgm.outer_suffix.empty()) {length += current_sgm.outer_suffix.length() - 2;}
         if (level_changes(i, conf) || end_reached(i, conf))
         {
             result += left;
