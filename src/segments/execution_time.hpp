@@ -28,7 +28,6 @@ std::string execution_time(Config conf, double start_time, double finish_time)
         return result;
     }
 
-    std::string stime = "";
     double &remaining = diff;
     int hours = subtract_time(remaining, HOUR);
     int minutes = subtract_time(remaining, MINUTE);
@@ -37,27 +36,27 @@ std::string execution_time(Config conf, double start_time, double finish_time)
 
     if (hours)
     {
-        stime += ' ' + std::to_string(hours) + 'h';
+        result += std::to_string(hours) + 'h';
     }
     if (minutes)
     {
-        stime += ' ' + std::to_string(minutes) + 'm';
+        result += hours ? " " : "";
+        result += std::to_string(minutes) + 'm';
     }
     if (seconds)
     {
-        stime += ' ' + std::to_string(seconds);
+        result += minutes ? " " : "";
+        result += std::to_string(seconds);
         if (seconds + minutes * MINUTE + hours * HOUR < conf.global.execution_time_display_fractional_until)
         {
-            stime += std::to_string(fractional).substr(1, 1 + conf.global.execution_time_precision);
+            result += std::to_string(fractional).substr(1, 1 + conf.global.execution_time_precision);
         }
-        stime += 's';
+        result += 's';
     }
     if (!hours && !minutes && !seconds)
     {
-        stime += ' ' + std::to_string(fractional).substr(0, 2 + conf.global.execution_time_precision) + 's';
+        result += std::to_string(fractional).substr(0, 2 + conf.global.execution_time_precision) + 's';
     }
-    result += "took";
-    result += stime;
     return result;
 }
 
