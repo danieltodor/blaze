@@ -9,7 +9,7 @@
 #include "color.hpp"
 #include "segment.hpp"
 
-std::string pre(Config conf, Segment current_segment, Segment previous_segment)
+std::string pre(Config config, Segment current_segment, Segment previous_segment)
 {
     std::string result = "";
     result += reset();
@@ -21,7 +21,7 @@ std::string pre(Config conf, Segment current_segment, Segment previous_segment)
     result += current_segment.outer_prefix;
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
-    result += conf.global.padding;
+    result += config.global.padding;
     result += current_segment.inner_prefix;
     if (current_segment.bold)
     {
@@ -42,7 +42,7 @@ std::string pre(Config conf, Segment current_segment, Segment previous_segment)
     return result;
 }
 
-std::string middle(Config conf, int length)
+std::string middle(Config config, int length)
 {
     auto multiple = [](int n, std::string c)
     {
@@ -55,20 +55,20 @@ std::string middle(Config conf, int length)
     };
     std::string result = "";
     result += reset();
-    result += foreground(conf.connector.foreground);
-    result += multiple(length, conf.connector.character);
+    result += foreground(config.connector.foreground);
+    result += multiple(length, config.connector.character);
     result += reset();
     return result;
 }
 
-std::string post(Config conf, Segment current_segment, Segment next_segment)
+std::string post(Config config, Segment current_segment, Segment next_segment)
 {
     std::string result = "";
     result += reset();
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
     result += current_segment.inner_suffix;
-    result += conf.global.padding;
+    result += config.global.padding;
     result += reset();
     if (next_segment.outer_prefix.empty())
     {
@@ -80,12 +80,12 @@ std::string post(Config conf, Segment current_segment, Segment next_segment)
     return result;
 }
 
-std::string prompt(Config conf)
+std::string prompt(Config config)
 {
     std::string result = "";
     result += reset();
-    result += foreground(conf.prompt.foreground);
-    result += conf.prompt.string;
+    result += foreground(config.prompt.foreground);
+    result += config.prompt.string;
     result += reset();
     return result;
 }
@@ -119,20 +119,20 @@ bool end_reached(std::size_t i, Config c)
 
 void print_all(double start_time, double finish_time)
 {
-    Config conf;
+    Config config;
     std::string result;
     std::string temp;
     std::string left;
     std::string right;
     std::size_t length = 0;
-    for (std::size_t i = 0; i < conf.segments.size(); i++)
+    for (std::size_t i = 0; i < config.segments.size(); i++)
     {
-        Segment current_segment = conf.segments[i];
-        Segment previous_segment = conf.get_previous_segment(i);
-        Segment next_segment = conf.get_next_segment(i);
+        Segment current_segment = config.segments[i];
+        Segment previous_segment = config.get_previous_segment(i);
+        Segment next_segment = config.get_next_segment(i);
         if (!current_segment.name.empty())
         {
-            temp += call_segment(current_segment.name, conf, start_time, finish_time);
+            temp += call_segment(current_segment.name, config, start_time, finish_time);
         }
         else if (!current_segment.execute.empty())
         {
@@ -142,15 +142,15 @@ void print_all(double start_time, double finish_time)
         {
             length += get_length({
                 temp,
-                conf.global.padding,
-                conf.global.padding,
+                config.global.padding,
+                config.global.padding,
                 current_segment.inner_prefix,
                 current_segment.inner_suffix,
                 current_segment.outer_prefix,
                 current_segment.outer_suffix
             });
-            temp.insert(0, pre(conf, current_segment, previous_segment));
-            temp.insert(temp.length(), post(conf, current_segment, next_segment));
+            temp.insert(0, pre(config, current_segment, previous_segment));
+            temp.insert(temp.length(), post(config, current_segment, next_segment));
         }
         if (current_segment.align == "right")
         {
@@ -160,24 +160,24 @@ void print_all(double start_time, double finish_time)
         {
             left += temp;
         }
-        if (level_changes(i, conf) || end_reached(i, conf))
+        if (level_changes(i, config) || end_reached(i, config))
         {
             result += left;
             left = "";
             if (!right.empty())
             {
-                result += middle(conf, get_col() - length);
+                result += middle(config, get_col() - length);
                 result += right;
                 right = "";
             }
             length = 0;
         }
-        if (level_changes(i, conf))
+        if (level_changes(i, config))
         {
             result += '\n';
         }
         temp = "";
     }
-    result += prompt(conf);
+    result += prompt(config);
     std::cout << result;
 }

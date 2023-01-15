@@ -2,11 +2,11 @@
 #include "segments/current_dir.hpp"
 #include "segments/execution_time.hpp"
 
-std::string call_segment(std::string name, Config conf, double start_time, double finish_time)
+std::string call_segment(std::string name, Config config, double start_time, double finish_time)
 {
     std::string result = "";
     if (name == "current_dir") {result = current_dir();}
-    else if (name == "execution_time") {result = execution_time(conf, start_time, finish_time);}
+    else if (name == "execution_time") {result = execution_time(config, start_time, finish_time);}
     return result;
 }
 

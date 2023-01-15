@@ -11,7 +11,7 @@
 #define MINUTE 60
 #define SECOND 1
 
-std::string execution_time(Config conf, double start_time, double finish_time)
+std::string execution_time(Config config, double start_time, double finish_time)
 {
     auto subtract_time = [](double &from, int unit)
     {
@@ -21,9 +21,9 @@ std::string execution_time(Config conf, double start_time, double finish_time)
     };
 
     std::string result = "";
-    float precision = std::pow(10, -conf.global.execution_time_precision);
+    float precision = std::pow(10, -config.global.execution_time_precision);
     double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < conf.global.execution_time_display_from)
+    if (diff < config.global.execution_time_display_from)
     {
         return result;
     }
@@ -47,15 +47,15 @@ std::string execution_time(Config conf, double start_time, double finish_time)
     {
         result += minutes ? " " : "";
         result += std::to_string(seconds);
-        if (seconds + minutes * MINUTE + hours * HOUR < conf.global.execution_time_display_fractional_until)
+        if (seconds + minutes * MINUTE + hours * HOUR < config.global.execution_time_display_fractional_until)
         {
-            result += std::to_string(fractional).substr(1, 1 + conf.global.execution_time_precision);
+            result += std::to_string(fractional).substr(1, 1 + config.global.execution_time_precision);
         }
         result += 's';
     }
     if (!hours && !minutes && !seconds)
     {
-        result += std::to_string(fractional).substr(0, 2 + conf.global.execution_time_precision) + 's';
+        result += std::to_string(fractional).substr(0, 2 + config.global.execution_time_precision) + 's';
     }
     return result;
 }
