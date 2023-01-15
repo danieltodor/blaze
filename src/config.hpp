@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+const std::string control_char = "`";
+
 struct Global
 {
     std::string padding = " ";
@@ -31,6 +33,7 @@ struct Segment
     int level = 1;
     int position = 1;
     std::string align = "left";
+    std::string padding = control_char;
     std::string inner_prefix = "";
     std::string inner_suffix = "";
     std::string outer_prefix = "";

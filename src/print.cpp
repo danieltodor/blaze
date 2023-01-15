@@ -9,6 +9,11 @@
 #include "color.hpp"
 #include "segment.hpp"
 
+std::string get_padding(Config config, Segment current_segment)
+{
+    return current_segment.padding != control_char ? current_segment.padding : config.global.padding;
+}
+
 std::string pre(Config config, Segment current_segment, Segment previous_segment)
 {
     std::string result = "";
@@ -21,7 +26,7 @@ std::string pre(Config config, Segment current_segment, Segment previous_segment
     result += current_segment.outer_prefix;
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
-    result += config.global.padding;
+    result += get_padding(config, current_segment);
     result += current_segment.inner_prefix;
     if (current_segment.bold)
     {
@@ -68,7 +73,7 @@ std::string post(Config config, Segment current_segment, Segment next_segment)
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
     result += current_segment.inner_suffix;
-    result += config.global.padding;
+    result += get_padding(config, current_segment);
     result += reset();
     if (next_segment.outer_prefix.empty())
     {
@@ -142,8 +147,8 @@ void print_all(double start_time, double finish_time)
         {
             length += get_length({
                 temp,
-                config.global.padding,
-                config.global.padding,
+                get_padding(config, current_segment),
+                get_padding(config, current_segment),
                 current_segment.inner_prefix,
                 current_segment.inner_suffix,
                 current_segment.outer_prefix,

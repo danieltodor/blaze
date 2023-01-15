@@ -64,6 +64,7 @@ void Config::parse_config()
                 set_value(segment_data, current.level, "level");
                 set_value(segment_data, current.position, "position");
                 set_value(segment_data, current.align, "align");
+                set_value(segment_data, current.padding, "padding");
                 set_value(segment_data, current.inner_prefix, "inner_prefix");
                 set_value(segment_data, current.inner_suffix, "inner_suffix");
                 set_value(segment_data, current.outer_prefix, "outer_prefix");
