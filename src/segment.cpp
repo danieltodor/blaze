@@ -1,12 +1,25 @@
+#include <unordered_map>
+
 #include "segment.hpp"
+#include "segments/separator.hpp"
 #include "segments/current_dir.hpp"
 #include "segments/execution_time.hpp"
 
-std::string call_segment(std::string name, Config config, double start_time, double finish_time)
+const std::unordered_map<std::string, std::string (*)(Context)> segment_map
+{
+    {"separator", &separator},
+    {"current_dir", &current_dir},
+    {"execution_time", &execution_time}
+};
+
+std::string call_segment(std::string name, Context context)
 {
     std::string result = "";
-    if (name == "current_dir") {result = current_dir();}
-    else if (name == "execution_time") {result = execution_time(config, start_time, finish_time);}
+    auto pair = segment_map.find(name);
+    if (pair != segment_map.end())
+    {
+        result = (*pair).second(context);
+    }
     return result;
 }
 

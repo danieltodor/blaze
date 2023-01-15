@@ -3,8 +3,11 @@
 
 #include <string>
 
-std::string current_dir()
+#include "src/segment.hpp"
+
+std::string current_dir(Context context)
 {
+    (void)context;
     std::string result = "";
     std::string PWD = std::getenv("PWD");
     std::string HOME = std::getenv("HOME");

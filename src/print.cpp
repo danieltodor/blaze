@@ -132,13 +132,13 @@ void print_all(double start_time, double finish_time)
         Segment next_segment = config.get_next_segment(i);
         if (!current_segment.name.empty())
         {
-            temp += call_segment(current_segment.name, config, start_time, finish_time);
+            temp += call_segment(current_segment.name, {config, start_time, finish_time});
         }
         else if (!current_segment.execute.empty())
         {
             temp += execute_segment(current_segment.execute);
         }
-        if (!temp.empty())
+        if (!temp.empty() || current_segment.name == "separator")
         {
             length += get_length({
                 temp,
