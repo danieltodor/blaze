@@ -1,5 +1,8 @@
 #include <iostream>
 #include <sys/ioctl.h>
+#include <vector>
+#include <locale>
+#include <codecvt>
 
 #include "print.hpp"
 #include "config.hpp"
@@ -94,6 +97,16 @@ unsigned short get_col()
     return w.ws_col;
 }
 
+std::size_t get_length(std::vector<std::string> strings)
+{
+    std::size_t length = 0;
+    for (const std::string &string : strings)
+    {
+        length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).size();
+    }
+    return length;
+}
+
 bool level_changes(std::size_t i, Config c)
 {
     return i < c.segments.size() - 1 && c.segments[i + 1].level > c.segments[i].level ? true : false;
@@ -111,7 +124,7 @@ void print_all(double start_time, double finish_time)
     std::string temp;
     std::string left;
     std::string right;
-    unsigned short length = 0;
+    std::size_t length = 0;
     for (std::size_t i = 0; i < conf.segments.size(); i++)
     {
         Segment current_segment = conf.segments[i];
@@ -127,12 +140,15 @@ void print_all(double start_time, double finish_time)
         }
         if (!temp.empty())
         {
-            length += temp.length();
-            length += conf.global.padding.length() * 2;
-            length += current_segment.inner_prefix.length();
-            length += current_segment.inner_suffix.length();
-            length += current_segment.outer_prefix.length();
-            length += current_segment.outer_suffix.length();
+            length += get_length({
+                temp,
+                conf.global.padding,
+                conf.global.padding,
+                current_segment.inner_prefix,
+                current_segment.inner_suffix,
+                current_segment.outer_prefix,
+                current_segment.outer_suffix
+            });
             temp.insert(0, pre(conf, current_segment, previous_segment));
             temp.insert(temp.length(), post(conf, current_segment, next_segment));
         }
