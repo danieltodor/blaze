@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "external/toml.hpp"
+
 const std::string control_char = "`";
 
 struct Global
@@ -54,7 +56,8 @@ public:
     Connector connector;
     Prompt prompt;
     Config();
-    void parse_config();
+    toml::value load_config();
+    void parse_config(toml::value data);
     void sort_segments();
     void set_default_config();
     Segment get_previous_segment(std::size_t current_index);

@@ -3,19 +3,8 @@
 #include <unordered_map>
 
 #include "config.hpp"
-#include "external/toml.hpp"
 
-template<typename T, typename... Keys>
-void set_value(toml::value data, T &target, Keys&&... keys)
-{
-    try
-    {
-        target = toml::find<T>(data, keys...);
-    }
-    catch (const std::out_of_range &err) {}
-}
-
-void Config::parse_config()
+toml::value Config::load_config()
 {
     std::string HOME = std::getenv("HOME");
     std::string paths[] = {
@@ -32,6 +21,21 @@ void Config::parse_config()
         }
         catch (const std::runtime_error &err) {}
     }
+    return data;
+}
+
+template<typename T, typename... Keys>
+void set_value(toml::value data, T &target, Keys&&... keys)
+{
+    try
+    {
+        target = toml::find<T>(data, keys...);
+    }
+    catch (const std::out_of_range &err) {}
+}
+
+void Config::parse_config(toml::value data)
+{
     this->set_default_config();
     if (data.is_uninitialized())
     {
@@ -104,7 +108,7 @@ void Config::sort_segments()
 
 Config::Config()
 {
-    this->parse_config();
+    this->parse_config(this->load_config());
     this->sort_segments();
 }
 
