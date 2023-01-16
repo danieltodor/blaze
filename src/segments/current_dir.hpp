@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "src/segment.hpp"
+#include "src/context.hpp"
 
 std::string current_dir(Context context)
 {

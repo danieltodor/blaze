@@ -4,7 +4,7 @@
 #include <string>
 #include <cmath>
 
-#include "src/segment.hpp"
+#include "src/context.hpp"
 
 // Times in seconds
 #define HOUR 3600
