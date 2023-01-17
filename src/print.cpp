@@ -11,6 +11,10 @@
 
 std::string get_padding(Config config, Segment current_segment)
 {
+    if (current_segment.name == "separator" && current_segment.padding == control_char)
+    {
+        return "";
+    }
     return current_segment.padding != control_char ? current_segment.padding : config.global.padding;
 }
 
