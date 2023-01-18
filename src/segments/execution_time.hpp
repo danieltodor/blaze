@@ -21,9 +21,10 @@ std::string execution_time(Context context)
     };
 
     std::string result = "";
-    float precision = std::pow(10, -context.config.global.execution_time_precision);
+    Config &config = context.config;
+    float precision = std::pow(10, -config.global.execution_time_precision);
     double diff = round((context.finish_time - context.start_time) / precision) * precision;
-    if (diff < context.config.global.execution_time_display_from)
+    if (diff < config.global.execution_time_display_from)
     {
         return result;
     }
@@ -47,15 +48,15 @@ std::string execution_time(Context context)
     {
         result += minutes ? " " : "";
         result += std::to_string(seconds);
-        if (seconds + minutes * MINUTE + hours * HOUR < context.config.global.execution_time_display_fractional_until)
+        if (seconds + minutes * MINUTE + hours * HOUR < config.global.execution_time_display_fractional_until)
         {
-            result += std::to_string(fractional).substr(1, 1 + context.config.global.execution_time_precision);
+            result += std::to_string(fractional).substr(1, 1 + config.global.execution_time_precision);
         }
         result += 's';
     }
     if (!hours && !minutes && !seconds)
     {
-        result += std::to_string(fractional).substr(0, 2 + context.config.global.execution_time_precision) + 's';
+        result += std::to_string(fractional).substr(0, 2 + config.global.execution_time_precision) + 's';
     }
     return result;
 }

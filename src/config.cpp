@@ -42,6 +42,7 @@ void Config::parse_config(toml::value data)
         return;
     }
 
+    set_value(data, this->global.new_line, "global", "new_line");
     set_value(data, this->global.padding, "global", "padding");
     set_value(data, this->global.execution_time_precision, "global", "execution_time_precision");
     set_value(data, this->global.execution_time_display_from, "global", "execution_time_display_from");

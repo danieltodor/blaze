@@ -2,8 +2,11 @@
 #define BLAZE_INIT_BASH_HPP_INCLUDED
 
 #include <iostream>
+#include <string>
 
-void init_bash()
+#include "src/config.hpp"
+
+void init_bash(Config config)
 {
     std::cout << R"d(
 blaze_get_current_time() {
@@ -33,10 +36,11 @@ fi
 
 blaze_save_start_time
 
-PROMPT_COMMAND="echo"
 PS0='$(blaze_save_start_time)'
-PS1='$(blaze -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
-    )d";
+PS1='$(blaze -c bash -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
+)d";
+    std::string new_line = config.global.new_line ? "echo" : "";
+    printf("PROMPT_COMMAND=\"%s\"", new_line.c_str());
 }
 
 #endif

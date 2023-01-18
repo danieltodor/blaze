@@ -4,12 +4,13 @@
 #include <string>
 #include <vector>
 
-#include "external/toml.hpp"
+#include "external/toml/toml.hpp"
 
 const std::string control_char = "`";
 
 struct Global
 {
+    bool new_line = false;
     std::string padding = " ";
     int execution_time_precision = 1;
     int execution_time_display_from = 0;

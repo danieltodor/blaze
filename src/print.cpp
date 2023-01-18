@@ -5,7 +5,6 @@
 #include <codecvt>
 
 #include "print.hpp"
-#include "config.hpp"
 #include "color.hpp"
 #include "segment.hpp"
 
@@ -126,9 +125,9 @@ bool end_reached(std::size_t i, Config c)
     return i == c.segments.size() - 1 ? true : false;
 }
 
-void print_all(double start_time, double finish_time)
+void print_all(Context context)
 {
-    Config config;
+    Config &config = context.config;
     std::string result;
     std::string temp;
     std::string left;
@@ -141,7 +140,7 @@ void print_all(double start_time, double finish_time)
         Segment next_segment = config.get_next_segment(i);
         if (!current_segment.name.empty())
         {
-            temp += call_segment(current_segment.name, {config, start_time, finish_time});
+            temp += call_segment(current_segment.name, context);
         }
         else if (!current_segment.execute.empty())
         {

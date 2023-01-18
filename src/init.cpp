@@ -1,10 +1,10 @@
 #include "init.hpp"
 #include "init/bash.hpp"
 
-void init_shell(std::string shell)
+void init_shell(Context context)
 {
-    if (shell == "bash")
+    if (context.shell == "bash")
     {
-        init_bash();
+        init_bash(context.config);
     }
 }
