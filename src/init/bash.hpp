@@ -37,7 +37,7 @@ fi
 blaze_save_start_time
 
 PS0='$(blaze_save_start_time)'
-PS1='$(blaze -c bash -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
+PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
 )d";
     std::string new_line = config.global.new_line ? "echo" : "";
     printf("PROMPT_COMMAND=\"%s\"", new_line.c_str());

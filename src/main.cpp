@@ -7,8 +7,8 @@
 
 struct Args : public argparse::Args
 {
-    std::string &init = kwarg("i,init", "Which shell to init").set_default("");
-    std::string &current_shell = kwarg("c,current_shell", "Current shell").set_default("");
+    std::string &shell = arg("Current shell");
+    bool &init = flag("i,init", "Init current shell");
     std::string &start_time = kwarg("s,start_time", "Time when the command was started").set_default("0");
     std::string &finish_time = kwarg("f,finish_time", "Time when the command was finished").set_default("0");
 };
@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
     Args args = argparse::parse<Args>(argc, argv);
     Context context = {
         Config(),
-        !args.init.empty() ? args.init : args.current_shell,
+        args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time)
     };
-    if (!args.init.empty())
+    if (args.init)
     {
         init_shell(context);
     }
