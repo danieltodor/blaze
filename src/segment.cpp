@@ -27,6 +27,13 @@ std::string call_segment(std::string name, Context context)
 
 std::string execute_command(std::string command)
 {
+    auto remove_trailing_newline = [](std::string &result)
+    {
+        if (result[result.length() - 1] == '\n')
+        {
+            result = result.substr(0, result.length() - 1);
+        }
+    };
     std::string result = "";
     char buffer[128];
     FILE *pipe = popen(command.c_str(), "r");
@@ -39,10 +46,6 @@ std::string execute_command(std::string command)
         result += buffer;
     }
     pclose(pipe);
-    // Remove trailing newline
-    if (result[result.length() - 1] == '\n')
-    {
-        result = result.substr(0, result.length() - 1);
-    }
+    remove_trailing_newline(result);
     return result;
 }
