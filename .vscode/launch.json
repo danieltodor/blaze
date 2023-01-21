@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/blaze",
             // "args": ["--init", "bash"],
-            "args": ["-s", "1669573672.173649637", "-f", "1669573895.264739827"],
+            "args": ["bash", "-s", "1669573672.173649637", "-f", "1669573895.264739827"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "externalConsole": false,

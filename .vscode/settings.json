@@ -38,6 +38,10 @@
         "sstream": "cpp",
         "cstddef": "cpp",
         "limits": "cpp",
-        "version": "cpp"
+        "version": "cpp",
+        "charconv": "cpp",
+        "cstdlib": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp"
     },
 }
