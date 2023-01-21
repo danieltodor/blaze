@@ -11,6 +11,7 @@ struct Context
     std::string shell;
     double start_time;
     double finish_time;
+    std::string PWD;
 };
 
 #endif

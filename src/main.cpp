@@ -24,7 +24,8 @@ int main(int argc, char *argv[])
         Config(),
         args.shell,
         std::stod(args.start_time),
-        std::stod(args.finish_time)
+        std::stod(args.finish_time),
+        std::getenv("PWD")
     };
     if (args.init)
     {
