@@ -45,12 +45,6 @@ void Config::parse_config(toml::value data)
     set_value(data, this->global.new_line, "global", "new_line");
     set_value(data, this->global.padding, "global", "padding");
 
-    set_value(data, this->execution_time.precision, "execution_time", "precision");
-    set_value(data, this->execution_time.display_from, "execution_time", "display_from");
-    set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
-
-    set_value(data, this->git_branch.ignore, "git_branch", "ignore");
-
     set_value(data, this->prompt.string, "prompt", "string");
     set_value(data, this->prompt.foreground, "prompt", "foreground");
 
@@ -89,6 +83,12 @@ void Config::parse_config(toml::value data)
         catch (const std::out_of_range &err) {}
     }
     catch (const std::out_of_range &err) {}
+
+    set_value(data, this->execution_time.precision, "execution_time", "precision");
+    set_value(data, this->execution_time.display_from, "execution_time", "display_from");
+    set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
+
+    set_value(data, this->git_branch.ignore, "git_branch", "ignore");
 }
 
 void Config::sort_segments()

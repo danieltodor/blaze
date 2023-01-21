@@ -17,7 +17,7 @@ std::string git_branch(Context context)
     {
         return result;
     }
-    result += execute_command("git branch");
+    result += execute_command("git branch --show-current");
     std::string patterns[] = {
         "\\*",
         "\\s"
