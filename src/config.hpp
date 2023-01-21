@@ -12,9 +12,6 @@ struct Global
 {
     bool new_line = false;
     std::string padding = " ";
-    int execution_time_precision = 1;
-    int execution_time_display_from = 0;
-    int execution_time_display_fractional_until = 10;
 };
 
 struct Prompt
@@ -49,13 +46,21 @@ struct Segment
     bool underline = false;
 };
 
+struct ExecutionTime
+{
+    int precision = 1;
+    int display_from = 0;
+    int display_fractional_until = 10;
+};
+
 class Config
 {
 public:
     Global global;
-    std::vector<Segment> segments;
-    Connector connector;
     Prompt prompt;
+    Connector connector;
+    std::vector<Segment> segments;
+    ExecutionTime execution_time;
     Config();
     toml::value load_config();
     void parse_config(toml::value data);

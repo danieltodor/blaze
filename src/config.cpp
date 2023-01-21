@@ -44,9 +44,10 @@ void Config::parse_config(toml::value data)
 
     set_value(data, this->global.new_line, "global", "new_line");
     set_value(data, this->global.padding, "global", "padding");
-    set_value(data, this->global.execution_time_precision, "global", "execution_time_precision");
-    set_value(data, this->global.execution_time_display_from, "global", "execution_time_display_from");
-    set_value(data, this->global.execution_time_display_fractional_until, "global", "execution_time_display_fractional_until");
+
+    set_value(data, this->execution_time.precision, "execution_time", "precision");
+    set_value(data, this->execution_time.display_from, "execution_time", "display_from");
+    set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
 
     set_value(data, this->prompt.string, "prompt", "string");
     set_value(data, this->prompt.foreground, "prompt", "foreground");
@@ -146,7 +147,7 @@ Segment Config::get_next_segment(std::size_t current_index)
 void Config::set_default_config()
 {
     this->global.padding = "";
-    this->global.execution_time_display_from = 2;
+    this->execution_time.display_from = 2;
 
     Prompt prompt;
     prompt.string = "\n❯ ";
