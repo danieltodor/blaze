@@ -49,6 +49,8 @@ void Config::parse_config(toml::value data)
     set_value(data, this->execution_time.display_from, "execution_time", "display_from");
     set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
 
+    set_value(data, this->git_branch.ignore, "git_branch", "ignore");
+
     set_value(data, this->prompt.string, "prompt", "string");
     set_value(data, this->prompt.foreground, "prompt", "foreground");
 

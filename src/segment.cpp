@@ -4,12 +4,14 @@
 #include "segments/separator.hpp"
 #include "segments/current_dir.hpp"
 #include "segments/execution_time.hpp"
+#include "segments/git_branch.hpp"
 
 const std::unordered_map<std::string, std::string (*)(Context)> segment_map
 {
     {"separator", &separator},
     {"current_dir", &current_dir},
-    {"execution_time", &execution_time}
+    {"execution_time", &execution_time},
+    {"git_branch", &git_branch}
 };
 
 std::string call_segment(std::string name, Context context)
@@ -23,7 +25,7 @@ std::string call_segment(std::string name, Context context)
     return result;
 }
 
-std::string execute_segment(std::string command)
+std::string execute_command(std::string command)
 {
     std::string result = "";
     char buffer[128];

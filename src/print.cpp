@@ -144,7 +144,7 @@ void print_all(Context context)
         }
         else if (!current_segment.execute.empty())
         {
-            temp += execute_segment(current_segment.execute);
+            temp += execute_command(current_segment.execute);
         }
         if (!temp.empty() || current_segment.name == "separator")
         {

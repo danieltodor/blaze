@@ -53,6 +53,11 @@ struct ExecutionTime
     int display_fractional_until = 10;
 };
 
+struct GitBranch
+{
+    std::vector<std::string> ignore;
+};
+
 class Config
 {
 public:
@@ -61,6 +66,7 @@ public:
     Connector connector;
     std::vector<Segment> segments;
     ExecutionTime execution_time;
+    GitBranch git_branch;
     Config();
     toml::value load_config();
     void parse_config(toml::value data);

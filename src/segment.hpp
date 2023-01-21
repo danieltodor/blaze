@@ -6,6 +6,6 @@
 #include "context.hpp"
 
 std::string call_segment(std::string name, Context context);
-std::string execute_segment(std::string command);
+std::string execute_command(std::string command);
 
 #endif
