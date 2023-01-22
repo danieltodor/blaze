@@ -2,11 +2,11 @@
 #define BLAZE_SEGMENTS_GIT_BRANCH_HPP_INCLUDED
 
 #include <string>
-#include <regex>
 #include <filesystem>
 
 #include "src/context.hpp"
 #include "src/segment.hpp"
+#include "src/utils.hpp"
 
 std::string git_branch(Context context)
 {
@@ -17,15 +17,12 @@ std::string git_branch(Context context)
     {
         return result;
     }
-    result += execute_command("git branch --show-current");
-    std::string patterns[] = {
-        "\\*",
-        "\\s"
+    result += execute_command("git branch --contains HEAD --format '%(refname:lstrip=2)'");
+    const std::string patterns[] = {
+        "\\(HEAD.*\\)"
     };
-    for (const std::string &pattern : patterns)
-    {
-        result = std::regex_replace(result, std::regex(pattern), "");
-    }
+    regex_replace(result, patterns, "");
+    strip(result);
     for (const std::string &ignore : config.git_branch.ignore)
     {
         if (result == ignore)

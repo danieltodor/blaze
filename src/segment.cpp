@@ -1,6 +1,6 @@
 #include <unordered_map>
-#include <regex>
 
+#include "utils.hpp"
 #include "segment.hpp"
 #include "segments/separator.hpp"
 #include "segments/current_dir.hpp"
@@ -28,17 +28,6 @@ std::string call_segment(std::string name, Context context)
 
 std::string execute_command(std::string command)
 {
-    auto strip = [](std::string &result)
-    {
-        std::string patterns[] = {
-            "^\\s*",
-            "\\s*$"
-        };
-        for (const std::string &pattern : patterns)
-        {
-            result = std::regex_replace(result, std::regex(pattern), "");
-        }
-    };
     std::string result = "";
     char buffer[128];
     FILE *pipe = popen(command.c_str(), "r");
