@@ -7,6 +7,7 @@
 #include "print.hpp"
 #include "color.hpp"
 #include "segment.hpp"
+#include "utils.hpp"
 
 std::string get_padding(Config config, Segment current_segment)
 {

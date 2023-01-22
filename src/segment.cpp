@@ -1,6 +1,5 @@
 #include <unordered_map>
 
-#include "utils.hpp"
 #include "segment.hpp"
 #include "segments/separator.hpp"
 #include "segments/current_dir.hpp"
@@ -23,23 +22,5 @@ std::string call_segment(std::string name, Context context)
     {
         result = (*pair).second(context);
     }
-    return result;
-}
-
-std::string execute_command(std::string command)
-{
-    std::string result = "";
-    char buffer[128];
-    FILE *pipe = popen(command.c_str(), "r");
-    if (!pipe)
-    {
-        return result;
-    }
-    while (fgets(buffer, sizeof(buffer), pipe) != NULL)
-    {
-        result += buffer;
-    }
-    pclose(pipe);
-    strip(result);
     return result;
 }

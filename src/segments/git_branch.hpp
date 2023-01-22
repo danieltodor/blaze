@@ -5,7 +5,6 @@
 #include <filesystem>
 
 #include "src/context.hpp"
-#include "src/segment.hpp"
 #include "src/utils.hpp"
 
 std::string git_branch(Context context)

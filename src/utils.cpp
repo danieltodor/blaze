@@ -34,3 +34,21 @@ void strip(std::string &string)
         },
         "");
 }
+
+std::string execute_command(std::string command)
+{
+    std::string result = "";
+    char buffer[128];
+    FILE *pipe = popen(command.c_str(), "r");
+    if (!pipe)
+    {
+        return result;
+    }
+    while (fgets(buffer, sizeof(buffer), pipe) != NULL)
+    {
+        result += buffer;
+    }
+    pclose(pipe);
+    strip(result);
+    return result;
+}
