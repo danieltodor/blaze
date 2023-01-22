@@ -52,3 +52,8 @@ std::string execute_command(std::string command)
     strip(result);
     return result;
 }
+
+bool git_repository_detected()
+{
+    return execute_command("git rev-parse 2>&1") == "" ? true : false;
+}
