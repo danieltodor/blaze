@@ -1,27 +1,36 @@
+#include <regex>
+
 #include "utils.hpp"
 
-void regex_replace(std::string &string, const std::string patterns[], const std::string &replacement)
+void regex_replace(std::string &string, const std::vector<std::string> patterns, const std::string &replacement)
 {
-    std::string pattern;
-    for (int i = 0;; i++)
+    for (const std::string &pattern : patterns)
     {
-        try
-        {
-            pattern = patterns[i];
-        }
-        catch (const std::exception &err)
-        {
-            break;
-        }
         string = std::regex_replace(string, std::regex(pattern), replacement);
     }
 }
 
+bool regex_search(std::string &string, const std::vector<std::string> patterns)
+{
+    bool result = false;
+    for (const std::string &pattern : patterns)
+    {
+        if (std::regex_search(string, std::regex(pattern)))
+        {
+            result = true;
+            break;
+        }
+    }
+    return result;
+}
+
 void strip(std::string &string)
 {
-    const std::string patterns[] = {
-        "^\\s*",
-        "\\s*$"
-    };
-    regex_replace(string, patterns, "");
+    regex_replace(
+        string,
+        {
+            "^\\s*",
+            "\\s*$"
+        },
+        "");
 }

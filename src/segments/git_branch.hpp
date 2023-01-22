@@ -18,18 +18,11 @@ std::string git_branch(Context context)
         return result;
     }
     result += execute_command("git branch --contains HEAD --format '%(refname:lstrip=2)'");
-    const std::string patterns[] = {
-        "\\(HEAD.*\\)"
-    };
-    regex_replace(result, patterns, "");
+    regex_replace(result, {"\\(HEAD.*\\)"}, "");
     strip(result);
-    for (const std::string &ignore : config.git_branch.ignore)
+    if (regex_search(result, config.git_branch.ignore))
     {
-        if (result == ignore)
-        {
-            result = "";
-            break;
-        }
+        result = "";
     }
     return result;
 }
