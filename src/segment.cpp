@@ -1,4 +1,5 @@
 #include <unordered_map>
+#include <regex>
 
 #include "segment.hpp"
 #include "segments/separator.hpp"
@@ -27,11 +28,15 @@ std::string call_segment(std::string name, Context context)
 
 std::string execute_command(std::string command)
 {
-    auto remove_trailing_newline = [](std::string &result)
+    auto strip = [](std::string &result)
     {
-        if (result[result.length() - 1] == '\n')
+        std::string patterns[] = {
+            "^\\s*",
+            "\\s*$"
+        };
+        for (const std::string &pattern : patterns)
         {
-            result = result.substr(0, result.length() - 1);
+            result = std::regex_replace(result, std::regex(pattern), "");
         }
     };
     std::string result = "";
@@ -46,6 +51,6 @@ std::string execute_command(std::string command)
         result += buffer;
     }
     pclose(pipe);
-    remove_trailing_newline(result);
+    strip(result);
     return result;
 }
