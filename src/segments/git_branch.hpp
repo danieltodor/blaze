@@ -4,7 +4,7 @@
 #include <string>
 
 #include "src/context.hpp"
-#include "src/utils.hpp"
+#include "src/util.hpp"
 
 std::string git_branch(Context context)
 {

@@ -1,5 +1,5 @@
-#ifndef BLAZE_UTILS_HPP_INCLUDED
-#define BLAZE_UTILS_HPP_INCLUDED
+#ifndef BLAZE_UTIL_HPP_INCLUDED
+#define BLAZE_UTIL_HPP_INCLUDED
 
 #include <string>
 #include <vector>

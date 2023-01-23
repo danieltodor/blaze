@@ -1,6 +1,6 @@
 #include <regex>
 
-#include "utils.hpp"
+#include "util.hpp"
 
 void regex_replace(std::string &string, const std::vector<std::string> patterns, const std::string &replacement)
 {
