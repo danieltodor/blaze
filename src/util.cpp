@@ -32,7 +32,8 @@ void strip(std::string &string)
             "^\\s*",
             "\\s*$"
         },
-        "");
+        ""
+    );
 }
 
 std::string execute_command(std::string command)
@@ -55,5 +56,5 @@ std::string execute_command(std::string command)
 
 bool git_repository_detected()
 {
-    return execute_command("git rev-parse 2>&1") == "" ? true : false;
+    return execute_command("git rev-parse 2>&1").empty() ? true : false;
 }
