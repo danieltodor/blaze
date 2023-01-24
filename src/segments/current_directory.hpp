@@ -1,11 +1,11 @@
-#ifndef BLAZE_SEGMENTS_CURRENT_DIR_HPP_INCLUDED
-#define BLAZE_SEGMENTS_CURRENT_DIR_HPP_INCLUDED
+#ifndef BLAZE_SEGMENTS_CURRENT_DIRECTORY_HPP_INCLUDED
+#define BLAZE_SEGMENTS_CURRENT_DIRECTORY_HPP_INCLUDED
 
 #include <string>
 
 #include "src/context.hpp"
 
-std::string current_dir(Context context)
+std::string current_directory(Context context)
 {
     std::string result = "";
     std::string &PWD = context.PWD;

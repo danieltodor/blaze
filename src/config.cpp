@@ -155,14 +155,14 @@ void Config::set_default_config()
     prompt.string = "\n❯ ";
     this->prompt = prompt;
 
-    Segment current_dir;
-    current_dir.name = "current_dir";
-    current_dir.level = 1;
-    current_dir.position = 1;
-    current_dir.align = "left";
-    current_dir.foreground = "blue";
-    current_dir.bold = true;
-    this->segments.push_back(current_dir);
+    Segment current_directory;
+    current_directory.name = "current_directory";
+    current_directory.level = 1;
+    current_directory.position = 1;
+    current_directory.align = "left";
+    current_directory.foreground = "blue";
+    current_directory.bold = true;
+    this->segments.push_back(current_directory);
 
     Segment execution_time;
     execution_time.name = "execution_time";

@@ -16,7 +16,6 @@ std::string git_branch(Context context)
     }
     result += execute_command("git name-rev --name-only HEAD 2>/dev/null");
     regex_replace(result, {"~\\d*"}, "");
-    strip(result);
     if (regex_search(result, config.git_branch.ignore))
     {
         result = "";
