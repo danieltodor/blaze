@@ -84,6 +84,8 @@ void Config::parse_config(toml::value data)
     }
     catch (const std::out_of_range &err) {}
 
+    set_value(data, this->current_directory.basename_only, "current_directory", "basename_only");
+
     set_value(data, this->execution_time.precision, "execution_time", "precision");
     set_value(data, this->execution_time.display_from, "execution_time", "display_from");
     set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");

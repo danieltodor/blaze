@@ -46,6 +46,11 @@ struct Segment
     bool underline = false;
 };
 
+struct CurrentDirectory
+{
+    bool basename_only = false;
+};
+
 struct ExecutionTime
 {
     int precision = 1;
@@ -65,6 +70,7 @@ public:
     Prompt prompt;
     Connector connector;
     std::vector<Segment> segments;
+    CurrentDirectory current_directory;
     ExecutionTime execution_time;
     GitBranch git_branch;
     Config();
