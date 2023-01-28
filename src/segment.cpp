@@ -5,13 +5,15 @@
 #include "segments/current_directory.hpp"
 #include "segments/execution_time.hpp"
 #include "segments/git_branch.hpp"
+#include "segments/git_status.hpp"
 
 const std::unordered_map<std::string, std::string (*)(Context)> segment_map
 {
     {"separator", &separator},
     {"current_directory", &current_directory},
     {"execution_time", &execution_time},
-    {"git_branch", &git_branch}
+    {"git_branch", &git_branch},
+    {"git_status", &git_status}
 };
 
 std::string call_segment(std::string name, Context context)

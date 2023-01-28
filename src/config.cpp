@@ -77,6 +77,7 @@ void Config::parse_config(toml::value data)
                 set_value(segment_data, current.dim, "dim");
                 set_value(segment_data, current.italic, "italic");
                 set_value(segment_data, current.underline, "underline");
+                set_value(segment_data, current.display_always, "display_always");
                 this->segments.push_back(current);
             }
         }
@@ -91,6 +92,18 @@ void Config::parse_config(toml::value data)
     set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
 
     set_value(data, this->git_branch.ignore, "git_branch", "ignore");
+
+    set_value(data, this->git_status.conflicted, "git_status", "conflicted");
+    set_value(data, this->git_status.ahead, "git_status", "ahead");
+    set_value(data, this->git_status.behind, "git_status", "behind");
+    set_value(data, this->git_status.diverged, "git_status", "diverged");
+    set_value(data, this->git_status.up_to_date, "git_status", "up_to_date");
+    set_value(data, this->git_status.untracked, "git_status", "untracked");
+    set_value(data, this->git_status.stashed, "git_status", "stashed");
+    set_value(data, this->git_status.modified, "git_status", "modified");
+    set_value(data, this->git_status.staged, "git_status", "staged");
+    set_value(data, this->git_status.renamed, "git_status", "renamed");
+    set_value(data, this->git_status.deleted, "git_status", "deleted");
 }
 
 void Config::sort_segments()

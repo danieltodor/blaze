@@ -44,6 +44,7 @@ struct Segment
     bool dim = false;
     bool italic = false;
     bool underline = false;
+    bool display_always = false;
 };
 
 struct CurrentDirectory
@@ -63,6 +64,21 @@ struct GitBranch
     std::vector<std::string> ignore;
 };
 
+struct GitStatus
+{
+    std::string conflicted = "=";
+    std::string ahead = "⇡";
+    std::string behind = "⇣";
+    std::string diverged = "⇕";
+    std::string up_to_date = "";
+    std::string untracked = "?";
+    std::string stashed = "$";
+    std::string modified = "!";
+    std::string staged = "+";
+    std::string renamed = "»";
+    std::string deleted = "✘";
+};
+
 class Config
 {
 public:
@@ -73,6 +89,7 @@ public:
     CurrentDirectory current_directory;
     ExecutionTime execution_time;
     GitBranch git_branch;
+    GitStatus git_status;
     Config();
     toml::value load_config();
     void parse_config(toml::value data);

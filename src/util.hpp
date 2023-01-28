@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+unsigned short get_column();
+std::size_t get_length(std::vector<std::string> strings);
+std::vector<std::string> split(const std::string &string, const std::string &delimiter);
 void regex_replace(std::string &string, const std::vector<std::string> patterns, const std::string &replacement);
 bool regex_search(std::string &string, const std::vector<std::string> patterns);
 void strip(std::string &string);

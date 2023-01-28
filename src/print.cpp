@@ -1,8 +1,4 @@
 #include <iostream>
-#include <sys/ioctl.h>
-#include <vector>
-#include <locale>
-#include <codecvt>
 
 #include "print.hpp"
 #include "color.hpp"
@@ -99,23 +95,6 @@ std::string prompt(Config config)
     return result;
 }
 
-unsigned short get_col()
-{
-    winsize w;
-    ioctl(0, TIOCGWINSZ, &w);
-    return w.ws_col;
-}
-
-std::size_t get_length(std::vector<std::string> strings)
-{
-    std::size_t length = 0;
-    for (const std::string &string : strings)
-    {
-        length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).size();
-    }
-    return length;
-}
-
 bool level_changes(std::size_t i, Config c)
 {
     return i < c.segments.size() - 1 && c.segments[i + 1].level > c.segments[i].level ? true : false;
@@ -146,8 +125,9 @@ void print_all(Context context)
         else if (!current_segment.execute.empty())
         {
             temp += execute_command(current_segment.execute);
+            strip(temp);
         }
-        if (!temp.empty() || current_segment.name == "separator")
+        if (!temp.empty() || current_segment.display_always || current_segment.name == "separator")
         {
             length += get_length({
                 temp,
@@ -175,7 +155,7 @@ void print_all(Context context)
             left = "";
             if (!right.empty())
             {
-                result += middle(config, get_col() - length);
+                result += middle(config, get_column() - length);
                 result += right;
                 right = "";
             }

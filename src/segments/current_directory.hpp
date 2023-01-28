@@ -19,7 +19,7 @@ std::string current_directory(Context context)
     result += PWD;
     if (result != "/" and config.current_directory.basename_only)
     {
-        regex_replace(result, {".*\\/"}, "");
+        regex_replace(result, {"^.*\\/"}, "");
     }
     return result;
 }
