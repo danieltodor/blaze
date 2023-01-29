@@ -130,7 +130,7 @@ Config::Config()
     this->sort_segments();
 }
 
-Segment Config::get_previous_segment(std::size_t current_index)
+Segment Config::get_previous_segment_in_group(std::size_t current_index)
 {
     Segment previous;
     if (current_index == 0)
@@ -145,7 +145,7 @@ Segment Config::get_previous_segment(std::size_t current_index)
     return previous;
 }
 
-Segment Config::get_next_segment(std::size_t current_index)
+Segment Config::get_next_segment_in_group(std::size_t current_index)
 {
     Segment next;
     if (current_index == this->segments.size() - 1)

@@ -22,7 +22,7 @@ std::string pre(Config config, Segment current_segment, Segment previous_segment
     {
         result += text_mode(DIM);
     }
-    if (previous_segment.outer_suffix.empty())
+    if (!previous_segment.content.empty() && previous_segment.outer_suffix.empty())
     {
         result += background(previous_segment.background);
     }
@@ -79,7 +79,7 @@ std::string post(Config config, Segment current_segment, Segment next_segment)
     result += current_segment.inner_suffix;
     result += get_padding(config, current_segment);
     result += reset();
-    if (next_segment.outer_prefix.empty())
+    if (!next_segment.content.empty() && next_segment.outer_prefix.empty())
     {
         result += background(next_segment.background);
     }
@@ -117,20 +117,24 @@ void print_all(Context context)
     std::string left;
     std::string right;
     std::size_t length = 0;
+    for (Segment &segment : config.segments)
+    {
+        if (!segment.name.empty())
+        {
+            segment.content = call_segment(segment.name, context);
+        }
+        else if (!segment.execute.empty())
+        {
+            segment.content = execute_command(segment.execute);
+            strip(segment.content);
+        }
+    }
     for (std::size_t i = 0; i < config.segments.size(); i++)
     {
         Segment current_segment = config.segments[i];
-        Segment previous_segment = config.get_previous_segment(i);
-        Segment next_segment = config.get_next_segment(i);
-        if (!current_segment.name.empty())
-        {
-            temp += call_segment(current_segment.name, context);
-        }
-        else if (!current_segment.execute.empty())
-        {
-            temp += execute_command(current_segment.execute);
-            strip(temp);
-        }
+        Segment previous_segment = config.get_previous_segment_in_group(i);
+        Segment next_segment = config.get_next_segment_in_group(i);
+        temp = current_segment.content;
         if (!temp.empty() || current_segment.name == "separator")
         {
             length += get_length({
@@ -169,7 +173,6 @@ void print_all(Context context)
         {
             result += '\n';
         }
-        temp = "";
     }
     result += prompt(config);
     std::cout << result;

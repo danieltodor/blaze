@@ -28,6 +28,7 @@ struct Connector
 
 struct Segment
 {
+    std::string content = "";
     std::string name = "";
     std::string execute = "";
     int level = 1;
@@ -94,8 +95,8 @@ public:
     void parse_config(toml::value data);
     void sort_segments();
     void set_default_config();
-    Segment get_previous_segment(std::size_t current_index);
-    Segment get_next_segment(std::size_t current_index);
+    Segment get_previous_segment_in_group(std::size_t current_index);
+    Segment get_next_segment_in_group(std::size_t current_index);
 };
 
 #endif
