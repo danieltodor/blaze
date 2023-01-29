@@ -18,6 +18,10 @@ std::string pre(Config config, Segment current_segment, Segment previous_segment
 {
     std::string result = "";
     result += reset();
+    if (current_segment.dim)
+    {
+        result += text_mode(DIM);
+    }
     if (previous_segment.outer_suffix.empty())
     {
         result += background(previous_segment.background);
@@ -31,10 +35,6 @@ std::string pre(Config config, Segment current_segment, Segment previous_segment
     if (current_segment.bold)
     {
         result += text_mode(BOLD);
-    }
-    if (current_segment.dim)
-    {
-        result += text_mode(DIM);
     }
     if (current_segment.italic)
     {
@@ -70,6 +70,10 @@ std::string post(Config config, Segment current_segment, Segment next_segment)
 {
     std::string result = "";
     result += reset();
+    if (current_segment.dim)
+    {
+        result += text_mode(DIM);
+    }
     result += background(current_segment.background);
     result += foreground(current_segment.foreground);
     result += current_segment.inner_suffix;
