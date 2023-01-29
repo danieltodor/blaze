@@ -2,7 +2,6 @@
 #include <sys/ioctl.h>
 #include <locale>
 #include <codecvt>
-#include <cstring>
 
 #include "util.hpp"
 
@@ -26,14 +25,17 @@ std::size_t get_length(std::vector<std::string> strings)
 std::vector<std::string> split(const std::string &string, const std::string &delimiter)
 {
     std::vector<std::string> result;
-    char temp[get_length({string})];
-    string.copy(temp, string.length());
-    char *ptr;
-    ptr = std::strtok(temp, delimiter.c_str());
-    while (ptr != NULL)
+    std::size_t from = 0;
+    std::size_t to;
+    const std::size_t delimiter_length = delimiter.length();
+    while ((to = string.find(delimiter, from)) != std::string::npos)
     {
-        result.push_back(ptr);
-        ptr = std::strtok(NULL, delimiter.c_str());
+        result.push_back(string.substr(from, to - from));
+        from = to + delimiter_length;
+    }
+    if (from == 0 && to == std::string::npos)
+    {
+        result.push_back(string);
     }
     return result;
 }
