@@ -131,7 +131,7 @@ void print_all(Context context)
             temp += execute_command(current_segment.execute);
             strip(temp);
         }
-        if (!temp.empty() || current_segment.display_always || current_segment.name == "separator")
+        if (!temp.empty() || current_segment.name == "separator")
         {
             length += get_length({
                 temp,

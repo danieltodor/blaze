@@ -44,7 +44,6 @@ struct Segment
     bool dim = false;
     bool italic = false;
     bool underline = false;
-    bool display_always = false;
 };
 
 struct CurrentDirectory

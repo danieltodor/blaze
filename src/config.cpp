@@ -77,7 +77,6 @@ void Config::parse_config(toml::value data)
                 set_value(segment_data, current.dim, "dim");
                 set_value(segment_data, current.italic, "italic");
                 set_value(segment_data, current.underline, "underline");
-                set_value(segment_data, current.display_always, "display_always");
                 this->segments.push_back(current);
             }
         }
