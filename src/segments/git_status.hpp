@@ -35,7 +35,7 @@ std::string git_status(Context context)
     {
         result += config.git_status.modified;
     }
-    if (regex_search(status, {"^.A "}))
+    if (regex_search(status, {"^M. "}))
     {
         result += config.git_status.staged;
     }
