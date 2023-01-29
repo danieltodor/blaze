@@ -3,6 +3,7 @@
 #include "init.hpp"
 #include "print.hpp"
 #include "context.hpp"
+#include "util.hpp"
 #include "external/argparse/argparse.hpp"
 
 struct Args : public argparse::Args
@@ -25,7 +26,8 @@ int main(int argc, char *argv[])
         args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time),
-        std::getenv("PWD")
+        std::getenv("PWD"),
+        check_git_repository()
     };
     if (args.init)
     {

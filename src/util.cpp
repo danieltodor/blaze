@@ -99,7 +99,7 @@ std::string execute_command(std::string command)
     return result;
 }
 
-bool git_repository_detected()
+bool check_git_repository()
 {
     return execute_command("git rev-parse 2>&1").empty() ? true : false;
 }

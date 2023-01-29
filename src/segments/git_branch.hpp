@@ -10,7 +10,7 @@ std::string git_branch(Context context)
 {
     std::string result = "";
     Config &config = context.config;
-    if (!git_repository_detected())
+    if (!context.git_repository_detected)
     {
         return result;
     }

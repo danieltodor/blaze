@@ -12,6 +12,7 @@ struct Context
     double start_time;
     double finish_time;
     std::string PWD;
+    bool git_repository_detected;
 };
 
 #endif
