@@ -47,7 +47,7 @@ struct Segment
     bool underline = false;
 };
 
-struct CurrentDirectory
+struct Directory
 {
     bool basename_only = false;
 };
@@ -86,7 +86,7 @@ public:
     Prompt prompt;
     Connector connector;
     std::vector<Segment> segments;
-    CurrentDirectory current_directory;
+    Directory directory;
     ExecutionTime execution_time;
     GitBranch git_branch;
     GitStatus git_status;

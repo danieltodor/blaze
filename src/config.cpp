@@ -6,9 +6,8 @@
 
 toml::value Config::load_config()
 {
-    std::string HOME = std::getenv("HOME");
     std::string paths[] = {
-        HOME + "/.config/blaze.toml",
+        std::string(std::getenv("HOME")) + "/.config/blaze.toml",
         "/etc/blaze.toml"
     };
     toml::value data;
@@ -84,7 +83,7 @@ void Config::parse_config(toml::value data)
     }
     catch (const std::out_of_range &err) {}
 
-    set_value(data, this->current_directory.basename_only, "current_directory", "basename_only");
+    set_value(data, this->directory.basename_only, "directory", "basename_only");
 
     set_value(data, this->execution_time.precision, "execution_time", "precision");
     set_value(data, this->execution_time.display_from, "execution_time", "display_from");
@@ -169,14 +168,14 @@ void Config::set_default_config()
     prompt.string = "\n❯ ";
     this->prompt = prompt;
 
-    Segment current_directory;
-    current_directory.name = "current_directory";
-    current_directory.level = 1;
-    current_directory.position = 1;
-    current_directory.align = "left";
-    current_directory.foreground = "blue";
-    current_directory.bold = true;
-    this->segments.push_back(current_directory);
+    Segment directory;
+    directory.name = "directory";
+    directory.level = 1;
+    directory.position = 1;
+    directory.align = "left";
+    directory.foreground = "blue";
+    directory.bold = true;
+    this->segments.push_back(directory);
 
     Segment execution_time;
     execution_time.name = "execution_time";

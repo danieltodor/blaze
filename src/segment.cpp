@@ -2,7 +2,7 @@
 
 #include "segment.hpp"
 #include "segments/separator.hpp"
-#include "segments/current_directory.hpp"
+#include "segments/directory.hpp"
 #include "segments/execution_time.hpp"
 #include "segments/git_branch.hpp"
 #include "segments/git_status.hpp"
@@ -10,7 +10,7 @@
 const std::unordered_map<std::string, std::string (*)(Context)> segment_map
 {
     {"separator", &separator},
-    {"current_directory", &current_directory},
+    {"directory", &directory},
     {"execution_time", &execution_time},
     {"git_branch", &git_branch},
     {"git_status", &git_status}
