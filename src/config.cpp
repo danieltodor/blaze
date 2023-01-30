@@ -52,31 +52,31 @@ void Config::parse_config(toml::value data)
 
     try
     {
-        toml::array &segment_array = toml::find(data, "segment").as_array();
-        this->segments.clear();
+        toml::array &module_array = toml::find(data, "module").as_array();
+        this->modules.clear();
         try
         {
             for (int i = 0;; i++)
             {
-                toml::value &segment_data = segment_array.at(i);
-                Segment current;
-                set_value(segment_data, current.name, "name");
-                set_value(segment_data, current.execute, "execute");
-                set_value(segment_data, current.level, "level");
-                set_value(segment_data, current.position, "position");
-                set_value(segment_data, current.align, "align");
-                set_value(segment_data, current.padding, "padding");
-                set_value(segment_data, current.inner_prefix, "inner_prefix");
-                set_value(segment_data, current.inner_suffix, "inner_suffix");
-                set_value(segment_data, current.outer_prefix, "outer_prefix");
-                set_value(segment_data, current.outer_suffix, "outer_suffix");
-                set_value(segment_data, current.background, "background");
-                set_value(segment_data, current.foreground, "foreground");
-                set_value(segment_data, current.bold, "bold");
-                set_value(segment_data, current.dim, "dim");
-                set_value(segment_data, current.italic, "italic");
-                set_value(segment_data, current.underline, "underline");
-                this->segments.push_back(current);
+                toml::value &module_data = module_array.at(i);
+                Module current;
+                set_value(module_data, current.name, "name");
+                set_value(module_data, current.execute, "execute");
+                set_value(module_data, current.level, "level");
+                set_value(module_data, current.position, "position");
+                set_value(module_data, current.align, "align");
+                set_value(module_data, current.padding, "padding");
+                set_value(module_data, current.inner_prefix, "inner_prefix");
+                set_value(module_data, current.inner_suffix, "inner_suffix");
+                set_value(module_data, current.outer_prefix, "outer_prefix");
+                set_value(module_data, current.outer_suffix, "outer_suffix");
+                set_value(module_data, current.background, "background");
+                set_value(module_data, current.foreground, "foreground");
+                set_value(module_data, current.bold, "bold");
+                set_value(module_data, current.dim, "dim");
+                set_value(module_data, current.italic, "italic");
+                set_value(module_data, current.underline, "underline");
+                this->modules.push_back(current);
             }
         }
         catch (const std::out_of_range &err) {}
@@ -104,12 +104,12 @@ void Config::parse_config(toml::value data)
     set_value(data, this->git_status.deleted, "git_status", "deleted");
 }
 
-void Config::sort_segments()
+void Config::sort_modules()
 {
     std::unordered_map<std::string, int> sides;
     sides["left"] = 1;
     sides["right"] = 2;
-    auto compare = [&sides](Segment a, Segment b)
+    auto compare = [&sides](Module a, Module b)
     {
         std::string a_value = "", b_value = "";
         a_value += std::to_string(a.level);
@@ -120,39 +120,39 @@ void Config::sort_segments()
         b_value += std::to_string(b.position);
         return a_value < b_value;
     };
-    std::sort(this->segments.begin(), this->segments.end(), compare);
+    std::sort(this->modules.begin(), this->modules.end(), compare);
 }
 
 Config::Config()
 {
     this->parse_config(this->load_config());
-    this->sort_segments();
+    this->sort_modules();
 }
 
-Segment Config::get_previous_segment_in_group(std::size_t current_index)
+Module Config::get_previous_module_in_group(std::size_t current_index)
 {
-    Segment previous;
+    Module previous;
     if (current_index == 0)
     {
         return previous;
     }
-    Segment tmp = this->segments[current_index - 1];
-    if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
+    Module tmp = this->modules[current_index - 1];
+    if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
     {
         previous = tmp;
     }
     return previous;
 }
 
-Segment Config::get_next_segment_in_group(std::size_t current_index)
+Module Config::get_next_module_in_group(std::size_t current_index)
 {
-    Segment next;
-    if (current_index == this->segments.size() - 1)
+    Module next;
+    if (current_index == this->modules.size() - 1)
     {
         return next;
     }
-    Segment tmp = this->segments[current_index + 1];
-    if (tmp.level == this->segments[current_index].level && tmp.align == this->segments[current_index].align)
+    Module tmp = this->modules[current_index + 1];
+    if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
     {
         next = tmp;
     }
@@ -168,21 +168,21 @@ void Config::set_default_config()
     prompt.string = "\n❯ ";
     this->prompt = prompt;
 
-    Segment directory;
+    Module directory;
     directory.name = "directory";
     directory.level = 1;
     directory.position = 1;
     directory.align = "left";
     directory.foreground = "blue";
     directory.bold = true;
-    this->segments.push_back(directory);
+    this->modules.push_back(directory);
 
-    Segment execution_time;
+    Module execution_time;
     execution_time.name = "execution_time";
     execution_time.level = 1;
     execution_time.position = 2;
     execution_time.align = "left";
     execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
-    this->segments.push_back(execution_time);
+    this->modules.push_back(execution_time);
 }

@@ -26,7 +26,7 @@ struct Connector
     std::string foreground = "";
 };
 
-struct Segment
+struct Module
 {
     std::string content = "";
     std::string name = "";
@@ -85,7 +85,7 @@ public:
     Global global;
     Prompt prompt;
     Connector connector;
-    std::vector<Segment> segments;
+    std::vector<Module> modules;
     Directory directory;
     ExecutionTime execution_time;
     GitBranch git_branch;
@@ -93,10 +93,10 @@ public:
     Config();
     toml::value load_config();
     void parse_config(toml::value data);
-    void sort_segments();
+    void sort_modules();
     void set_default_config();
-    Segment get_previous_segment_in_group(std::size_t current_index);
-    Segment get_next_segment_in_group(std::size_t current_index);
+    Module get_previous_module_in_group(std::size_t current_index);
+    Module get_next_module_in_group(std::size_t current_index);
 };
 
 #endif

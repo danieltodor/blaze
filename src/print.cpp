@@ -2,45 +2,45 @@
 
 #include "print.hpp"
 #include "color.hpp"
-#include "segment.hpp"
+#include "module.hpp"
 #include "util.hpp"
 
-std::string get_padding(Config config, Segment current_segment)
+std::string get_padding(Config config, Module current_module)
 {
-    if (current_segment.name == "separator" && current_segment.padding == control_char)
+    if (current_module.name == "separator" && current_module.padding == control_char)
     {
         return "";
     }
-    return current_segment.padding != control_char ? current_segment.padding : config.global.padding;
+    return current_module.padding != control_char ? current_module.padding : config.global.padding;
 }
 
-std::string pre(Config config, Segment current_segment, Segment previous_segment)
+std::string pre(Config config, Module current_module, Module previous_module)
 {
     std::string result = "";
     result += reset();
-    if (current_segment.dim)
+    if (current_module.dim)
     {
         result += text_mode(DIM);
     }
-    if (!previous_segment.content.empty() && previous_segment.outer_suffix.empty())
+    if (!previous_module.content.empty() && previous_module.outer_suffix.empty())
     {
-        result += background(previous_segment.background);
+        result += background(previous_module.background);
     }
-    result += foreground(current_segment.background);
-    result += current_segment.outer_prefix;
-    result += background(current_segment.background);
-    result += foreground(current_segment.foreground);
-    result += get_padding(config, current_segment);
-    result += current_segment.inner_prefix;
-    if (current_segment.bold)
+    result += foreground(current_module.background);
+    result += current_module.outer_prefix;
+    result += background(current_module.background);
+    result += foreground(current_module.foreground);
+    result += get_padding(config, current_module);
+    result += current_module.inner_prefix;
+    if (current_module.bold)
     {
         result += text_mode(BOLD);
     }
-    if (current_segment.italic)
+    if (current_module.italic)
     {
         result += text_mode(ITALIC);
     }
-    if (current_segment.underline)
+    if (current_module.underline)
     {
         result += text_mode(UNDERLINE);
     }
@@ -66,25 +66,25 @@ std::string middle(Config config, int length)
     return result;
 }
 
-std::string post(Config config, Segment current_segment, Segment next_segment)
+std::string post(Config config, Module current_module, Module next_module)
 {
     std::string result = "";
     result += reset();
-    if (current_segment.dim)
+    if (current_module.dim)
     {
         result += text_mode(DIM);
     }
-    result += background(current_segment.background);
-    result += foreground(current_segment.foreground);
-    result += current_segment.inner_suffix;
-    result += get_padding(config, current_segment);
+    result += background(current_module.background);
+    result += foreground(current_module.foreground);
+    result += current_module.inner_suffix;
+    result += get_padding(config, current_module);
     result += reset();
-    if (!next_segment.content.empty() && next_segment.outer_prefix.empty())
+    if (!next_module.content.empty() && next_module.outer_prefix.empty())
     {
-        result += background(next_segment.background);
+        result += background(next_module.background);
     }
-    result += foreground(current_segment.background);
-    result += current_segment.outer_suffix;
+    result += foreground(current_module.background);
+    result += current_module.outer_suffix;
     result += reset();
     return result;
 }
@@ -101,12 +101,12 @@ std::string prompt(Config config)
 
 bool level_changes(std::size_t i, Config c)
 {
-    return i < c.segments.size() - 1 && c.segments[i + 1].level > c.segments[i].level ? true : false;
+    return i < c.modules.size() - 1 && c.modules[i + 1].level > c.modules[i].level ? true : false;
 }
 
 bool end_reached(std::size_t i, Config c)
 {
-    return i == c.segments.size() - 1 ? true : false;
+    return i == c.modules.size() - 1 ? true : false;
 }
 
 void print_all(Context context)
@@ -117,39 +117,39 @@ void print_all(Context context)
     std::string left;
     std::string right;
     std::size_t length = 0;
-    for (Segment &segment : config.segments)
+    for (Module &module : config.modules)
     {
-        if (!segment.name.empty())
+        if (!module.name.empty())
         {
-            segment.content = call_segment(segment.name, context);
+            module.content = call_module(module.name, context);
         }
-        else if (!segment.execute.empty())
+        else if (!module.execute.empty())
         {
-            segment.content = execute_command(segment.execute);
-            strip(segment.content);
+            module.content = execute_command(module.execute);
+            strip(module.content);
         }
     }
-    for (std::size_t i = 0; i < config.segments.size(); i++)
+    for (std::size_t i = 0; i < config.modules.size(); i++)
     {
-        Segment current_segment = config.segments[i];
-        Segment previous_segment = config.get_previous_segment_in_group(i);
-        Segment next_segment = config.get_next_segment_in_group(i);
-        temp = current_segment.content;
-        if (!temp.empty() || current_segment.name == "separator")
+        Module current_module = config.modules[i];
+        Module previous_module = config.get_previous_module_in_group(i);
+        Module next_module = config.get_next_module_in_group(i);
+        temp = current_module.content;
+        if (!temp.empty() || current_module.name == "separator")
         {
             length += get_length({
                 temp,
-                get_padding(config, current_segment),
-                get_padding(config, current_segment),
-                current_segment.inner_prefix,
-                current_segment.inner_suffix,
-                current_segment.outer_prefix,
-                current_segment.outer_suffix
+                get_padding(config, current_module),
+                get_padding(config, current_module),
+                current_module.inner_prefix,
+                current_module.inner_suffix,
+                current_module.outer_prefix,
+                current_module.outer_suffix
             });
-            temp.insert(0, pre(config, current_segment, previous_segment));
-            temp.insert(temp.length(), post(config, current_segment, next_segment));
+            temp.insert(0, pre(config, current_module, previous_module));
+            temp.insert(temp.length(), post(config, current_module, next_module));
         }
-        if (current_segment.align == "right")
+        if (current_module.align == "right")
         {
             right += temp;
         }
