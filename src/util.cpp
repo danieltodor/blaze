@@ -114,3 +114,14 @@ bool check_git_repository()
 {
     return execute_command("git rev-parse 2>&1").empty() ? true : false;
 }
+
+std::string get_env(const std::string &name)
+{
+    std::string env;
+    const char *result = std::getenv(name.c_str());
+    if (result != NULL)
+    {
+        env = result;
+    }
+    return env;
+}

@@ -3,11 +3,13 @@
 #include <unordered_map>
 
 #include "config.hpp"
+#include "util.hpp"
 
 toml::value Config::load_config()
 {
     std::string paths[] = {
-        std::string(std::getenv("HOME")) + "/.config/blaze.toml",
+        get_env("BLAZE_CONFIG"),
+        get_env("HOME") + "/.config/blaze.toml",
         "/etc/blaze.toml"
     };
     toml::value data;

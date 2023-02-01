@@ -13,5 +13,6 @@ bool regex_search(std::string &string, const std::vector<std::string> patterns);
 void strip(std::string &string);
 std::string execute_command(std::string command);
 bool check_git_repository();
+std::string get_env(const std::string &name);
 
 #endif
