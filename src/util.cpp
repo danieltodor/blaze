@@ -40,18 +40,29 @@ std::vector<std::string> split(const std::string &string, const std::string &del
     return result;
 }
 
+std::string join(const std::vector<std::string> &strings, const std::string &delimiter)
+{
+    std::string result;
+    for (std::size_t i = 0; i < strings.size() - 1; i++)
+    {
+        result += strings.at(i);
+        result += delimiter;
+    }
+    result += strings.at(strings.size() - 1);
+    return result;
+}
+
 void regex_replace(std::string &string, const std::vector<std::string> patterns, const std::string &replacement)
 {
-    std::string temp;
     std::vector<std::string> lines = split(string, "\n");
-    for (const std::string &line : lines)
+    for (std::string &line : lines)
     {
         for (const std::string &pattern : patterns)
         {
-            temp = std::regex_replace(line, std::regex(pattern), replacement);
+            line = std::regex_replace(line, std::regex(pattern), replacement);
         }
     }
-    string = temp;
+    string = join(lines, "\n");
 }
 
 bool regex_search(std::string &string, const std::vector<std::string> patterns)
