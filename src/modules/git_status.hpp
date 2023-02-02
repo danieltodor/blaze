@@ -39,6 +39,10 @@ std::string git_status(Context context)
     {
         result += config.git_status.staged;
     }
+    if (result.empty())
+    {
+        result += config.git_status.clean;
+    }
     return result;
 }
 

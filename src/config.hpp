@@ -66,11 +66,11 @@ struct GitBranch
 
 struct GitStatus
 {
+    std::string clean = "";
     std::string conflicted = "=";
     std::string ahead = "⇡";
     std::string behind = "⇣";
     std::string diverged = "⇕";
-    std::string up_to_date = "";
     std::string untracked = "?";
     std::string stashed = "$";
     std::string modified = "!";
