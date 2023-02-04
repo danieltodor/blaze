@@ -9,7 +9,7 @@ INCLUDE_DIRS = .
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS = -std=c++17 -Wall -Wextra -O3
+CXXFLAGS = -std=c++17 -Wall -Wextra
 CXXFLAGS += $(addprefix -I , $(INCLUDE_DIRS))
 LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
@@ -29,6 +29,8 @@ endif
 
 ifeq ($(debug),true)
 	CXXFLAGS += -g
+else
+	CXXFLAGS += -O3
 endif
 
 all: $(BIN_DIR)/$(BINARY)
