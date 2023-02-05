@@ -27,7 +27,8 @@ int main(int argc, char *argv[])
         std::stod(args.start_time),
         std::stod(args.finish_time),
         get_env("PWD"),
-        check_git_repository()
+        check_git_repository(),
+        get_current_time()
     };
     if (args.init)
     {

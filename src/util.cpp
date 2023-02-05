@@ -125,3 +125,18 @@ std::string get_env(const std::string &name)
     }
     return env;
 }
+
+std::tm get_current_time()
+{
+    std::time_t now = std::time(NULL);
+    return *std::localtime(&now);
+}
+
+std::string format_time(const std::tm &time_structure, const std::string &format)
+{
+    std::string result = "";
+    char buffer[128];
+    std::strftime(buffer, sizeof(buffer), format.c_str(), &time_structure);
+    result += buffer;
+    return result;
+}

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <time.h>
 
 unsigned short get_column();
 std::size_t get_length(const std::vector<std::string> &strings);
@@ -14,5 +15,7 @@ void strip(std::string &string);
 std::string execute_command(const std::string &command);
 bool check_git_repository();
 std::string get_env(const std::string &name);
+std::tm get_current_time();
+std::string format_time(const std::tm &time_structure, const std::string &format);
 
 #endif

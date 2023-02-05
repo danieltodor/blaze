@@ -6,6 +6,8 @@
 #include "modules/execution_time.hpp"
 #include "modules/git_branch.hpp"
 #include "modules/git_status.hpp"
+#include "modules/date.hpp"
+#include "modules/time.hpp"
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
@@ -13,7 +15,9 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
     {"directory", &directory},
     {"execution_time", &execution_time},
     {"git_branch", &git_branch},
-    {"git_status", &git_status}
+    {"git_status", &git_status},
+    {"date", &date},
+    {"time", &time}
 };
 
 std::string call_module(const std::string &name, const Context &context)
