@@ -21,9 +21,9 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::string text_mode(int code);
-std::string background(std::string color);
-std::string foreground(std::string color);
+std::string text_mode(const int code);
+std::string foreground(const std::string &color);
+std::string background(const std::string &color);
 std::string reset();
 
 #endif

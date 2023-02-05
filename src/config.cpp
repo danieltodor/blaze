@@ -7,7 +7,7 @@
 
 toml::value Config::load_config()
 {
-    std::string paths[] = {
+    const std::string paths[] = {
         get_env("BLAZE_CONFIG"),
         get_env("HOME") + "/.config/blaze.toml",
         "/etc/blaze.toml"
@@ -20,22 +20,26 @@ toml::value Config::load_config()
             data = toml::parse(paths[i]);
             break;
         }
-        catch (const std::runtime_error &err) {}
+        catch (const std::runtime_error &err)
+        {
+        }
     }
     return data;
 }
 
 template<typename T, typename... Keys>
-void set_value(toml::value data, T &target, Keys&&... keys)
+void set_value(const toml::value &data, T &target, Keys&&... keys)
 {
     try
     {
         target = toml::find<T>(data, keys...);
     }
-    catch (const std::out_of_range &err) {}
+    catch (const std::out_of_range &err)
+    {
+    }
 }
 
-void Config::parse_config(toml::value data)
+void Config::parse_config(toml::value &data)
 {
     this->set_default_config();
     if (data.is_uninitialized())
@@ -54,13 +58,13 @@ void Config::parse_config(toml::value data)
 
     try
     {
-        toml::array &module_array = toml::find(data, "module").as_array();
+        const toml::array &module_array = toml::find(data, "module").as_array();
         this->modules.clear();
         try
         {
             for (int i = 0;; i++)
             {
-                toml::value &module_data = module_array.at(i);
+                const toml::value &module_data = module_array.at(i);
                 Module current;
                 set_value(module_data, current.name, "name");
                 set_value(module_data, current.execute, "execute");
@@ -72,8 +76,8 @@ void Config::parse_config(toml::value data)
                 set_value(module_data, current.inner_suffix, "inner_suffix");
                 set_value(module_data, current.outer_prefix, "outer_prefix");
                 set_value(module_data, current.outer_suffix, "outer_suffix");
-                set_value(module_data, current.background, "background");
                 set_value(module_data, current.foreground, "foreground");
+                set_value(module_data, current.background, "background");
                 set_value(module_data, current.bold, "bold");
                 set_value(module_data, current.dim, "dim");
                 set_value(module_data, current.italic, "italic");
@@ -81,9 +85,13 @@ void Config::parse_config(toml::value data)
                 this->modules.push_back(current);
             }
         }
-        catch (const std::out_of_range &err) {}
+        catch (const std::out_of_range &err)
+        {
+        }
     }
-    catch (const std::out_of_range &err) {}
+    catch (const std::out_of_range &err)
+    {
+    }
 
     set_value(data, this->directory.basename_only, "directory", "basename_only");
 
@@ -111,7 +119,7 @@ void Config::sort_modules()
     std::unordered_map<std::string, int> sides;
     sides["left"] = 1;
     sides["right"] = 2;
-    auto compare = [&sides](Module a, Module b)
+    auto compare = [&sides](const Module &a, const Module &b)
     {
         std::string a_value = "", b_value = "";
         a_value += std::to_string(a.level);
@@ -127,36 +135,37 @@ void Config::sort_modules()
 
 Config::Config()
 {
-    this->parse_config(this->load_config());
+    toml::value config = this->load_config();
+    this->parse_config(config);
     this->sort_modules();
 }
 
-Module Config::get_previous_module_in_group(std::size_t current_index)
+Module *Config::get_previous_module_in_group(const std::size_t current_index)
 {
-    Module previous;
+    Module *previous = NULL;
     if (current_index == 0)
     {
         return previous;
     }
-    Module tmp = this->modules[current_index - 1];
+    Module &tmp = this->modules[current_index - 1];
     if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
     {
-        previous = tmp;
+        previous = &tmp;
     }
     return previous;
 }
 
-Module Config::get_next_module_in_group(std::size_t current_index)
+Module *Config::get_next_module_in_group(const std::size_t current_index)
 {
-    Module next;
+    Module *next = NULL;
     if (current_index == this->modules.size() - 1)
     {
         return next;
     }
-    Module tmp = this->modules[current_index + 1];
+    Module &tmp = this->modules[current_index + 1];
     if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
     {
-        next = tmp;
+        next = &tmp;
     }
     return next;
 }

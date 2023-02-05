@@ -3,6 +3,6 @@
 
 #include "context.hpp"
 
-void init_shell(Context context);
+void init_shell(const Context &context);
 
 #endif

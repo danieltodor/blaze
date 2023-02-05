@@ -3,6 +3,6 @@
 
 #include "context.hpp"
 
-void print_all(Context context);
+void print_all(Context &context);
 
 #endif

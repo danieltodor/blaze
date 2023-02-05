@@ -7,7 +7,7 @@
 #include "modules/git_branch.hpp"
 #include "modules/git_status.hpp"
 
-const std::unordered_map<std::string, std::string (*)(Context)> module_map
+const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
     {"separator", &separator},
     {"directory", &directory},
@@ -16,10 +16,10 @@ const std::unordered_map<std::string, std::string (*)(Context)> module_map
     {"git_status", &git_status}
 };
 
-std::string call_module(std::string name, Context context)
+std::string call_module(const std::string &name, const Context &context)
 {
     std::string result = "";
-    auto pair = module_map.find(name);
+    const auto pair = module_map.find(name);
     if (pair != module_map.end())
     {
         result = (*pair).second(context);

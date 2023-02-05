@@ -5,6 +5,6 @@
 
 #include "context.hpp"
 
-std::string call_module(std::string name, Context context);
+std::string call_module(const std::string &name, const Context &context);
 
 #endif

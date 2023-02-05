@@ -5,7 +5,7 @@
 
 #include "src/context.hpp"
 
-std::string separator(Context context)
+std::string separator(const Context &context)
 {
     (void)context;
     std::string result = "";

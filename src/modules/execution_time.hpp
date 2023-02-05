@@ -11,9 +11,9 @@
 #define MINUTE 60
 #define SECOND 1
 
-std::string execution_time(Context context)
+std::string execution_time(const Context &context)
 {
-    auto subtract_time = [](double &from, int unit)
+    auto subtract_time = [](double from, const int unit)
     {
         int time = floor(from / unit);
         from -= time * unit;
@@ -21,8 +21,8 @@ std::string execution_time(Context context)
     };
 
     std::string result = "";
-    Config &config = context.config;
-    float precision = std::pow(10, -config.execution_time.precision);
+    const Config &config = context.config;
+    const float precision = std::pow(10, -config.execution_time.precision);
     double diff = round((context.finish_time - context.start_time) / precision) * precision;
     if (diff < config.execution_time.display_from)
     {
@@ -30,10 +30,10 @@ std::string execution_time(Context context)
     }
 
     double &remaining = diff;
-    int hours = subtract_time(remaining, HOUR);
-    int minutes = subtract_time(remaining, MINUTE);
-    int seconds = subtract_time(remaining, SECOND);
-    double fractional = round(remaining / precision) * precision;
+    const int hours = subtract_time(remaining, HOUR);
+    const int minutes = subtract_time(remaining, MINUTE);
+    const int seconds = subtract_time(remaining, SECOND);
+    const double fractional = round(remaining / precision) * precision;
 
     if (hours)
     {

@@ -6,14 +6,14 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
-std::string git_branch(Context context)
+std::string git_branch(const Context &context)
 {
     std::string result = "";
-    Config &config = context.config;
     if (!context.git_repository_detected)
     {
         return result;
     }
+    const Config &config = context.config;
     result += execute_command("git name-rev --name-only HEAD 2>/dev/null");
     regex_replace(
         result,

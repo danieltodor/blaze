@@ -39,8 +39,8 @@ struct Module
     std::string inner_suffix = "";
     std::string outer_prefix = "";
     std::string outer_suffix = "";
-    std::string background = "";
     std::string foreground = "";
+    std::string background = "";
     bool bold = false;
     bool dim = false;
     bool italic = false;
@@ -92,11 +92,11 @@ public:
     GitStatus git_status;
     Config();
     toml::value load_config();
-    void parse_config(toml::value data);
+    void parse_config(toml::value &data);
     void sort_modules();
     void set_default_config();
-    Module get_previous_module_in_group(std::size_t current_index);
-    Module get_next_module_in_group(std::size_t current_index);
+    Module *get_previous_module_in_group(const std::size_t current_index);
+    Module *get_next_module_in_group(const std::size_t current_index);
 };
 
 #endif

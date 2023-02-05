@@ -20,13 +20,13 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-    Args args = argparse::parse<Args>(argc, argv);
+    const Args args = argparse::parse<Args>(argc, argv);
     Context context = {
         Config(),
         args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time),
-        std::getenv("PWD"),
+        get_env("PWD"),
         check_git_repository()
     };
     if (args.init)

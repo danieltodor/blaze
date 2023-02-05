@@ -12,7 +12,7 @@ unsigned short get_column()
     return w.ws_col;
 }
 
-std::size_t get_length(std::vector<std::string> strings)
+std::size_t get_length(const std::vector<std::string> &strings)
 {
     std::size_t length = 0;
     for (const std::string &string : strings)
@@ -52,7 +52,7 @@ std::string join(const std::vector<std::string> &strings, const std::string &del
     return result;
 }
 
-void regex_replace(std::string &string, const std::vector<std::string> patterns, const std::string &replacement)
+void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement)
 {
     std::vector<std::string> lines = split(string, "\n");
     for (std::string &line : lines)
@@ -65,7 +65,7 @@ void regex_replace(std::string &string, const std::vector<std::string> patterns,
     string = join(lines, "\n");
 }
 
-bool regex_search(std::string &string, const std::vector<std::string> patterns)
+bool regex_search(const std::string &string, const std::vector<std::string> &patterns)
 {
     std::vector<std::string> lines = split(string, "\n");
     for (const std::string &line : lines)
@@ -93,7 +93,7 @@ void strip(std::string &string)
     );
 }
 
-std::string execute_command(std::string command)
+std::string execute_command(const std::string &command)
 {
     std::string result = "";
     char buffer[128];

@@ -6,12 +6,12 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
-std::string directory(Context context)
+std::string directory(const Context &context)
 {
     std::string result = "";
-    std::string &PWD = context.PWD;
-    Config &config = context.config;
-    std::string HOME = std::getenv("HOME");
+    const Config &config = context.config;
+    std::string PWD = context.PWD;
+    std::string HOME = get_env("HOME");
     if (PWD.find(HOME) != std::string::npos)
     {
         PWD.replace(0, HOME.length(), "~");

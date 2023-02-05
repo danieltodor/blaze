@@ -6,14 +6,14 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
-std::string git_status(Context context)
+std::string git_status(const Context &context)
 {
     std::string result = "";
-    Config &config = context.config;
     if (!context.git_repository_detected)
     {
         return result;
     }
+    const Config &config = context.config;
     std::string status = execute_command("git status --porcelain");
     if (!execute_command("git stash list").empty())
     {

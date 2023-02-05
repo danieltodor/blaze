@@ -3,8 +3,8 @@
 #include "color.hpp"
 
 const std::string csi = "\001\033["; // Control Sequence Introducer
-const std::string rgb_background_prefix = "48;2;";
 const std::string rgb_foreground_prefix = "38;2;";
+const std::string rgb_background_prefix = "48;2;";
 
 typedef std::unordered_map<std::string, std::string> stringmap;
 const stringmap foreground_color_map = {
@@ -28,7 +28,7 @@ const stringmap background_color_map = {
     {"white", std::to_string(WHITE + 10)}
 };
 
-std::string graphics(std::string code)
+std::string graphics(const std::string &code)
 {
     std::string result = csi;
     result += code;
@@ -36,7 +36,7 @@ std::string graphics(std::string code)
     return result;
 }
 
-std::string to_color_code(std::string color, stringmap color_map, std::string rgb_prefix)
+std::string to_color_code(const std::string &color, const stringmap &color_map, const std::string &rgb_prefix)
 {
     if (color.empty())
     {
@@ -52,7 +52,7 @@ std::string to_color_code(std::string color, stringmap color_map, std::string rg
     }
 }
 
-std::string text_mode(int code)
+std::string text_mode(const int code)
 {
     if (code == 0)
     {
@@ -61,14 +61,14 @@ std::string text_mode(int code)
     return graphics(std::to_string(code));
 }
 
-std::string background(std::string color)
-{
-    return to_color_code(color, background_color_map, rgb_background_prefix);
-}
-
-std::string foreground(std::string color)
+std::string foreground(const std::string &color)
 {
     return to_color_code(color, foreground_color_map, rgb_foreground_prefix);
+}
+
+std::string background(const std::string &color)
+{
+    return to_color_code(color, background_color_map, rgb_background_prefix);
 }
 
 std::string reset()
