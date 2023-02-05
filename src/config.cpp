@@ -55,6 +55,8 @@ void Config::parse_config(toml::value &data)
 
     set_value(data, this->connector.character, "connector", "character");
     set_value(data, this->connector.foreground, "connector", "foreground");
+    set_value(data, this->connector.background, "connector", "background");
+    set_value(data, this->connector.dim, "connector", "dim");
 
     try
     {

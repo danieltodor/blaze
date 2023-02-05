@@ -24,6 +24,8 @@ struct Connector
 {
     std::string character = " ";
     std::string foreground = "";
+    std::string background = "";
+    bool dim = false;
 };
 
 struct Module

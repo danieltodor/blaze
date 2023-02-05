@@ -26,6 +26,10 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += background(previous_module->background);
     }
+    else
+    {
+        result += background(config.connector.background);
+    }
     result += foreground(current_module->background);
     result += current_module->outer_prefix;
     result += foreground(current_module->foreground);
@@ -60,7 +64,12 @@ std::string middle(const Config &config, const int length)
     };
     std::string result = "";
     result += reset();
+    if (config.connector.dim)
+    {
+        result += text_mode(DIM);
+    }
     result += foreground(config.connector.foreground);
+    result += background(config.connector.background);
     result += multiple(length, config.connector.character);
     result += reset();
     return result;
@@ -83,6 +92,10 @@ std::string post(const Config &config, const Module *current_module, const Modul
     if (next_module != NULL && !next_module->content.empty() && next_module->outer_prefix.empty())
     {
         result += background(next_module->background);
+    }
+    else
+    {
+        result += background(config.connector.background);
     }
     result += current_module->outer_suffix;
     result += reset();
