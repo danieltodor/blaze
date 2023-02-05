@@ -114,6 +114,10 @@ void Config::parse_config(toml::value &data)
     set_value(data, this->git_status.staged, "git_status", "staged");
     set_value(data, this->git_status.renamed, "git_status", "renamed");
     set_value(data, this->git_status.deleted, "git_status", "deleted");
+
+    set_value(data, this->date.format, "date", "format");
+
+    set_value(data, this->time.format, "time", "format");
 }
 
 void Config::sort_modules()

@@ -81,6 +81,16 @@ struct GitStatus
     std::string deleted = "✘";
 };
 
+struct Date
+{
+    std::string format = "%x";
+};
+
+struct Time
+{
+    std::string format = "%X";
+};
+
 class Config
 {
 public:
@@ -92,6 +102,8 @@ public:
     ExecutionTime execution_time;
     GitBranch git_branch;
     GitStatus git_status;
+    Date date;
+    Time time;
     Config();
     toml::value load_config();
     void parse_config(toml::value &data);

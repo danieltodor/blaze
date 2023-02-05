@@ -8,8 +8,9 @@
 
 std::string time(const Context &context)
 {
+    const Config &config = context.config;
     std::string result = "";
-    result += format_time(context.time_structure, "%X");
+    result += format_time(context.time_structure, config.time.format);
     return result;
 }
 
