@@ -122,17 +122,9 @@ bool end_reached(const std::size_t i, const Config &c)
     return i == c.modules.size() - 1 ? true : false;
 }
 
-void print_all(Context &context)
+void evaluate_content(Context &context)
 {
     Config &config = context.config;
-    Module *current_module;
-    Module *previous_module;
-    Module *next_module;
-    std::string result;
-    std::string temp;
-    std::string left;
-    std::string right;
-    std::size_t length = 0;
     for (Module &module : config.modules)
     {
         if (!module.name.empty())
@@ -145,6 +137,20 @@ void print_all(Context &context)
             strip(module.content);
         }
     }
+}
+
+void print_all(Context &context)
+{
+    Config &config = context.config;
+    Module *current_module;
+    Module *previous_module;
+    Module *next_module;
+    std::string result;
+    std::string temp;
+    std::string left;
+    std::string right;
+    std::size_t length = 0;
+    evaluate_content(context);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
