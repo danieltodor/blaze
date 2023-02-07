@@ -13,7 +13,7 @@
 
 std::string execution_time(const Context &context)
 {
-    auto subtract_time = [](double from, const int unit)
+    auto subtract_time = [](double &from, const int unit)
     {
         int time = floor(from / unit);
         from -= time * unit;
@@ -29,11 +29,10 @@ std::string execution_time(const Context &context)
         return result;
     }
 
-    double &remaining = diff;
-    const int hours = subtract_time(remaining, HOUR);
-    const int minutes = subtract_time(remaining, MINUTE);
-    const int seconds = subtract_time(remaining, SECOND);
-    const double fractional = round(remaining / precision) * precision;
+    const int hours = subtract_time(diff, HOUR);
+    const int minutes = subtract_time(diff, MINUTE);
+    const int seconds = subtract_time(diff, SECOND);
+    const double fractional = round(diff / precision) * precision;
 
     if (hours)
     {
