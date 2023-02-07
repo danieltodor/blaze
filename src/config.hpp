@@ -57,8 +57,8 @@ struct Directory
 struct ExecutionTime
 {
     int precision = 1;
-    int display_from = 0;
-    int display_fractional_until = 10;
+    float display_from = 0;
+    float display_fractional_until = 10;
 };
 
 struct GitBranch
