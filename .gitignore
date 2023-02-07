@@ -1,2 +1,5 @@
 # Generated dirs
 build/*
+
+# Visual Studio Files
+.vscode/settings.json
