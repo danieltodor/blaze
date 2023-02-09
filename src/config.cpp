@@ -176,6 +176,40 @@ Module *Config::get_next_module_in_group(const std::size_t current_index)
     return next;
 }
 
+std::vector<Module *> Config::modules_on_level(int level)
+{
+    std::vector<Module *> result;
+    for (Module &module : this->modules)
+    {
+        if (module.level < level)
+        {
+            continue;
+        }
+        else if (module.level == level)
+        {
+            result.push_back(&module);
+        }
+        else if (module.level > level)
+        {
+            break;
+        }
+    }
+    return result;
+}
+
+bool Config::content_on_right(int level)
+{
+    std::vector<Module *> modules = this->modules_on_level(level);
+    for (const Module *module : modules)
+    {
+        if (module->align == "right" && !module->content.empty())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Config::set_default_config()
 {
     this->global.padding = "";

@@ -26,7 +26,7 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += background(previous_module->background);
     }
-    else
+    else if (config.connector_displayed)
     {
         result += background(config.connector.background);
     }
@@ -93,7 +93,7 @@ std::string post(const Config &config, const Module *current_module, const Modul
     {
         result += background(next_module->background);
     }
-    else
+    else if (config.connector_displayed)
     {
         result += background(config.connector.background);
     }
@@ -151,6 +151,7 @@ void print_all(Context &context)
     std::string right;
     std::size_t length = 0;
     evaluate_content(context);
+    config.connector_displayed = config.content_on_right(1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
@@ -193,6 +194,7 @@ void print_all(Context &context)
         }
         if (level_changes(i, config))
         {
+            config.connector_displayed = config.content_on_right(i + 1);
             result += '\n';
         }
     }

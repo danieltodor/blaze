@@ -97,6 +97,7 @@ public:
     Global global;
     Prompt prompt;
     Connector connector;
+    bool connector_displayed;
     std::vector<Module> modules;
     Directory directory;
     ExecutionTime execution_time;
@@ -111,6 +112,8 @@ public:
     void set_default_config();
     Module *get_previous_module_in_group(const std::size_t current_index);
     Module *get_next_module_in_group(const std::size_t current_index);
+    std::vector<Module *> modules_on_level(int level);
+    bool content_on_right(int level);
 };
 
 #endif
