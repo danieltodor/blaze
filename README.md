@@ -70,9 +70,9 @@ dim = false
 name = ""
 # Execute a user defined module
 execute = ""
-# Which level the module should be displayed on
+# Which level the module should be displayed on (required only for multilevel prompt)
 level = 1
-# The position of the module
+# The position of the module (if omitted, modules will be displayed as they appear in config)
 position = 1
 # Display it on left/right side
 align = "left"
@@ -104,9 +104,9 @@ basename_only = false
 # Digits displayed after seconds
 precision = 1
 # Display module if execution time exceeds this
-display_from = 0
+display_from = 0.0
 # Display franctional part if less than this
-display_fractional_until = 10
+display_fractional_until = 10.0
 
 [git_branch]
 # Ignore branches that matches these regex patterns, e.g.: "^master"
@@ -143,14 +143,14 @@ format = "%X"
 | execution_time | Execution time of the last command (wall time) |
 | git_branch | Active branch in the repository |
 | git_status | Symbols indicating the current state of the repository |
-| date | Current date |
-| time | Current time |
+| date | Current date [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
+| time | Current time [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 
 ## Creating your own modules
-You can use any backend language to create a custom module.
-1. Create a script/binary that prints something to stdout.
+You can use the programming language of your choice to create a custom module.
+1. Create a script/binary that writes something to stdout. Otherwise the module won`t be displayed.
 ``` py
-# Check the PWD and the file/dir contents, or do whatever you need to do.
+# Check the PWD and/or the file/directory contents, or whatever you need.
 # At the end, print the information you need.
 print('important stuff')
 ```
