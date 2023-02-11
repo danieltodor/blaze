@@ -22,6 +22,7 @@ struct Prompt
 
 struct Connector
 {
+    bool display = false;
     std::string character = " ";
     std::string foreground = "";
     std::string background = "";
@@ -31,6 +32,7 @@ struct Connector
 struct Module
 {
     std::string content = "";
+    bool display = false;
     std::string name = "";
     std::string execute = "";
     int level = 1;
@@ -96,7 +98,6 @@ struct Config
     Global global;
     Prompt prompt;
     Connector connector;
-    bool connector_displayed;
     std::vector<Module> modules;
     Directory directory;
     ExecutionTime execution_time;

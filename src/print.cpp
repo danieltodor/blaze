@@ -15,26 +15,6 @@ std::string get_padding(const Config &config, const Module *current_module)
     return current_module->padding != control_char ? current_module->padding : config.global.padding;
 }
 
-bool use_modules_background(const Module *module, const std::string &outer)
-{
-    if (module == NULL)
-    {
-        return false;
-    }
-    else if (!module->content.empty() && outer.empty())
-    {
-        return true;
-    }
-    else if (module->name == "separator")
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 std::string pre(const Config &config, const Module *current_module, const Module *previous_module)
 {
     std::string result = "";
@@ -43,11 +23,11 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += text_mode(DIM);
     }
-    if (use_modules_background(previous_module, previous_module->outer_suffix))
+    if (previous_module != NULL && previous_module->display && previous_module->outer_suffix.empty())
     {
         result += background(previous_module->background);
     }
-    else if (config.connector_displayed)
+    else if (config.connector.display)
     {
         result += background(config.connector.background);
     }
@@ -110,11 +90,11 @@ std::string post(const Config &config, const Module *current_module, const Modul
     result += get_padding(config, current_module);
     result += reset();
     result += foreground(current_module->background);
-    if (use_modules_background(next_module, next_module->outer_prefix))
+    if (next_module != NULL && next_module->display && next_module->outer_prefix.empty())
     {
         result += background(next_module->background);
     }
-    else if (config.connector_displayed)
+    else if (config.connector.display)
     {
         result += background(config.connector.background);
     }
@@ -133,19 +113,36 @@ std::string prompt(const Config &config)
     return result;
 }
 
-bool level_changes(const std::size_t i, const Config &c)
+bool level_changes(const Config &config, const std::size_t index)
 {
-    return i < c.modules.size() - 1 && c.modules[i + 1].level > c.modules[i].level ? true : false;
+    if (index < config.modules.size() - 1 && config.modules[index + 1].level > config.modules[index].level)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-bool end_reached(const std::size_t i, const Config &c)
+bool end_reached(const Config &config, const std::size_t index)
 {
-    return i == c.modules.size() - 1 ? true : false;
+    if (index == config.modules.size() - 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-void evaluate_content(Context &context)
+void preprocess_modules(Context &context)
 {
     Config &config = context.config;
+    Module *current_module;
+    Module *previous_module;
+    Module *next_module;
     for (Module &module : config.modules)
     {
         if (!module.name.empty())
@@ -156,6 +153,20 @@ void evaluate_content(Context &context)
         {
             module.content = execute_command(module.execute);
             strip(module.content);
+        }
+    }
+    for (std::size_t i = 0; i < config.modules.size(); i++)
+    {
+        current_module = &config.modules[i];
+        previous_module = get_previous_module_in_group(config.modules, i);
+        next_module = get_next_module_in_group(config.modules, i);
+        if (!current_module->content.empty())
+        {
+            current_module->display = true;
+        }
+        else if (current_module->name == "separator" && !previous_module->content.empty() && !next_module->content.empty())
+        {
+            current_module->display = true;
         }
     }
 }
@@ -171,15 +182,15 @@ void print_all(Context &context)
     std::string left;
     std::string right;
     std::size_t length = 0;
-    evaluate_content(context);
-    config.connector_displayed = content_on_right(config.modules, 1);
+    preprocess_modules(context);
+    config.connector.display = content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
         temp = current_module->content;
-        if (!temp.empty() || current_module->name == "separator")
+        if (current_module->display)
         {
             length += get_length({
                 temp,
@@ -201,7 +212,7 @@ void print_all(Context &context)
         {
             left += temp;
         }
-        if (level_changes(i, config) || end_reached(i, config))
+        if (level_changes(config, i) || end_reached(config, i))
         {
             result += left;
             left = "";
@@ -213,9 +224,9 @@ void print_all(Context &context)
             }
             length = 0;
         }
-        if (level_changes(i, config))
+        if (level_changes(config, i))
         {
-            config.connector_displayed = content_on_right(config.modules, i + 1);
+            config.connector.display = content_on_right(config.modules, i + 1);
             result += '\n';
         }
     }

@@ -189,7 +189,7 @@ bool content_on_right(std::vector<Module> &modules, int level)
     std::vector<Module *> level_modules = modules_on_level(modules, level);
     for (const Module *module : level_modules)
     {
-        if (module->align == "right" && !module->content.empty())
+        if (module->align == "right" && module->display)
         {
             return true;
         }
