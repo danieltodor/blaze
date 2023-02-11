@@ -8,7 +8,7 @@
 
 std::string get_padding(const Config &config, const Module *current_module)
 {
-    if (current_module->name == "separator" && current_module->padding == control_char)
+    if (is_separator(*current_module) && current_module->padding == control_char)
     {
         return "";
     }
@@ -164,7 +164,7 @@ void preprocess_modules(Context &context)
         {
             current_module->display = true;
         }
-        else if (current_module->name == "separator" && !previous_module->content.empty() && !next_module->content.empty())
+        else if (is_separator(*current_module) && !previous_module->content.empty() && !next_module->content.empty())
         {
             current_module->display = true;
         }

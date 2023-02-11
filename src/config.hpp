@@ -107,10 +107,11 @@ struct Config
     Time time;
 };
 
+Config get_config();
 Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t current_index);
 Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t current_index);
 std::vector<Module *> modules_on_level(std::vector<Module> &modules, int level);
 bool content_on_right(std::vector<Module> &modules, int level);
-Config get_config();
+bool is_separator(const Module &module);
 
 #endif

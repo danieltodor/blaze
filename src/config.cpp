@@ -133,6 +133,50 @@ void sort_modules(std::vector<Module> &modules)
     std::sort(modules.begin(), modules.end(), compare);
 }
 
+void set_default_values(Config &config)
+{
+    config.global.padding = "";
+    config.execution_time.display_from = 2;
+
+    Prompt prompt;
+    prompt.string = "\n❯ ";
+    config.prompt = prompt;
+
+    Module directory;
+    directory.name = "directory";
+    directory.level = 1;
+    directory.position = 1;
+    directory.align = "left";
+    directory.foreground = "blue";
+    directory.bold = true;
+    config.modules.push_back(directory);
+
+    Module execution_time;
+    execution_time.name = "execution_time";
+    execution_time.level = 1;
+    execution_time.position = 2;
+    execution_time.align = "left";
+    execution_time.outer_prefix = " ";
+    execution_time.foreground = "yellow";
+    config.modules.push_back(execution_time);
+}
+
+Config get_config()
+{
+    Config config;
+    toml::value data = read_data();
+    if (data.is_uninitialized())
+    {
+        set_default_values(config);
+    }
+    else
+    {
+        load_values(data, config);
+        sort_modules(config.modules);
+    }
+    return config;
+}
+
 Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t current_index)
 {
     Module *previous = NULL;
@@ -197,46 +241,7 @@ bool content_on_right(std::vector<Module> &modules, int level)
     return false;
 }
 
-void set_default_values(Config &config)
+bool is_separator(const Module &module)
 {
-    config.global.padding = "";
-    config.execution_time.display_from = 2;
-
-    Prompt prompt;
-    prompt.string = "\n❯ ";
-    config.prompt = prompt;
-
-    Module directory;
-    directory.name = "directory";
-    directory.level = 1;
-    directory.position = 1;
-    directory.align = "left";
-    directory.foreground = "blue";
-    directory.bold = true;
-    config.modules.push_back(directory);
-
-    Module execution_time;
-    execution_time.name = "execution_time";
-    execution_time.level = 1;
-    execution_time.position = 2;
-    execution_time.align = "left";
-    execution_time.outer_prefix = " ";
-    execution_time.foreground = "yellow";
-    config.modules.push_back(execution_time);
-}
-
-Config get_config()
-{
-    Config config;
-    toml::value data = read_data();
-    if (data.is_uninitialized())
-    {
-        set_default_values(config);
-    }
-    else
-    {
-        load_values(data, config);
-        sort_modules(config.modules);
-    }
-    return config;
+    return module.name == "separator" ? true : false;
 }
