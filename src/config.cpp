@@ -5,7 +5,7 @@
 #include "config.hpp"
 #include "util.hpp"
 
-toml::value Config::load_config()
+toml::value read_data()
 {
     const std::string paths[] = {
         get_env("BLAZE_CONFIG"),
@@ -39,29 +39,23 @@ void set_value(const toml::value &data, T &target, Keys&&... keys)
     }
 }
 
-void Config::parse_config(toml::value &data)
+void load_values(toml::value &data, Config &config)
 {
-    this->set_default_config();
-    if (data.is_uninitialized())
-    {
-        return;
-    }
+    set_value(data, config.global.new_line, "global", "new_line");
+    set_value(data, config.global.padding, "global", "padding");
 
-    set_value(data, this->global.new_line, "global", "new_line");
-    set_value(data, this->global.padding, "global", "padding");
+    set_value(data, config.prompt.string, "prompt", "string");
+    set_value(data, config.prompt.foreground, "prompt", "foreground");
 
-    set_value(data, this->prompt.string, "prompt", "string");
-    set_value(data, this->prompt.foreground, "prompt", "foreground");
-
-    set_value(data, this->connector.character, "connector", "character");
-    set_value(data, this->connector.foreground, "connector", "foreground");
-    set_value(data, this->connector.background, "connector", "background");
-    set_value(data, this->connector.dim, "connector", "dim");
+    set_value(data, config.connector.character, "connector", "character");
+    set_value(data, config.connector.foreground, "connector", "foreground");
+    set_value(data, config.connector.background, "connector", "background");
+    set_value(data, config.connector.dim, "connector", "dim");
 
     try
     {
         const toml::array &module_array = toml::find(data, "module").as_array();
-        this->modules.clear();
+        config.modules.clear();
         try
         {
             for (int i = 0;; i++)
@@ -84,7 +78,7 @@ void Config::parse_config(toml::value &data)
                 set_value(module_data, current.dim, "dim");
                 set_value(module_data, current.italic, "italic");
                 set_value(module_data, current.underline, "underline");
-                this->modules.push_back(current);
+                config.modules.push_back(current);
             }
         }
         catch (const std::out_of_range &err)
@@ -95,32 +89,32 @@ void Config::parse_config(toml::value &data)
     {
     }
 
-    set_value(data, this->directory.basename_only, "directory", "basename_only");
+    set_value(data, config.directory.basename_only, "directory", "basename_only");
 
-    set_value(data, this->execution_time.precision, "execution_time", "precision");
-    set_value(data, this->execution_time.display_from, "execution_time", "display_from");
-    set_value(data, this->execution_time.display_fractional_until, "execution_time", "display_fractional_until");
+    set_value(data, config.execution_time.precision, "execution_time", "precision");
+    set_value(data, config.execution_time.display_from, "execution_time", "display_from");
+    set_value(data, config.execution_time.display_fractional_until, "execution_time", "display_fractional_until");
 
-    set_value(data, this->git_branch.ignore, "git_branch", "ignore");
+    set_value(data, config.git_branch.ignore, "git_branch", "ignore");
 
-    set_value(data, this->git_status.clean, "git_status", "clean");
-    set_value(data, this->git_status.conflicted, "git_status", "conflicted");
-    set_value(data, this->git_status.ahead, "git_status", "ahead");
-    set_value(data, this->git_status.behind, "git_status", "behind");
-    set_value(data, this->git_status.diverged, "git_status", "diverged");
-    set_value(data, this->git_status.untracked, "git_status", "untracked");
-    set_value(data, this->git_status.stashed, "git_status", "stashed");
-    set_value(data, this->git_status.modified, "git_status", "modified");
-    set_value(data, this->git_status.staged, "git_status", "staged");
-    set_value(data, this->git_status.renamed, "git_status", "renamed");
-    set_value(data, this->git_status.deleted, "git_status", "deleted");
+    set_value(data, config.git_status.clean, "git_status", "clean");
+    set_value(data, config.git_status.conflicted, "git_status", "conflicted");
+    set_value(data, config.git_status.ahead, "git_status", "ahead");
+    set_value(data, config.git_status.behind, "git_status", "behind");
+    set_value(data, config.git_status.diverged, "git_status", "diverged");
+    set_value(data, config.git_status.untracked, "git_status", "untracked");
+    set_value(data, config.git_status.stashed, "git_status", "stashed");
+    set_value(data, config.git_status.modified, "git_status", "modified");
+    set_value(data, config.git_status.staged, "git_status", "staged");
+    set_value(data, config.git_status.renamed, "git_status", "renamed");
+    set_value(data, config.git_status.deleted, "git_status", "deleted");
 
-    set_value(data, this->date.format, "date", "format");
+    set_value(data, config.date.format, "date", "format");
 
-    set_value(data, this->time.format, "time", "format");
+    set_value(data, config.time.format, "time", "format");
 }
 
-void Config::sort_modules()
+void sort_modules(std::vector<Module> &modules)
 {
     std::unordered_map<std::string, int> sides;
     sides["left"] = 1;
@@ -136,50 +130,43 @@ void Config::sort_modules()
         b_value += std::to_string(b.position);
         return a_value < b_value;
     };
-    std::sort(this->modules.begin(), this->modules.end(), compare);
+    std::sort(modules.begin(), modules.end(), compare);
 }
 
-Config::Config()
-{
-    toml::value config = this->load_config();
-    this->parse_config(config);
-    this->sort_modules();
-}
-
-Module *Config::get_previous_module_in_group(const std::size_t current_index)
+Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t current_index)
 {
     Module *previous = NULL;
     if (current_index == 0)
     {
         return previous;
     }
-    Module &tmp = this->modules[current_index - 1];
-    if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
+    Module &tmp = modules[current_index - 1];
+    if (tmp.level == modules[current_index].level && tmp.align == modules[current_index].align)
     {
         previous = &tmp;
     }
     return previous;
 }
 
-Module *Config::get_next_module_in_group(const std::size_t current_index)
+Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t current_index)
 {
     Module *next = NULL;
-    if (current_index == this->modules.size() - 1)
+    if (current_index == modules.size() - 1)
     {
         return next;
     }
-    Module &tmp = this->modules[current_index + 1];
-    if (tmp.level == this->modules[current_index].level && tmp.align == this->modules[current_index].align)
+    Module &tmp = modules[current_index + 1];
+    if (tmp.level == modules[current_index].level && tmp.align == modules[current_index].align)
     {
         next = &tmp;
     }
     return next;
 }
 
-std::vector<Module *> Config::modules_on_level(int level)
+std::vector<Module *> modules_on_level(std::vector<Module> &modules, int level)
 {
     std::vector<Module *> result;
-    for (Module &module : this->modules)
+    for (Module &module : modules)
     {
         if (module.level < level)
         {
@@ -197,10 +184,10 @@ std::vector<Module *> Config::modules_on_level(int level)
     return result;
 }
 
-bool Config::content_on_right(int level)
+bool content_on_right(std::vector<Module> &modules, int level)
 {
-    std::vector<Module *> modules = this->modules_on_level(level);
-    for (const Module *module : modules)
+    std::vector<Module *> level_modules = modules_on_level(modules, level);
+    for (const Module *module : level_modules)
     {
         if (module->align == "right" && !module->content.empty())
         {
@@ -210,14 +197,14 @@ bool Config::content_on_right(int level)
     return false;
 }
 
-void Config::set_default_config()
+void set_default_values(Config &config)
 {
-    this->global.padding = "";
-    this->execution_time.display_from = 2;
+    config.global.padding = "";
+    config.execution_time.display_from = 2;
 
     Prompt prompt;
     prompt.string = "\n❯ ";
-    this->prompt = prompt;
+    config.prompt = prompt;
 
     Module directory;
     directory.name = "directory";
@@ -226,7 +213,7 @@ void Config::set_default_config()
     directory.align = "left";
     directory.foreground = "blue";
     directory.bold = true;
-    this->modules.push_back(directory);
+    config.modules.push_back(directory);
 
     Module execution_time;
     execution_time.name = "execution_time";
@@ -235,5 +222,21 @@ void Config::set_default_config()
     execution_time.align = "left";
     execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
-    this->modules.push_back(execution_time);
+    config.modules.push_back(execution_time);
+}
+
+Config get_config()
+{
+    Config config;
+    toml::value data = read_data();
+    if (data.is_uninitialized())
+    {
+        set_default_values(config);
+    }
+    else
+    {
+        load_values(data, config);
+        sort_modules(config.modules);
+    }
+    return config;
 }

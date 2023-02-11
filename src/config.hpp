@@ -91,9 +91,8 @@ struct Time
     std::string format = "%X";
 };
 
-class Config
+struct Config
 {
-public:
     Global global;
     Prompt prompt;
     Connector connector;
@@ -105,15 +104,12 @@ public:
     GitStatus git_status;
     Date date;
     Time time;
-    Config();
-    toml::value load_config();
-    void parse_config(toml::value &data);
-    void sort_modules();
-    void set_default_config();
-    Module *get_previous_module_in_group(const std::size_t current_index);
-    Module *get_next_module_in_group(const std::size_t current_index);
-    std::vector<Module *> modules_on_level(int level);
-    bool content_on_right(int level);
 };
+
+Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t current_index);
+Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t current_index);
+std::vector<Module *> modules_on_level(std::vector<Module> &modules, int level);
+bool content_on_right(std::vector<Module> &modules, int level);
+Config get_config();
 
 #endif

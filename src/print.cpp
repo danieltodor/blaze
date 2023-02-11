@@ -4,6 +4,7 @@
 #include "color.hpp"
 #include "module.hpp"
 #include "util.hpp"
+#include "config.hpp"
 
 std::string get_padding(const Config &config, const Module *current_module)
 {
@@ -171,12 +172,12 @@ void print_all(Context &context)
     std::string right;
     std::size_t length = 0;
     evaluate_content(context);
-    config.connector_displayed = config.content_on_right(1);
+    config.connector_displayed = content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
-        previous_module = config.get_previous_module_in_group(i);
-        next_module = config.get_next_module_in_group(i);
+        previous_module = get_previous_module_in_group(config.modules, i);
+        next_module = get_next_module_in_group(config.modules, i);
         temp = current_module->content;
         if (!temp.empty() || current_module->name == "separator")
         {
@@ -214,7 +215,7 @@ void print_all(Context &context)
         }
         if (level_changes(i, config))
         {
-            config.connector_displayed = config.content_on_right(i + 1);
+            config.connector_displayed = content_on_right(config.modules, i + 1);
             result += '\n';
         }
     }

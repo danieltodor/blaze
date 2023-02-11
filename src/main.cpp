@@ -3,6 +3,7 @@
 #include "init.hpp"
 #include "print.hpp"
 #include "context.hpp"
+#include "config.hpp"
 #include "util.hpp"
 #include "external/argparse/argparse.hpp"
 
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
     }
     const Args args = argparse::parse<Args>(argc, argv);
     Context context = {
-        Config(),
+        get_config(),
         args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time),
