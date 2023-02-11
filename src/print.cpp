@@ -14,6 +14,26 @@ std::string get_padding(const Config &config, const Module *current_module)
     return current_module->padding != control_char ? current_module->padding : config.global.padding;
 }
 
+bool use_modules_background(const Module *module, const std::string &outer)
+{
+    if (module == NULL)
+    {
+        return false;
+    }
+    else if (!module->content.empty() && outer.empty())
+    {
+        return true;
+    }
+    else if (module->name == "separator")
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 std::string pre(const Config &config, const Module *current_module, const Module *previous_module)
 {
     std::string result = "";
@@ -22,7 +42,7 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += text_mode(DIM);
     }
-    if (previous_module != NULL && !previous_module->content.empty() && previous_module->outer_suffix.empty())
+    if (use_modules_background(previous_module, previous_module->outer_suffix))
     {
         result += background(previous_module->background);
     }
@@ -89,7 +109,7 @@ std::string post(const Config &config, const Module *current_module, const Modul
     result += get_padding(config, current_module);
     result += reset();
     result += foreground(current_module->background);
-    if (next_module != NULL && !next_module->content.empty() && next_module->outer_prefix.empty())
+    if (use_modules_background(next_module, next_module->outer_prefix))
     {
         result += background(next_module->background);
     }
