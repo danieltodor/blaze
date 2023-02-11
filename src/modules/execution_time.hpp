@@ -43,7 +43,7 @@ std::string execution_time(const Context &context)
         result += hours ? " " : "";
         result += std::to_string(minutes) + 'm';
     }
-    if (seconds)
+    if (seconds || fractional > config.execution_time.display_from)
     {
         result += hours || minutes ? " " : "";
         result += std::to_string(seconds);
@@ -52,10 +52,6 @@ std::string execution_time(const Context &context)
             result += std::to_string(fractional).substr(1, 1 + config.execution_time.precision);
         }
         result += 's';
-    }
-    if (!hours && !minutes && !seconds)
-    {
-        result += std::to_string(fractional).substr(0, 2 + config.execution_time.precision) + 's';
     }
     return result;
 }
