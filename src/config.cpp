@@ -172,42 +172,42 @@ Config get_config()
     else
     {
         load_values(data, config);
-        sort_modules(config.modules);
     }
+    sort_modules(config.modules);
     return config;
 }
 
-Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t current_index)
+Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t index)
 {
     Module *previous = NULL;
-    if (current_index == 0)
+    if (index == 0)
     {
         return previous;
     }
-    Module &tmp = modules[current_index - 1];
-    if (tmp.level == modules[current_index].level && tmp.align == modules[current_index].align)
+    Module &tmp = modules[index - 1];
+    if (tmp.level == modules[index].level && tmp.align == modules[index].align)
     {
         previous = &tmp;
     }
     return previous;
 }
 
-Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t current_index)
+Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t index)
 {
     Module *next = NULL;
-    if (current_index == modules.size() - 1)
+    if (index == modules.size() - 1)
     {
         return next;
     }
-    Module &tmp = modules[current_index + 1];
-    if (tmp.level == modules[current_index].level && tmp.align == modules[current_index].align)
+    Module &tmp = modules[index + 1];
+    if (tmp.level == modules[index].level && tmp.align == modules[index].align)
     {
         next = &tmp;
     }
     return next;
 }
 
-std::vector<Module *> modules_on_level(std::vector<Module> &modules, int level)
+std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const int level)
 {
     std::vector<Module *> result;
     for (Module &module : modules)
@@ -228,9 +228,9 @@ std::vector<Module *> modules_on_level(std::vector<Module> &modules, int level)
     return result;
 }
 
-bool content_on_right(std::vector<Module> &modules, int level)
+bool contains_content_on_right(std::vector<Module> &modules, const int level)
 {
-    std::vector<Module *> level_modules = modules_on_level(modules, level);
+    std::vector<Module *> level_modules = get_modules_on_level(modules, level);
     for (const Module *module : level_modules)
     {
         if (module->align == "right" && module->display)

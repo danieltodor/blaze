@@ -137,12 +137,9 @@ bool end_reached(const Config &config, const std::size_t index)
     }
 }
 
-void preprocess_modules(Context &context)
+void evaluate_content(Context &context)
 {
     Config &config = context.config;
-    Module *current_module;
-    Module *previous_module;
-    Module *next_module;
     for (Module &module : config.modules)
     {
         if (!module.name.empty())
@@ -155,6 +152,14 @@ void preprocess_modules(Context &context)
             strip(module.content);
         }
     }
+}
+
+void set_module_display(Context &context)
+{
+    Config &config = context.config;
+    Module *current_module;
+    Module *previous_module;
+    Module *next_module;
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
@@ -171,6 +176,12 @@ void preprocess_modules(Context &context)
     }
 }
 
+void process_modules(Context &context)
+{
+    evaluate_content(context);
+    set_module_display(context);
+}
+
 void print_all(Context &context)
 {
     Config &config = context.config;
@@ -182,8 +193,8 @@ void print_all(Context &context)
     std::string left;
     std::string right;
     std::size_t length = 0;
-    preprocess_modules(context);
-    config.connector.display = content_on_right(config.modules, 1);
+    process_modules(context);
+    config.connector.display = contains_content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
@@ -226,7 +237,7 @@ void print_all(Context &context)
         }
         if (level_changes(config, i))
         {
-            config.connector.display = content_on_right(config.modules, i + 1);
+            config.connector.display = contains_content_on_right(config.modules, i + 1);
             result += '\n';
         }
     }
