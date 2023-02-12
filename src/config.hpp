@@ -32,7 +32,6 @@ struct Connector
 struct Module
 {
     std::string content = "";
-    bool display = false;
     std::string name = "";
     std::string execute = "";
     int level = 1;

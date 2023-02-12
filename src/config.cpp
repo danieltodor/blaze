@@ -230,10 +230,10 @@ std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const i
 
 bool contains_content_on_right(std::vector<Module> &modules, const int level)
 {
-    std::vector<Module *> level_modules = get_modules_on_level(modules, level);
-    for (const Module *module : level_modules)
+    std::vector<Module *> modules_on_level = get_modules_on_level(modules, level);
+    for (const Module *module : modules_on_level)
     {
-        if (module->align == "right" && module->display)
+        if (module->align == "right" && !module->content.empty())
         {
             return true;
         }

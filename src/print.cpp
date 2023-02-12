@@ -23,7 +23,7 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += text_mode(DIM);
     }
-    if (previous_module != NULL && previous_module->display && previous_module->outer_suffix.empty())
+    if (previous_module != NULL && previous_module->outer_suffix.empty())
     {
         result += background(previous_module->background);
     }
@@ -90,7 +90,7 @@ std::string post(const Config &config, const Module *current_module, const Modul
     result += get_padding(config, current_module);
     result += reset();
     result += foreground(current_module->background);
-    if (next_module != NULL && next_module->display && next_module->outer_prefix.empty())
+    if (next_module != NULL && next_module->outer_prefix.empty())
     {
         result += background(next_module->background);
     }
@@ -154,24 +154,35 @@ void evaluate_content(Context &context)
     }
 }
 
-void set_module_display(Context &context)
+void remove_surplus(Context &context)
 {
     Config &config = context.config;
     Module *current_module;
-    Module *previous_module;
     Module *next_module;
-    for (std::size_t i = 0; i < config.modules.size(); i++)
+    for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
-        current_module = &config.modules[i];
-        previous_module = get_previous_module_in_group(config.modules, i);
-        next_module = get_next_module_in_group(config.modules, i);
-        if (!current_module->content.empty())
+        current_module = iterator.base();
+        if (current_module->content.empty() && !is_separator(*current_module))
         {
-            current_module->display = true;
+            config.modules.erase(iterator--);
         }
-        else if (is_separator(*current_module) && !previous_module->content.empty() && !next_module->content.empty())
+    }
+    int i = 0;
+    for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
+    {
+        current_module = iterator.base();
+        next_module = get_next_module_in_group(config.modules, i);
+        if (is_separator(*current_module) && next_module != NULL && is_separator(*next_module))
         {
-            current_module->display = true;
+            config.modules.erase(iterator--);
+        }
+        else if (is_separator(*current_module) && next_module == NULL)
+        {
+            config.modules.erase(iterator--);
+        }
+        else
+        {
+            i++;
         }
     }
 }
@@ -179,7 +190,7 @@ void set_module_display(Context &context)
 void process_modules(Context &context)
 {
     evaluate_content(context);
-    set_module_display(context);
+    remove_surplus(context);
 }
 
 void print_all(Context &context)
@@ -201,20 +212,17 @@ void print_all(Context &context)
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
         temp = current_module->content;
-        if (current_module->display)
-        {
-            length += get_length({
-                temp,
-                get_padding(config, current_module),
-                get_padding(config, current_module),
-                current_module->inner_prefix,
-                current_module->inner_suffix,
-                current_module->outer_prefix,
-                current_module->outer_suffix
-            });
-            temp.insert(0, pre(config, current_module, previous_module));
-            temp.insert(temp.length(), post(config, current_module, next_module));
-        }
+        length += get_length({
+            temp,
+            get_padding(config, current_module),
+            get_padding(config, current_module),
+            current_module->inner_prefix,
+            current_module->inner_suffix,
+            current_module->outer_prefix,
+            current_module->outer_suffix
+        });
+        temp.insert(0, pre(config, current_module, previous_module));
+        temp.insert(temp.length(), post(config, current_module, next_module));
         if (current_module->align == "right")
         {
             right += temp;
