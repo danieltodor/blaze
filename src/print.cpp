@@ -158,6 +158,7 @@ void remove_surplus(Context &context)
 {
     Config &config = context.config;
     Module *current_module;
+    Module *previous_module;
     Module *next_module;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
@@ -171,12 +172,13 @@ void remove_surplus(Context &context)
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
+        previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
         if (is_separator(*current_module) && next_module != NULL && is_separator(*next_module))
         {
             config.modules.erase(iterator--);
         }
-        else if (is_separator(*current_module) && next_module == NULL)
+        else if (is_separator(*current_module) && (next_module == NULL || previous_module == NULL))
         {
             config.modules.erase(iterator--);
         }
