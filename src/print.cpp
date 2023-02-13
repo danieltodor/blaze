@@ -15,7 +15,7 @@ std::string get_padding(const Config &config, const Module *current_module)
     return current_module->padding != control_char ? current_module->padding : config.global.padding;
 }
 
-std::string pre(const Config &config, const Module *current_module, const Module *previous_module)
+std::string pre(const Config &config, const Module *current_module, const Module *previous_module, const bool display_connector)
 {
     std::string result = "";
     result += reset();
@@ -27,7 +27,7 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += background(previous_module->background);
     }
-    else if (config.connector.display)
+    else if (display_connector)
     {
         result += background(config.connector.background);
     }
@@ -76,7 +76,7 @@ std::string middle(const Config &config, const int length)
     return result;
 }
 
-std::string post(const Config &config, const Module *current_module, const Module *next_module)
+std::string post(const Config &config, const Module *current_module, const Module *next_module, const bool display_connector)
 {
     std::string result = "";
     result += reset();
@@ -94,7 +94,7 @@ std::string post(const Config &config, const Module *current_module, const Modul
     {
         result += background(next_module->background);
     }
-    else if (config.connector.display)
+    else if (display_connector)
     {
         result += background(config.connector.background);
     }
@@ -207,7 +207,7 @@ void print_all(Context &context)
     std::string right;
     std::size_t length = 0;
     process_modules(context);
-    config.connector.display = contains_content_on_right(config.modules, 1);
+    bool display_connector = contains_content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
         current_module = &config.modules[i];
@@ -223,8 +223,8 @@ void print_all(Context &context)
             current_module->outer_prefix,
             current_module->outer_suffix
         });
-        temp.insert(0, pre(config, current_module, previous_module));
-        temp.insert(temp.length(), post(config, current_module, next_module));
+        temp.insert(0, pre(config, current_module, previous_module, display_connector));
+        temp.insert(temp.length(), post(config, current_module, next_module, display_connector));
         if (current_module->align == "right")
         {
             right += temp;
@@ -247,7 +247,7 @@ void print_all(Context &context)
         }
         if (level_changes(config, i))
         {
-            config.connector.display = contains_content_on_right(config.modules, i + 1);
+            display_connector = contains_content_on_right(config.modules, i + 1);
             result += '\n';
         }
     }

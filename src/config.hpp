@@ -22,7 +22,6 @@ struct Prompt
 
 struct Connector
 {
-    bool display = false;
     std::string character = " ";
     std::string foreground = "";
     std::string background = "";
