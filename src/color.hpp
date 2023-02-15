@@ -4,6 +4,8 @@
 #include <string>
 
 #define RESET 0
+#define BACKGROUND_COLOR_OFFSET 10
+#define TEXT_TYPE_RESET_OFFSET 20
 
 // Colors
 #define BLACK 30
@@ -14,6 +16,7 @@
 #define MAGENTA 35
 #define CYAN 36
 #define WHITE 37
+#define DEFAULT 39
 
 // Text types
 #define BOLD 1
@@ -21,9 +24,12 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::string text_mode(const int code);
-std::string foreground(const std::string &color);
-std::string background(const std::string &color);
-std::string reset();
+std::string set_text_mode(const int code);
+std::string set_foreground(const std::string &color);
+std::string set_background(const std::string &color);
+std::string reset_all();
+std::string reset_text_mode(const int code);
+std::string reset_foreground();
+std::string reset_background();
 
 #endif

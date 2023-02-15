@@ -52,26 +52,42 @@ std::string to_color_code(const std::string &color, const stringmap &color_map, 
     }
 }
 
-std::string text_mode(const int code)
+std::string set_text_mode(const int code)
 {
-    if (code == 0)
-    {
-        return "";
-    }
     return graphics(std::to_string(code));
 }
 
-std::string foreground(const std::string &color)
+std::string set_foreground(const std::string &color)
 {
     return to_color_code(color, foreground_color_map, rgb_foreground_prefix);
 }
 
-std::string background(const std::string &color)
+std::string set_background(const std::string &color)
 {
     return to_color_code(color, background_color_map, rgb_background_prefix);
 }
 
-std::string reset()
+std::string reset_all()
 {
     return graphics(std::to_string(RESET));
+}
+
+std::string reset_text_mode(const int code)
+{
+    int special_offset = 0;
+    if (code == BOLD)
+    {
+        special_offset = 1;
+    }
+    return graphics(std::to_string(code + TEXT_TYPE_RESET_OFFSET + special_offset));
+}
+
+std::string reset_foreground()
+{
+    return graphics(std::to_string(DEFAULT));
+}
+
+std::string reset_background()
+{
+    return graphics(std::to_string(DEFAULT + BACKGROUND_COLOR_OFFSET));
 }

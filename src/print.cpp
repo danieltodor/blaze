@@ -18,37 +18,37 @@ std::string get_padding(const Config &config, const Module *current_module)
 std::string pre(const Config &config, const Module *current_module, const Module *previous_module, const bool display_connector)
 {
     std::string result = "";
-    result += reset();
+    result += reset_all();
     if (current_module->dim)
     {
-        result += text_mode(DIM);
+        result += set_text_mode(DIM);
     }
     if (previous_module != NULL && previous_module->outer_suffix.empty())
     {
-        result += background(previous_module->background);
+        result += set_background(previous_module->background);
     }
     else if (display_connector)
     {
-        result += background(config.connector.background);
+        result += set_background(config.connector.background);
     }
-    result += foreground(current_module->background);
+    result += set_foreground(current_module->background);
     result += current_module->outer_prefix;
-    result += foreground(current_module->foreground);
-    result += background(current_module->background);
-    result += get_padding(config, current_module);
-    result += current_module->inner_prefix;
     if (current_module->bold)
     {
-        result += text_mode(BOLD);
+        result += set_text_mode(BOLD);
     }
     if (current_module->italic)
     {
-        result += text_mode(ITALIC);
+        result += set_text_mode(ITALIC);
     }
+    result += set_foreground(current_module->foreground);
+    result += set_background(current_module->background);
+    result += get_padding(config, current_module);
     if (current_module->underline)
     {
-        result += text_mode(UNDERLINE);
+        result += set_text_mode(UNDERLINE);
     }
+    result += current_module->inner_prefix;
     return result;
 }
 
@@ -64,52 +64,69 @@ std::string middle(const Config &config, const int length)
         return result;
     };
     std::string result = "";
-    result += reset();
+    result += reset_all();
     if (config.connector.dim)
     {
-        result += text_mode(DIM);
+        result += set_text_mode(DIM);
     }
-    result += foreground(config.connector.foreground);
-    result += background(config.connector.background);
+    result += set_foreground(config.connector.foreground);
+    result += set_background(config.connector.background);
     result += multiple(length, config.connector.character);
-    result += reset();
+    result += reset_all();
     return result;
 }
 
 std::string post(const Config &config, const Module *current_module, const Module *next_module, const bool display_connector)
 {
     std::string result = "";
-    result += reset();
+    result += reset_all();
+    if (current_module->bold)
+    {
+        result += set_text_mode(BOLD);
+    }
     if (current_module->dim)
     {
-        result += text_mode(DIM);
+        result += set_text_mode(DIM);
     }
-    result += foreground(current_module->foreground);
-    result += background(current_module->background);
+    if (current_module->italic)
+    {
+        result += set_text_mode(ITALIC);
+    }
+    if (current_module->underline)
+    {
+        result += set_text_mode(UNDERLINE);
+    }
+    result += set_foreground(current_module->foreground);
+    result += set_background(current_module->background);
     result += current_module->inner_suffix;
+    result += reset_text_mode(UNDERLINE);
     result += get_padding(config, current_module);
-    result += reset();
-    result += foreground(current_module->background);
+    result += reset_all();
+    if (current_module->dim)
+    {
+        result += set_text_mode(DIM);
+    }
+    result += set_foreground(current_module->background);
     if (next_module != NULL && next_module->outer_prefix.empty())
     {
-        result += background(next_module->background);
+        result += set_background(next_module->background);
     }
     else if (display_connector)
     {
-        result += background(config.connector.background);
+        result += set_background(config.connector.background);
     }
     result += current_module->outer_suffix;
-    result += reset();
+    result += reset_all();
     return result;
 }
 
 std::string prompt(const Config &config)
 {
     std::string result = "";
-    result += reset();
-    result += foreground(config.prompt.foreground);
+    result += reset_all();
+    result += set_foreground(config.prompt.foreground);
     result += config.prompt.string;
-    result += reset();
+    result += reset_all();
     return result;
 }
 
