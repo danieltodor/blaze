@@ -23,6 +23,7 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += set_text_mode(DIM);
     }
+    result += set_foreground(current_module->background);
     if (previous_module != NULL && previous_module->outer_suffix.empty())
     {
         result += set_background(previous_module->background);
@@ -31,8 +32,10 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += set_background(config.connector.background);
     }
-    result += set_foreground(current_module->background);
     result += current_module->outer_prefix;
+    result += set_foreground(current_module->foreground);
+    result += set_background(current_module->background);
+    result += get_padding(config, current_module);
     if (current_module->bold)
     {
         result += set_text_mode(BOLD);
@@ -41,9 +44,6 @@ std::string pre(const Config &config, const Module *current_module, const Module
     {
         result += set_text_mode(ITALIC);
     }
-    result += set_foreground(current_module->foreground);
-    result += set_background(current_module->background);
-    result += get_padding(config, current_module);
     if (current_module->underline)
     {
         result += set_text_mode(UNDERLINE);
@@ -99,14 +99,16 @@ std::string post(const Config &config, const Module *current_module, const Modul
     result += set_foreground(current_module->foreground);
     result += set_background(current_module->background);
     result += current_module->inner_suffix;
+    result += reset_text_mode(BOLD);
+    result += reset_text_mode(ITALIC);
     result += reset_text_mode(UNDERLINE);
-    result += get_padding(config, current_module);
-    result += reset_all();
     if (current_module->dim)
     {
         result += set_text_mode(DIM);
     }
+    result += get_padding(config, current_module);
     result += set_foreground(current_module->background);
+    result += reset_background();
     if (next_module != NULL && next_module->outer_prefix.empty())
     {
         result += set_background(next_module->background);
