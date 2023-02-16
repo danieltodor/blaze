@@ -24,12 +24,12 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::string set_text_mode(const int code);
-std::string set_foreground(const std::string &color);
-std::string set_background(const std::string &color);
-std::string reset_all();
-std::string reset_text_mode(const int code);
-std::string reset_foreground();
-std::string reset_background();
+std::string set_text_mode(const int code, const std::string &shell);
+std::string set_foreground(const std::string &color, const std::string &shell);
+std::string set_background(const std::string &color, const std::string &shell);
+std::string reset_all(const std::string &shell);
+std::string reset_text_mode(const int code, const std::string &shell);
+std::string reset_foreground(const std::string &shell);
+std::string reset_background(const std::string &shell);
 
 #endif

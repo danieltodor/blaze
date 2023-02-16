@@ -15,44 +15,44 @@ std::string get_padding(const Config &config, const Module *current_module)
     return current_module->padding != control_char ? current_module->padding : config.global.padding;
 }
 
-std::string pre(const Config &config, const Module *current_module, const Module *previous_module, const bool display_connector)
+std::string pre(const Context &context, const Module *current_module, const Module *previous_module, const bool display_connector)
 {
     std::string result = "";
-    result += reset_all();
+    result += reset_all(context.shell);
     if (current_module->dim)
     {
-        result += set_text_mode(DIM);
+        result += set_text_mode(DIM, context.shell);
     }
-    result += set_foreground(current_module->background);
+    result += set_foreground(current_module->background, context.shell);
     if (previous_module != NULL && previous_module->outer_suffix.empty())
     {
-        result += set_background(previous_module->background);
+        result += set_background(previous_module->background, context.shell);
     }
     else if (display_connector)
     {
-        result += set_background(config.connector.background);
+        result += set_background(context.config.connector.background, context.shell);
     }
     result += current_module->outer_prefix;
-    result += set_foreground(current_module->foreground);
-    result += set_background(current_module->background);
-    result += get_padding(config, current_module);
+    result += set_foreground(current_module->foreground, context.shell);
+    result += set_background(current_module->background, context.shell);
+    result += get_padding(context.config, current_module);
     if (current_module->bold)
     {
-        result += set_text_mode(BOLD);
+        result += set_text_mode(BOLD, context.shell);
     }
     if (current_module->italic)
     {
-        result += set_text_mode(ITALIC);
+        result += set_text_mode(ITALIC, context.shell);
     }
     if (current_module->underline)
     {
-        result += set_text_mode(UNDERLINE);
+        result += set_text_mode(UNDERLINE, context.shell);
     }
     result += current_module->inner_prefix;
     return result;
 }
 
-std::string middle(const Config &config, const int length)
+std::string middle(const Context &context, const int length)
 {
     auto multiple = [](const int n, const std::string &c)
     {
@@ -64,71 +64,71 @@ std::string middle(const Config &config, const int length)
         return result;
     };
     std::string result = "";
-    result += reset_all();
-    if (config.connector.dim)
+    result += reset_all(context.shell);
+    if (context.config.connector.dim)
     {
-        result += set_text_mode(DIM);
+        result += set_text_mode(DIM, context.shell);
     }
-    result += set_foreground(config.connector.foreground);
-    result += set_background(config.connector.background);
-    result += multiple(length, config.connector.character);
-    result += reset_all();
+    result += set_foreground(context.config.connector.foreground, context.shell);
+    result += set_background(context.config.connector.background, context.shell);
+    result += multiple(length, context.config.connector.character);
+    result += reset_all(context.shell);
     return result;
 }
 
-std::string post(const Config &config, const Module *current_module, const Module *next_module, const bool display_connector)
+std::string post(const Context &context, const Module *current_module, const Module *next_module, const bool display_connector)
 {
     std::string result = "";
-    result += reset_all();
+    result += reset_all(context.shell);
     if (current_module->bold)
     {
-        result += set_text_mode(BOLD);
+        result += set_text_mode(BOLD, context.shell);
     }
     if (current_module->dim)
     {
-        result += set_text_mode(DIM);
+        result += set_text_mode(DIM, context.shell);
     }
     if (current_module->italic)
     {
-        result += set_text_mode(ITALIC);
+        result += set_text_mode(ITALIC, context.shell);
     }
     if (current_module->underline)
     {
-        result += set_text_mode(UNDERLINE);
+        result += set_text_mode(UNDERLINE, context.shell);
     }
-    result += set_foreground(current_module->foreground);
-    result += set_background(current_module->background);
+    result += set_foreground(current_module->foreground, context.shell);
+    result += set_background(current_module->background, context.shell);
     result += current_module->inner_suffix;
-    result += reset_text_mode(BOLD);
-    result += reset_text_mode(ITALIC);
-    result += reset_text_mode(UNDERLINE);
+    result += reset_text_mode(BOLD, context.shell);
+    result += reset_text_mode(ITALIC, context.shell);
+    result += reset_text_mode(UNDERLINE, context.shell);
     if (current_module->dim)
     {
-        result += set_text_mode(DIM);
+        result += set_text_mode(DIM, context.shell);
     }
-    result += get_padding(config, current_module);
-    result += set_foreground(current_module->background);
-    result += reset_background();
+    result += get_padding(context.config, current_module);
+    result += set_foreground(current_module->background, context.shell);
+    result += reset_background(context.shell);
     if (next_module != NULL && next_module->outer_prefix.empty())
     {
-        result += set_background(next_module->background);
+        result += set_background(next_module->background, context.shell);
     }
     else if (display_connector)
     {
-        result += set_background(config.connector.background);
+        result += set_background(context.config.connector.background, context.shell);
     }
     result += current_module->outer_suffix;
-    result += reset_all();
+    result += reset_all(context.shell);
     return result;
 }
 
-std::string prompt(const Config &config)
+std::string prompt(const Context &context)
 {
     std::string result = "";
-    result += reset_all();
-    result += set_foreground(config.prompt.foreground);
-    result += config.prompt.string;
-    result += reset_all();
+    result += reset_all(context.shell);
+    result += set_foreground(context.config.prompt.foreground, context.shell);
+    result += context.config.prompt.string;
+    result += reset_all(context.shell);
     return result;
 }
 
@@ -173,9 +173,8 @@ void evaluate_content(Context &context)
     }
 }
 
-void remove_surplus(Context &context)
+void remove_surplus(Config &config)
 {
-    Config &config = context.config;
     Module *current_module;
     Module *previous_module;
     Module *next_module;
@@ -211,7 +210,7 @@ void remove_surplus(Context &context)
 void process_modules(Context &context)
 {
     evaluate_content(context);
-    remove_surplus(context);
+    remove_surplus(context.config);
 }
 
 void print_all(Context &context)
@@ -242,8 +241,8 @@ void print_all(Context &context)
             current_module->outer_prefix,
             current_module->outer_suffix
         });
-        temp.insert(0, pre(config, current_module, previous_module, display_connector));
-        temp.insert(temp.length(), post(config, current_module, next_module, display_connector));
+        temp.insert(0, pre(context, current_module, previous_module, display_connector));
+        temp.insert(temp.length(), post(context, current_module, next_module, display_connector));
         if (current_module->align == "right")
         {
             right += temp;
@@ -258,7 +257,7 @@ void print_all(Context &context)
             left = "";
             if (!right.empty())
             {
-                result += middle(config, get_column() - length);
+                result += middle(context, get_column() - length);
                 result += right;
                 right = "";
             }
@@ -270,6 +269,6 @@ void print_all(Context &context)
             result += '\n';
         }
     }
-    result += prompt(config);
+    result += prompt(context);
     std::cout << result;
 }
