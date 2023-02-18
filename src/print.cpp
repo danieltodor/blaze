@@ -52,30 +52,6 @@ std::string pre(const Context &context, const Module *current_module, const Modu
     return result;
 }
 
-std::string middle(const Context &context, const int length)
-{
-    auto multiple = [](const int n, const std::string &c)
-    {
-        std::string result = "";
-        for (int i = 0; i < n; i++)
-        {
-            result += c;
-        }
-        return result;
-    };
-    std::string result = "";
-    result += reset_all(context.shell);
-    if (context.config.connector.dim)
-    {
-        result += set_text_mode(DIM, context.shell);
-    }
-    result += set_foreground(context.config.connector.foreground, context.shell);
-    result += set_background(context.config.connector.background, context.shell);
-    result += multiple(length, context.config.connector.character);
-    result += reset_all(context.shell);
-    return result;
-}
-
 std::string post(const Context &context, const Module *current_module, const Module *next_module, const bool display_connector)
 {
     std::string result = "";
@@ -118,6 +94,30 @@ std::string post(const Context &context, const Module *current_module, const Mod
         result += set_background(context.config.connector.background, context.shell);
     }
     result += current_module->outer_suffix;
+    result += reset_all(context.shell);
+    return result;
+}
+
+std::string connector(const Context &context, const int length)
+{
+    auto multiple = [](const int n, const std::string &c)
+    {
+        std::string result = "";
+        for (int i = 0; i < n; i++)
+        {
+            result += c;
+        }
+        return result;
+    };
+    std::string result = "";
+    result += reset_all(context.shell);
+    if (context.config.connector.dim)
+    {
+        result += set_text_mode(DIM, context.shell);
+    }
+    result += set_foreground(context.config.connector.foreground, context.shell);
+    result += set_background(context.config.connector.background, context.shell);
+    result += multiple(length, context.config.connector.character);
     result += reset_all(context.shell);
     return result;
 }
@@ -207,7 +207,7 @@ void remove_surplus(Config &config)
     }
 }
 
-void process_modules(Context &context)
+void preprocess_modules(Context &context)
 {
     evaluate_content(context);
     remove_surplus(context.config);
@@ -224,7 +224,7 @@ void print_all(Context &context)
     std::string left;
     std::string right;
     std::size_t length = 0;
-    process_modules(context);
+    preprocess_modules(context);
     bool display_connector = contains_content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
@@ -257,7 +257,7 @@ void print_all(Context &context)
             left = "";
             if (!right.empty())
             {
-                result += middle(context, get_column() - length);
+                result += connector(context, get_column() - length);
                 result += right;
                 right = "";
             }
