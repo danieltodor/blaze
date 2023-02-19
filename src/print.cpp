@@ -224,6 +224,10 @@ void print_all(Context &context)
     std::string left;
     std::string right;
     std::size_t length = 0;
+    if (config.global.new_line)
+    {
+        result += "\n";
+    }
     preprocess_modules(context);
     bool display_connector = contains_content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)

@@ -27,4 +27,3 @@ blaze_save_start_time
 
 PS0='$(blaze_save_start_time)'
 PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
-PROMPT_COMMAND="echo"
