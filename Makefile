@@ -3,7 +3,7 @@ BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 OBJ_DUMP_DIR = $(BUILD_DIR)/dump
 BIN_DIR = $(BUILD_DIR)/bin
-INSTALL_DIR = ~/.local/bin
+INSTALL_DIR = ~/.local
 SRC_DIR = src
 INCLUDE_DIRS = .
 
@@ -36,13 +36,18 @@ endif
 all: $(BIN_DIR)/$(BINARY)
 
 install:
-	@echo "Installing to $(INSTALL_DIR)"
-	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)
-	$(CMD_PREFIX)cp $(BIN_DIR)/$(BINARY) $(INSTALL_DIR)
+	@echo "Installing binary to $(INSTALL_DIR)/bin"
+	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/bin
+	$(CMD_PREFIX)cp $(BIN_DIR)/$(BINARY) $(INSTALL_DIR)/bin
+	@echo "Installing init scripts to $(INSTALL_DIR)/share/blaze"
+	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/share/blaze
+	$(CMD_PREFIX)cp $(SRC_DIR)/init/* $(INSTALL_DIR)/share/blaze
 
 uninstall:
-	@echo "Removing from $(INSTALL_DIR)"
-	$(CMD_PREFIX)rm -f $(INSTALL_DIR)/$(BINARY)
+	@echo "Removing binary from $(INSTALL_DIR)/bin"
+	$(CMD_PREFIX)rm -f $(INSTALL_DIR)/bin/$(BINARY)
+	@echo "Removing init scripts from $(INSTALL_DIR)/share/blaze"
+	$(CMD_PREFIX)rm -rf $(INSTALL_DIR)/share/blaze
 
 clean:
 	@echo "Removing files and directories..."
