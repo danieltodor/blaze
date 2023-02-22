@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "context.hpp"
+
 #define RESET 0
 #define BACKGROUND_COLOR_OFFSET 10
 #define TEXT_TYPE_RESET_OFFSET 20
@@ -24,12 +26,12 @@
 #define ITALIC 3
 #define UNDERLINE 4
 
-std::string set_text_mode(const int code, const std::string &shell);
-std::string set_foreground(const std::string &color, const std::string &shell);
-std::string set_background(const std::string &color, const std::string &shell);
-std::string reset_all(const std::string &shell);
-std::string reset_text_mode(const int code, const std::string &shell);
-std::string reset_foreground(const std::string &shell);
-std::string reset_background(const std::string &shell);
+std::string set_text_mode(const int code, const Context &context);
+std::string set_foreground(const std::string &color, const Context &context);
+std::string set_background(const std::string &color, const Context &context);
+std::string reset_all(const Context &context);
+std::string reset_text_mode(const int code, const Context &context);
+std::string reset_foreground(const Context &context);
+std::string reset_background(const Context &context);
 
 #endif

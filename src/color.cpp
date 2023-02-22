@@ -22,18 +22,18 @@ const std::unordered_map<std::string, int> foreground_color_map = {
     {"white", WHITE}
 };
 
-std::string create_sequence(const std::string &code, const std::string &shell)
+std::string create_sequence(const std::string &code, const Context &context)
 {
     std::string result = "";
-    result += sequence_begin.at(shell);
+    result += sequence_begin.at(context.shell);
     result += csi;
     result += code;
     result += 'm';
-    result += sequence_end.at(shell);
+    result += sequence_end.at(context.shell);
     return result;
 }
 
-std::string to_color_code(const std::string &color, const int offset, const std::string &shell)
+std::string to_color_code(const std::string &color, const int offset, const Context &context)
 {
     if (color.empty())
     {
@@ -42,51 +42,56 @@ std::string to_color_code(const std::string &color, const int offset, const std:
     else if (foreground_color_map.find(color) != foreground_color_map.end())
     {
         const int code = foreground_color_map.at(color);
-        return create_sequence(std::to_string(code + offset), shell);
+        return create_sequence(std::to_string(code + offset), context);
     }
     else
     {
         const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
-        return create_sequence(rgb_prefix + color, shell);
+        std::string rgb_color = color;
+        if (color == "default")
+        {
+            rgb_color = context.DEFAULT_BACKGROUND;
+        }
+        return create_sequence(rgb_prefix + rgb_color, context);
     }
 }
 
-std::string set_text_mode(const int code, const std::string &shell)
+std::string set_text_mode(const int code, const Context &context)
 {
-    return create_sequence(std::to_string(code), shell);
+    return create_sequence(std::to_string(code), context);
 }
 
-std::string set_foreground(const std::string &color, const std::string &shell)
+std::string set_foreground(const std::string &color, const Context &context)
 {
-    return to_color_code(color, 0, shell);
+    return to_color_code(color, 0, context);
 }
 
-std::string set_background(const std::string &color, const std::string &shell)
+std::string set_background(const std::string &color, const Context &context)
 {
-    return to_color_code(color, BACKGROUND_COLOR_OFFSET, shell);
+    return to_color_code(color, BACKGROUND_COLOR_OFFSET, context);
 }
 
-std::string reset_all(const std::string &shell)
+std::string reset_all(const Context &context)
 {
-    return create_sequence(std::to_string(RESET), shell);
+    return create_sequence(std::to_string(RESET), context);
 }
 
-std::string reset_text_mode(const int code, const std::string &shell)
+std::string reset_text_mode(const int code, const Context &context)
 {
     int special_offset = 0;
     if (code == BOLD)
     {
         special_offset = 1;
     }
-    return create_sequence(std::to_string(code + TEXT_TYPE_RESET_OFFSET + special_offset), shell);
+    return create_sequence(std::to_string(code + TEXT_TYPE_RESET_OFFSET + special_offset), context);
 }
 
-std::string reset_foreground(const std::string &shell)
+std::string reset_foreground(const Context &context)
 {
-    return create_sequence(std::to_string(DEFAULT), shell);
+    return create_sequence(std::to_string(DEFAULT), context);
 }
 
-std::string reset_background(const std::string &shell)
+std::string reset_background(const Context &context)
 {
-    return create_sequence(std::to_string(DEFAULT + BACKGROUND_COLOR_OFFSET), shell);
+    return create_sequence(std::to_string(DEFAULT + BACKGROUND_COLOR_OFFSET), context);
 }

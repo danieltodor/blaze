@@ -41,7 +41,10 @@ Configuration files are read from these locations in order:
 
 ``` toml
 # For color values you can use named values like "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white"
-# or an RGB value like "145;255;0"
+# Or an RGB value like "145;255;0"
+# Special values:
+#   - "" Do nothing. The default background/foreground value will be used.
+#   - "default" This is the background color of the emulator. Useful for the invisible separator effect.
 
 [global]
 # Whether to add a new line before the prompt is rendered
@@ -78,14 +81,14 @@ position = 1
 align = "left"
 # Same as global one, but takes precedence over it.
 padding = ""
-# Displayed inside the module, before the content
-inner_prefix = "";
-# Displayed inside the module, after the content
-inner_suffix = "";
-# Displayed as the beginning of the module
-outer_prefix = "";
-# Displayed as the end of the module
-outer_suffix = "";
+# Displayed inside the module, before the content (foreground used as color)
+inner_prefix = ""
+# Displayed inside the module, after the content (foreground used as color)
+inner_suffix = ""
+# Displayed as the beginning of the module (background used as color)
+outer_prefix = ""
+# Displayed as the end of the module (background used as color)
+outer_suffix = ""
 # Foreground color to use
 foreground = ""
 # Background color to use
@@ -148,10 +151,12 @@ format = "%X"
 
 ## Creating your own modules
 You can use the programming language of your choice to create a custom module.
-1. Create a script/binary that writes something to stdout. Otherwise the module won`t be displayed.
+1. Create a script/binary that writes something to stdout.
 ``` py
 # Check the PWD and/or the file/directory contents, or whatever you need.
-# At the end, print the information you need.
+# At the end, write something to stdout.
+# If stdout is empty at the end, the module and it`s prefix/suffix content won`t be displayed.
+# This way you can create modules that are only used in certain directories.
 print('important stuff')
 ```
 2. Create a new module entry in your config file, and tell blaze how and where it can be executed.

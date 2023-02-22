@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
         std::stod(args.start_time),
         std::stod(args.finish_time),
         get_env("PWD"),
+        get_env("DEFAULT_BACKGROUND"),
         check_git_repository(),
         get_current_time()
     };
