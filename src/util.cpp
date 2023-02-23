@@ -140,3 +140,19 @@ std::string format_time(const std::tm &time_structure, const std::string &format
     result += buffer;
     return result;
 }
+
+bool is_number(const std::string &string)
+{
+    if (string.empty())
+    {
+        return false;
+    }
+    for (const unsigned char c : string)
+    {
+        if (!std::isdigit(c))
+        {
+            return false;
+        }
+    }
+    return true;
+}

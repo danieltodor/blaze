@@ -1,10 +1,13 @@
 #include <unordered_map>
 
 #include "color.hpp"
+#include "util.hpp"
 
 const std::string csi = "\033["; // Control Sequence Introducer
 const std::string foreground_rgb_prefix = "38;2;";
 const std::string background_rgb_prefix = "48;2;";
+const std::string foreground_id_prefix = "38;5;";
+const std::string background_id_prefix = "48;5;";
 const std::unordered_map<std::string, std::string> sequence_begin = {
     {"bash", "\001"} // \[
 };
@@ -51,6 +54,11 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
     {
         const int code = foreground_color_map.at(color);
         return create_sequence(std::to_string(code + offset), context);
+    }
+    else if (is_number(color))
+    {
+        const std::string id_prefix = offset == 0 ? foreground_id_prefix : background_id_prefix;
+        return create_sequence(id_prefix + color, context);
     }
     else
     {

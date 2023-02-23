@@ -42,7 +42,8 @@ Configuration files are read from these locations in order:
 ``` toml
 # For color values you can use named values like "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white".
 # If your emulator supports the aixterm specification, you can also use these colors with the "bright_" prefix.
-# If your emulator has truecolor support, you can use an RGB value like "145;255;0".
+# You can use color ids from 0 to 255.
+# If your emulator has truecolor support, you can also use an RGB value like "145;255;0".
 # Special values:
 #   - "" Do nothing. The default background/foreground value will be used.
 #   - "default" This is the background color of the emulator. Useful for the invisible separator effect.

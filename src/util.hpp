@@ -17,5 +17,6 @@ bool check_git_repository();
 std::string get_env(const std::string &name);
 std::tm get_current_time();
 std::string format_time(const std::tm &time_structure, const std::string &format);
+bool is_number(const std::string &string);
 
 #endif
