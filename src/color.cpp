@@ -19,7 +19,15 @@ const std::unordered_map<std::string, int> foreground_color_map = {
     {"blue", BLUE},
     {"magenta", MAGENTA},
     {"cyan", CYAN},
-    {"white", WHITE}
+    {"white", WHITE},
+    {"bright_black", BRIGHT_BLACK},
+    {"bright_red", BRIGHT_RED},
+    {"bright_green", BRIGHT_GREEN},
+    {"bright_yellow", BRIGHT_YELLOW},
+    {"bright_blue", BRIGHT_BLUE},
+    {"bright_magenta", BRIGHT_MAGENTA},
+    {"bright_cyan", BRIGHT_CYAN},
+    {"bright_white", BRIGHT_WHITE}
 };
 
 std::string create_sequence(const std::string &code, const Context &context)
@@ -88,10 +96,10 @@ std::string reset_text_mode(const int code, const Context &context)
 
 std::string reset_foreground(const Context &context)
 {
-    return create_sequence(std::to_string(DEFAULT), context);
+    return create_sequence(std::to_string(DEFAULT_COLOR), context);
 }
 
 std::string reset_background(const Context &context)
 {
-    return create_sequence(std::to_string(DEFAULT + BACKGROUND_COLOR_OFFSET), context);
+    return create_sequence(std::to_string(DEFAULT_COLOR + BACKGROUND_COLOR_OFFSET), context);
 }
