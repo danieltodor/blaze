@@ -22,7 +22,8 @@ std::string git_status(const Context &context)
             result += symbol;
         }
     };
-    std::string status = execute_command("git status --porcelain");
+    std::string status = execute_command("git status --porcelain --branch");
+    add_status(regex_search(status, {"##.* \\[ahead "}), config.git_status.ahead);
     add_status(regex_count(status, {"^.\\? "}), config.git_status.untracked);
     add_status(regex_count(execute_command("git stash list"), {"stash@\\{"}), config.git_status.stashed);
     add_status(regex_count(status, {"^.M "}), config.git_status.modified);
