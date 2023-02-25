@@ -14,31 +14,21 @@ std::string git_status(const Context &context)
         return result;
     }
     const Config &config = context.config;
+    auto add_status = [&config, &result](int count, const std::string &symbol)
+    {
+        if (count)
+        {
+            result += config.git_status.count ? std::to_string(count) : "";
+            result += symbol;
+        }
+    };
     std::string status = execute_command("git status --porcelain");
-    if (!execute_command("git stash list").empty())
-    {
-        result += config.git_status.stashed;
-    }
-    if (regex_search(status, {"^.\? "}))
-    {
-        result += config.git_status.untracked;
-    }
-    if (regex_search(status, {"^.D "}))
-    {
-        result += config.git_status.deleted;
-    }
-    if (regex_search(status, {"^.R "}))
-    {
-        result += config.git_status.renamed;
-    }
-    if (regex_search(status, {"^.M "}))
-    {
-        result += config.git_status.modified;
-    }
-    if (regex_search(status, {"^M. "}))
-    {
-        result += config.git_status.staged;
-    }
+    add_status(regex_count(execute_command("git stash list"), {"stash@\\{"}), config.git_status.stashed);
+    add_status(regex_count(status, {"^.\\? "}), config.git_status.untracked);
+    add_status(regex_count(status, {"^.D "}), config.git_status.deleted);
+    add_status(regex_count(status, {"^.R "}), config.git_status.renamed);
+    add_status(regex_count(status, {"^.M "}), config.git_status.modified);
+    add_status(regex_count(status, {"^M. "}), config.git_status.staged);
     if (result.empty())
     {
         result += config.git_status.clean;

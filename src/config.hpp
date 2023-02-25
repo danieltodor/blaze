@@ -68,6 +68,7 @@ struct GitBranch
 
 struct GitStatus
 {
+    bool count = true;
     std::string clean = "";
     std::string conflicted = "=";
     std::string ahead = "⇡";

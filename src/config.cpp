@@ -97,6 +97,7 @@ void load_values(toml::value &data, Config &config)
 
     set_value(data, config.git_branch.ignore, "git_branch", "ignore");
 
+    set_value(data, config.git_status.count, "git_status", "count");
     set_value(data, config.git_status.clean, "git_status", "clean");
     set_value(data, config.git_status.conflicted, "git_status", "conflicted");
     set_value(data, config.git_status.ahead, "git_status", "ahead");

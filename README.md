@@ -42,7 +42,7 @@ Configuration files are read from these locations in order:
 ``` toml
 # For color values you can use named values like "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white".
 # If your emulator supports the aixterm specification, you can also use these colors with the "bright_" prefix.
-# You can use color ids from 0 to 255.
+# You can use color ids from 0 to 255. https://www.ditig.com/256-colors-cheat-sheet
 # If your emulator has truecolor support, you can also use an RGB value like "145;255;0".
 # Special values:
 #   - "" Do nothing. The default background/foreground value will be used.
@@ -118,16 +118,29 @@ display_fractional_until = 10.0
 ignore = []
 
 [git_status]
+# Show the number of changes
+count = true
+# Displayed when the repository is clean
 clean = ""
+# Displayed when there are conflicted files
 conflicted = "="
+# Displayed when the current branch is ahead of the remote branch
 ahead = "⇡"
+# Displayed when the current branch is behind the remote branch
 behind = "⇣"
+# Displayed when there are diverged files
 diverged = "⇕"
+# Displayed when there are untracked files
 untracked = "?"
+# Displayed when there are stashed files
 stashed = "$"
+# Displayed when there are modified files
 modified = "!"
+# Displayed when there are staged files
 staged = "+"
+# Displayed when there are renamed files
 renamed = "»"
+# Displayed when there are deleted files
 deleted = "✘"
 
 [date]

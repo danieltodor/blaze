@@ -81,6 +81,23 @@ bool regex_search(const std::string &string, const std::vector<std::string> &pat
     return false;
 }
 
+int regex_count(const std::string &string, const std::vector<std::string> &patterns)
+{
+    int result = 0;
+    std::vector<std::string> lines = split(string, "\n");
+    for (const std::string &line : lines)
+    {
+        for (const std::string &pattern : patterns)
+        {
+            if (regex_search(line, {pattern}))
+            {
+                result++;
+            }
+        }
+    }
+    return result;
+}
+
 void strip(std::string &string)
 {
     regex_replace(
