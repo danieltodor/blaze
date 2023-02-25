@@ -23,12 +23,12 @@ std::string git_status(const Context &context)
         }
     };
     std::string status = execute_command("git status --porcelain");
-    add_status(regex_count(execute_command("git stash list"), {"stash@\\{"}), config.git_status.stashed);
     add_status(regex_count(status, {"^.\\? "}), config.git_status.untracked);
-    add_status(regex_count(status, {"^.D "}), config.git_status.deleted);
-    add_status(regex_count(status, {"^.R "}), config.git_status.renamed);
+    add_status(regex_count(execute_command("git stash list"), {"stash@\\{"}), config.git_status.stashed);
     add_status(regex_count(status, {"^.M "}), config.git_status.modified);
     add_status(regex_count(status, {"^M. "}), config.git_status.staged);
+    add_status(regex_count(status, {"^.R "}), config.git_status.renamed);
+    add_status(regex_count(status, {"^.D "}), config.git_status.deleted);
     if (result.empty())
     {
         result += config.git_status.clean;
