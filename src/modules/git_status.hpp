@@ -20,6 +20,7 @@ std::string git_status(const Context &context)
         {
             result += config.git_status.count ? std::to_string(count) : "";
             result += symbol;
+            result += config.git_status.spacing;
         }
     };
     std::string status = execute_command("git status --porcelain --branch");
@@ -33,6 +34,10 @@ std::string git_status(const Context &context)
     if (result.empty())
     {
         result += config.git_status.clean;
+    }
+    else
+    {
+        result = result.substr(0, result.length() - config.git_status.spacing.length());
     }
     return result;
 }

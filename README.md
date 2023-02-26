@@ -120,6 +120,8 @@ ignore = []
 [git_status]
 # Show the number of changes
 count = true
+# Spacing between the elements
+spacing = ""
 # Displayed when the repository is clean
 clean = ""
 # Displayed when there are conflicted files
