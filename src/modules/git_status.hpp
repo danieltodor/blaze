@@ -23,14 +23,15 @@ std::string git_status(const Context &context)
             result += config.git_status.spacing;
         }
     };
-    std::string status = execute_command("git status --porcelain --branch");
-    add_status(regex_search(status, {"##.* \\[ahead "}), config.git_status.ahead);
-    add_status(regex_count(status, {"^.\\? "}), config.git_status.untracked);
-    add_status(regex_count(execute_command("git stash list"), {"stash@\\{"}), config.git_status.stashed);
-    add_status(regex_count(status, {"^.M "}), config.git_status.modified);
-    add_status(regex_count(status, {"^M. "}), config.git_status.staged);
-    add_status(regex_count(status, {"^R. "}), config.git_status.renamed);
-    add_status(regex_count(status, {"^.D "}), config.git_status.deleted);
+    std::string status = execute_command("git status --porcelain=v2 --branch --show-stash");
+    add_status(regex_count(status, {"^# branch\\.ab \\+[1-9]{1,} "}), config.git_status.ahead);
+    add_status(regex_count(status, {"^# branch\\.ab \\+\\d+ -[1-9]{1,}"}), config.git_status.behind);
+    add_status(regex_count(status, {"^\\? "}), config.git_status.untracked);
+    add_status(regex_count(status, {"^# stash"}), config.git_status.stashed);
+    add_status(regex_count(status, {"^\\d+ .M "}), config.git_status.modified);
+    add_status(regex_count(status, {"^\\d+ M. "}), config.git_status.staged);
+    add_status(regex_count(status, {"^\\d+ R. "}), config.git_status.renamed);
+    add_status(regex_count(status, {"^\\d+ .D "}), config.git_status.deleted);
     if (result.empty())
     {
         result += config.git_status.clean;
