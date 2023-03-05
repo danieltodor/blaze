@@ -15,6 +15,7 @@ std::string git_branch(const Context &context)
     }
     const Config &config = context.config;
     result += execute_command("git name-rev --name-only HEAD 2>/dev/null");
+    strip(result);
     regex_replace(
         result,
         {
@@ -23,7 +24,7 @@ std::string git_branch(const Context &context)
         },
         ""
     );
-    if (regex_search(result, config.git_branch.ignore))
+    if (regex_find_all(result, config.git_branch.ignore).empty())
     {
         result = "";
     }

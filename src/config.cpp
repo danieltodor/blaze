@@ -100,12 +100,12 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.git_status.count, "git_status", "count");
     set_value(data, config.git_status.spacing, "git_status", "spacing");
     set_value(data, config.git_status.clean, "git_status", "clean");
-    set_value(data, config.git_status.conflicted, "git_status", "conflicted");
     set_value(data, config.git_status.ahead, "git_status", "ahead");
     set_value(data, config.git_status.behind, "git_status", "behind");
     set_value(data, config.git_status.diverged, "git_status", "diverged");
-    set_value(data, config.git_status.untracked, "git_status", "untracked");
     set_value(data, config.git_status.stashed, "git_status", "stashed");
+    set_value(data, config.git_status.untracked, "git_status", "untracked");
+    set_value(data, config.git_status.conflicted, "git_status", "conflicted");
     set_value(data, config.git_status.modified, "git_status", "modified");
     set_value(data, config.git_status.staged, "git_status", "staged");
     set_value(data, config.git_status.renamed, "git_status", "renamed");

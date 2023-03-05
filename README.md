@@ -124,18 +124,18 @@ count = true
 spacing = ""
 # Displayed when the repository is clean
 clean = ""
-# Displayed when there are conflicted files
-conflicted = "="
 # Displayed when the current branch is ahead of the remote branch
 ahead = "⇡"
 # Displayed when the current branch is behind the remote branch
 behind = "⇣"
 # Displayed when there are diverged files
 diverged = "⇕"
-# Displayed when there are untracked files
-untracked = "?"
 # Displayed when there are stashed files
 stashed = "$"
+# Displayed when there are untracked files
+untracked = "?"
+# Displayed when there are conflicted files
+conflicted = "="
 # Displayed when there are modified files
 modified = "!"
 # Displayed when there are staged files

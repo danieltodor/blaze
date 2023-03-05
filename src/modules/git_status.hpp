@@ -14,7 +14,7 @@ std::string git_status(const Context &context)
         return result;
     }
     const Config &config = context.config;
-    auto add_status = [&config, &result](int count, const std::string &symbol)
+    auto add_status = [&config, &result](const std::size_t count, const std::string &symbol)
     {
         if (count)
         {
@@ -24,14 +24,23 @@ std::string git_status(const Context &context)
         }
     };
     std::string status = execute_command("git status --porcelain=v2 --branch --show-stash");
-    add_status(regex_count(status, {"^# branch\\.ab \\+[1-9]{1,} "}), config.git_status.ahead);
-    add_status(regex_count(status, {"^# branch\\.ab \\+\\d+ -[1-9]{1,}"}), config.git_status.behind);
-    add_status(regex_count(status, {"^\\? "}), config.git_status.untracked);
-    add_status(regex_count(status, {"^# stash"}), config.git_status.stashed);
-    add_status(regex_count(status, {"^\\d+ .M "}), config.git_status.modified);
-    add_status(regex_count(status, {"^\\d+ M. "}), config.git_status.staged);
-    add_status(regex_count(status, {"^\\d+ R. "}), config.git_status.renamed);
-    add_status(regex_count(status, {"^\\d+ .D "}), config.git_status.deleted);
+    std::vector<std::string> ahead_behind = regex_find_all(status, {"(?<=^# branch\\.ab \\+).*?(?=\n)"});
+    if (!ahead_behind.empty())
+    {
+        ahead_behind = split(ahead_behind.at(0), " -");
+        add_status(std::stoul(ahead_behind.at(0)), config.git_status.ahead);
+        add_status(std::stoul(ahead_behind.at(1)), config.git_status.behind);
+    }
+    const std::vector<std::string> stashed = regex_find_all(status, {"(?<=^# stash )\\d+"});
+    if (!stashed.empty())
+    {
+        add_status(std::stoul(stashed.at(0)), config.git_status.stashed);
+    }
+    add_status(regex_find_all(status, {"^\\? "}).size(), config.git_status.untracked);
+    add_status(regex_find_all(status, {"^\\d+ .M "}).size(), config.git_status.modified);
+    add_status(regex_find_all(status, {"^\\d+ M. "}).size(), config.git_status.staged);
+    add_status(regex_find_all(status, {"^\\d+ R. "}).size(), config.git_status.renamed);
+    add_status(regex_find_all(status, {"^\\d+ .D "}).size(), config.git_status.deleted);
     if (result.empty())
     {
         result += config.git_status.clean;

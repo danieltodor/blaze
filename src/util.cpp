@@ -4,6 +4,7 @@
 #include <codecvt>
 
 #include "util.hpp"
+#include "external/boost/regex.hpp"
 
 unsigned short get_column()
 {
@@ -37,12 +38,20 @@ std::vector<std::string> split(const std::string &string, const std::string &del
     {
         result.push_back(string);
     }
+    else
+    {
+        result.push_back(string.substr(from, to - from));
+    }
     return result;
 }
 
 std::string join(const std::vector<std::string> &strings, const std::string &delimiter)
 {
-    std::string result;
+    std::string result = "";
+    if (strings.empty())
+    {
+        return result;
+    }
     for (std::size_t i = 0; i < strings.size() - 1; i++)
     {
         result += strings.at(i);
@@ -54,46 +63,20 @@ std::string join(const std::vector<std::string> &strings, const std::string &del
 
 void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement)
 {
-    std::vector<std::string> lines = split(string, "\n");
-    for (std::string &line : lines)
-    {
-        for (const std::string &pattern : patterns)
-        {
-            line = std::regex_replace(line, std::regex(pattern), replacement);
-        }
-    }
-    string = join(lines, "\n");
+    const std::string pattern = join(patterns, "|");
+    string = boost::regex_replace(string, boost::regex(pattern), replacement);
 }
 
-bool regex_search(const std::string &string, const std::vector<std::string> &patterns)
+std::vector<std::string> regex_find_all(const std::string &string, const std::vector<std::string> &patterns)
 {
-    std::vector<std::string> lines = split(string, "\n");
-    for (const std::string &line : lines)
+    std::vector<std::string> result;
+    const std::string pattern = join(patterns, "|");
+    boost::sregex_token_iterator current(string.begin(), string.end(), boost::regex(pattern));
+    const boost::sregex_token_iterator end;
+    while (current != end)
     {
-        for (const std::string &pattern : patterns)
-        {
-            if (std::regex_search(line, std::regex(pattern)))
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-int regex_count(const std::string &string, const std::vector<std::string> &patterns)
-{
-    int result = 0;
-    std::vector<std::string> lines = split(string, "\n");
-    for (const std::string &line : lines)
-    {
-        for (const std::string &pattern : patterns)
-        {
-            if (regex_search(line, {pattern}))
-            {
-                result++;
-            }
-        }
+        result.push_back(*current);
+        current++;
     }
     return result;
 }

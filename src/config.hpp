@@ -71,12 +71,12 @@ struct GitStatus
     bool count = true;
     std::string spacing = "";
     std::string clean = "";
-    std::string conflicted = "=";
     std::string ahead = "⇡";
     std::string behind = "⇣";
     std::string diverged = "⇕";
-    std::string untracked = "?";
     std::string stashed = "$";
+    std::string untracked = "?";
+    std::string conflicted = "=";
     std::string modified = "!";
     std::string staged = "+";
     std::string renamed = "»";
