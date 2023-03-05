@@ -16,7 +16,7 @@ std::string git_status(const Context &context)
     const Config &config = context.config;
     auto add_status = [&config, &result](const std::size_t count, const std::string &symbol)
     {
-        if (count)
+        if (count && !symbol.empty())
         {
             result += config.git_status.count ? std::to_string(count) : "";
             result += symbol;
