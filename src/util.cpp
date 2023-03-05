@@ -96,8 +96,9 @@ void strip(std::string &string)
 std::string execute_command(const std::string &command)
 {
     std::string result = "";
+    const std::string env = "LC_ALL=C";
     char buffer[128];
-    FILE *pipe = popen(command.c_str(), "r");
+    FILE *pipe = popen((env + "; " + command).c_str(), "r");
     if (!pipe)
     {
         return result;
