@@ -69,10 +69,10 @@ struct GitBranch
 struct GitStatus
 {
     bool count = true;
-    std::string spacing = "";
-    std::string clean = "";
-    std::string ahead = "⇡";
-    std::string behind = "⇣";
+    std::string spacing = " ";
+    std::string clean = "✓";
+    std::string ahead = "↑";
+    std::string behind = "↓";
     std::string stashed = "$";
     std::string untracked = "?";
     std::string conflicted = "=";

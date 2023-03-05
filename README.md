@@ -121,13 +121,13 @@ ignore = []
 # Show the number of changes
 count = true
 # Spacing between the elements
-spacing = ""
+spacing = " "
 # Displayed when the repository is clean
-clean = ""
+clean = "✓"
 # Displayed when the current branch is ahead of the remote branch
-ahead = "⇡"
+ahead = "↑"
 # Displayed when the current branch is behind the remote branch
-behind = "⇣"
+behind = "↓"
 # Displayed when there are stashed files
 stashed = "$"
 # Displayed when there are untracked files
