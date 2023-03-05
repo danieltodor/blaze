@@ -24,7 +24,7 @@ std::string git_branch(const Context &context)
         },
         ""
     );
-    if (regex_find_all(result, config.git_branch.ignore).empty())
+    if (!regex_find_all(result, config.git_branch.ignore).empty())
     {
         result = "";
     }
