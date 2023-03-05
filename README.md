@@ -128,8 +128,6 @@ clean = ""
 ahead = "⇡"
 # Displayed when the current branch is behind the remote branch
 behind = "⇣"
-# Displayed when there are diverged files
-diverged = "⇕"
 # Displayed when there are stashed files
 stashed = "$"
 # Displayed when there are untracked files

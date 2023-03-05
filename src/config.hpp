@@ -73,7 +73,6 @@ struct GitStatus
     std::string clean = "";
     std::string ahead = "⇡";
     std::string behind = "⇣";
-    std::string diverged = "⇕";
     std::string stashed = "$";
     std::string untracked = "?";
     std::string conflicted = "=";
