@@ -71,6 +71,10 @@ std::vector<std::string> regex_find_all(const std::string &string, const std::ve
 {
     std::vector<std::string> result;
     const std::string pattern = join(patterns, "|");
+    if (pattern.empty())
+    {
+        return result;
+    }
     boost::sregex_token_iterator current(string.begin(), string.end(), boost::regex(pattern));
     const boost::sregex_token_iterator end;
     while (current != end)
