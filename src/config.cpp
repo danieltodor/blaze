@@ -157,6 +157,7 @@ void set_default_values(Config &config)
     execution_time.level = 1;
     execution_time.position = 2;
     execution_time.align = "left";
+    execution_time.inner_prefix = "took ";
     execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
     config.modules.push_back(execution_time);
