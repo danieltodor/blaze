@@ -46,10 +46,14 @@ std::string execution_time(const Context &context)
     if (seconds || fractional > config.execution_time.display_from)
     {
         result += hours || minutes ? " " : "";
-        result += std::to_string(seconds);
         if (seconds + minutes * MINUTE + hours * HOUR < config.execution_time.display_fractional_until)
         {
+            result += std::to_string(seconds);
             result += std::to_string(fractional).substr(1, 1 + config.execution_time.precision);
+        }
+        else
+        {
+            result += std::to_string((int)round(seconds + fractional));
         }
         result += 's';
     }
