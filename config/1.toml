@@ -1,13 +1,13 @@
 [global]
-new_line = true
-padding = " "
+new_line = false
+padding = ""
 
 [prompt]
-string = "\n❯ "
+string = " ❯ "
 foreground = ""
 
 [connector]
-character = "─"
+character = " "
 foreground = ""
 background = ""
 dim = false
@@ -17,7 +17,7 @@ basename_only = false
 
 [execution_time]
 precision = 1
-display_from = 1.0
+display_from = 2.0
 display_fractional_until = 10.0
 
 [git_branch]
@@ -49,65 +49,23 @@ align = "left"
 inner_prefix = ""
 inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = "blue"
-foreground = "black"
-bold = false
-dim = false
-italic = false
-underline = false
-
-[[module]]
-name = "separator"
-align = "left"
-background = "default"
-outer_suffix = ""
-
-[[module]]
-name = "git_branch"
-align = "left"
-inner_prefix = "  "
-inner_suffix = ""
-outer_prefix = ""
 outer_suffix = ""
-background = "green"
-foreground = "black"
-bold = false
+background = ""
+foreground = "blue"
+bold = true
 dim = false
 italic = false
 underline = false
-padding = ""
-
-[[module]]
-name = "git_status"
-align = "left"
-inner_prefix = " "
-inner_suffix = " "
-outer_prefix = ""
-outer_suffix = ""
-background = "green"
-foreground = "black"
-bold = false
-dim = false
-italic = false
-underline = false
-padding = ""
-
-[[module]]
-name = "separator"
-align = "left"
-background = "default"
-outer_suffix = ""
 
 [[module]]
 name = "execution_time"
 align = "left"
 inner_prefix = "⌛︎"
 inner_suffix = ""
-outer_prefix = ""
-outer_suffix = ""
-background = "yellow"
-foreground = "black"
+outer_prefix = " "
+outer_suffix = ""
+background = ""
+foreground = "yellow"
 bold = false
 dim = false
 italic = false

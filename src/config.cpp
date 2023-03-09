@@ -140,13 +140,11 @@ void set_default_values(Config &config)
     config.execution_time.display_from = 2;
 
     Prompt prompt;
-    prompt.string = "\n❯ ";
+    prompt.string = " ❯ ";
     config.prompt = prompt;
 
     Module directory;
     directory.name = "directory";
-    directory.level = 1;
-    directory.position = 1;
     directory.align = "left";
     directory.foreground = "blue";
     directory.bold = true;
@@ -154,10 +152,8 @@ void set_default_values(Config &config)
 
     Module execution_time;
     execution_time.name = "execution_time";
-    execution_time.level = 1;
-    execution_time.position = 2;
     execution_time.align = "left";
-    execution_time.inner_prefix = "took ";
+    execution_time.inner_prefix = "⌛︎";
     execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
     config.modules.push_back(execution_time);

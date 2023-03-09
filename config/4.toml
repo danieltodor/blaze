@@ -1,0 +1,148 @@
+[global]
+new_line = true
+padding = " "
+
+[prompt]
+string = "\n❯ "
+foreground = ""
+
+[connector]
+character = "─"
+foreground = ""
+background = ""
+dim = false
+
+[directory]
+basename_only = false
+
+[execution_time]
+precision = 1
+display_from = 1.0
+display_fractional_until = 10.0
+
+[git_branch]
+ignore = []
+
+[git_status]
+count = true
+spacing = " "
+clean = "✓"
+ahead = "↑"
+behind = "↓"
+stashed = "$"
+untracked = "?"
+conflicted = "="
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[date]
+format = "%F"
+
+[time]
+format = "%T"
+
+[[module]]
+name = "directory"
+align = "left"
+inner_prefix = ""
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "blue"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "separator"
+align = "left"
+background = "default"
+outer_suffix = ""
+
+[[module]]
+name = "git_branch"
+align = "left"
+inner_prefix = "  "
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "green"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+padding = ""
+
+[[module]]
+name = "git_status"
+align = "left"
+inner_prefix = " "
+inner_suffix = " "
+outer_prefix = ""
+outer_suffix = ""
+background = "green"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+padding = ""
+
+[[module]]
+name = "separator"
+align = "left"
+background = "default"
+outer_suffix = ""
+
+[[module]]
+name = "execution_time"
+align = "left"
+inner_prefix = "⌛︎"
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "yellow"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "date"
+align = "right"
+inner_prefix = "🗓 "
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "magenta"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "separator"
+align = "right"
+background = "default"
+outer_prefix = ""
+
+[[module]]
+name = "time"
+align = "right"
+inner_prefix = "⏲ "
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "cyan"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false

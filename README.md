@@ -28,9 +28,9 @@
 
 3. Configure\
 Open a new shell instance to see the new prompt.\
-The default prompt is minimalistic. It contains only the working directory
-and the last command`s execution time (if it exceeds the default treshold).\
-If you want to modify it, check the [configuration](#configuration) section.
+The default prompt (1.toml) is built into blaze.
+If you are not happy with it, select another config with the `./copy_config.sh <n>` command.\
+For additional configuration options, check out the [configuration](#configuration) section.
 
 ## Configuration
 
