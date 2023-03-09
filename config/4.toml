@@ -17,7 +17,7 @@ basename_only = false
 
 [execution_time]
 precision = 1
-display_from = 1.0
+display_from = 2.0
 display_fractional_until = 10.0
 
 [git_branch]
@@ -107,40 +107,6 @@ inner_suffix = ""
 outer_prefix = ""
 outer_suffix = ""
 background = "yellow"
-foreground = "black"
-bold = false
-dim = false
-italic = false
-underline = false
-
-[[module]]
-name = "date"
-align = "right"
-inner_prefix = "🗓 "
-inner_suffix = ""
-outer_prefix = ""
-outer_suffix = ""
-background = "magenta"
-foreground = "black"
-bold = false
-dim = false
-italic = false
-underline = false
-
-[[module]]
-name = "separator"
-align = "right"
-background = "default"
-outer_prefix = ""
-
-[[module]]
-name = "time"
-align = "right"
-inner_prefix = "⏲ "
-inner_suffix = ""
-outer_prefix = ""
-outer_suffix = ""
-background = "cyan"
 foreground = "black"
 bold = false
 dim = false
