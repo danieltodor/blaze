@@ -20,29 +20,28 @@ blaze_get_current_time() {
 }
 
 blaze_save_start_time() {
-    echo $(blaze_get_current_time) > $BLAZE_TIME_FILE
+    echo $(blaze_get_current_time) > $blaze_time_file
 }
 
 blaze_get_start_time() {
-    echo "$(cat $BLAZE_TIME_FILE)"
+    echo "$(cat $blaze_time_file)"
 }
 
 blaze_run_on_exit() {
-    rm $BLAZE_TIME_FILE
+    rm $blaze_time_file
 }
 trap blaze_run_on_exit EXIT
 
-BLAZE_TIME_FILE_NAME=${USER}_bashtime_${BASHPID}
+blaze_default_background=$(blaze_get_current_background)
+blaze_time_file_name=${USER}_bashtime_${BASHPID}
 
 if [[ -d "/dev/shm" ]]; then
-    BLAZE_TIME_FILE="/dev/shm/$BLAZE_TIME_FILE_NAME"
+    blaze_time_file="/dev/shm/$blaze_time_file_name"
 else
-    BLAZE_TIME_FILE="/tmp/$BLAZE_TIME_FILE_NAME"
+    blaze_time_file="/tmp/$blaze_time_file_name"
 fi
 
 blaze_save_start_time
 
-export DEFAULT_BACKGROUND=$(blaze_get_current_background)
-
 PS0='$(blaze_save_start_time)'
-PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time))'
+PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time) -b $blaze_default_background)'

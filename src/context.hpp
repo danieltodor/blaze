@@ -12,8 +12,8 @@ struct Context
     std::string shell;
     double start_time;
     double finish_time;
+    std::string default_background;
     std::string PWD;
-    std::string DEFAULT_BACKGROUND;
     bool git_repository_detected;
     std::tm time_structure;
 };

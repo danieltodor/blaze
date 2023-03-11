@@ -13,6 +13,7 @@ struct Args : public argparse::Args
     bool &init = flag("i,init", "Init current shell");
     std::string &start_time = kwarg("s,start_time", "Time when the command was started").set_default("0");
     std::string &finish_time = kwarg("f,finish_time", "Time when the command was finished").set_default("0");
+    std::string &background = kwarg("b,background", "Background RGB color").set_default("0;0;0");
 };
 
 int main(int argc, char *argv[])
@@ -27,8 +28,8 @@ int main(int argc, char *argv[])
         args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time),
+        args.background,
         get_env("PWD"),
-        get_env("DEFAULT_BACKGROUND"),
         check_git_repository(),
         get_current_time()
     };

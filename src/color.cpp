@@ -66,7 +66,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
         std::string rgb_color = color;
         if (color == "default")
         {
-            rgb_color = context.DEFAULT_BACKGROUND;
+            rgb_color = context.default_background;
         }
         return create_sequence(rgb_prefix + rgb_color, context);
     }
