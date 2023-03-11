@@ -122,7 +122,7 @@ bool check_git_repository()
 
 std::string get_env(const std::string &name)
 {
-    std::string env;
+    std::string env = "";
     const char *result = std::getenv(name.c_str());
     if (result != NULL)
     {

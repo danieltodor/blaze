@@ -29,7 +29,7 @@
 3. Configure\
 Open a new shell instance to see the new prompt.\
 The default prompt (1.toml) is built into blaze.
-If you are not happy with it, select another config with the `./copy_config.sh <n>` command.\
+If you are not happy with it, select another config with the `./use_config <n>` command.\
 For additional configuration options, check out the [configuration](#configuration) section.
 
 ## Configuration
@@ -163,6 +163,7 @@ format = "%X"
 | git_status | Symbols indicating the current state of the repository |
 | date | Current date [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 | time | Current time [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
+| user | Current user |
 
 ## Creating your own modules
 You can use the programming language of your choice to create a custom module.
