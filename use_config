@@ -6,12 +6,14 @@ if [[ $# -eq 0 ]]; then
 fi
 
 src_file=./config/$1.toml
-dest_file=~/.config/blaze.toml
+dest_dir=~/.config
+dest_file=$dest_dir/blaze.toml
 
 if [[ ! -f $src_file ]]; then
     echo "No such file as $src_file"
     exit 1
 fi
 
+mkdir -p $dest_dir
 cp $src_file $dest_file
 echo "Config copied to $dest_file"
