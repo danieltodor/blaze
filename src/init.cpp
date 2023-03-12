@@ -3,8 +3,8 @@
 #include <string>
 #include <iostream>
 
-#include "init.hpp"
-#include "util.hpp"
+#include "src/init.hpp"
+#include "src/util.hpp"
 
 void init_shell(const Context &context)
 {

@@ -3,8 +3,8 @@
 #include <locale>
 #include <codecvt>
 
-#include "util.hpp"
 #include "external/boost/regex.hpp"
+#include "src/util.hpp"
 
 unsigned short get_columns()
 {

@@ -4,7 +4,7 @@
 #include <string>
 #include <time.h>
 
-#include "config.hpp"
+#include "src/config.hpp"
 
 struct Context
 {

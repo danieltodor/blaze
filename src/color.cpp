@@ -1,7 +1,7 @@
 #include <unordered_map>
 
-#include "color.hpp"
-#include "util.hpp"
+#include "src/color.hpp"
+#include "src/util.hpp"
 
 const std::string csi = "\033["; // Control Sequence Introducer
 const std::string foreground_rgb_prefix = "38;2;";

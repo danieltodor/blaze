@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "config.hpp"
-#include "util.hpp"
+#include "src/config.hpp"
+#include "src/util.hpp"
 
 // Read the user`s config file
 toml::value read_data()

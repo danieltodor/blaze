@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "print.hpp"
-#include "color.hpp"
-#include "module.hpp"
-#include "util.hpp"
-#include "config.hpp"
+#include "src/print.hpp"
+#include "src/color.hpp"
+#include "src/module.hpp"
+#include "src/util.hpp"
+#include "src/config.hpp"
 
 // Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)

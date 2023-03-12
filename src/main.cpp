@@ -1,11 +1,11 @@
 #include <string>
 
-#include "init.hpp"
-#include "print.hpp"
-#include "context.hpp"
-#include "config.hpp"
-#include "util.hpp"
 #include "external/argparse/argparse.hpp"
+#include "src/init.hpp"
+#include "src/print.hpp"
+#include "src/context.hpp"
+#include "src/config.hpp"
+#include "src/util.hpp"
 
 struct Args : public argparse::Args
 {

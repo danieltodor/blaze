@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "context.hpp"
+#include "src/context.hpp"
 
 #define RESET 0
 #define BACKGROUND_COLOR_OFFSET 10

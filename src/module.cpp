@@ -1,15 +1,15 @@
 #include <unordered_map>
 
-#include "module.hpp"
-#include "modules/separator.hpp"
-#include "modules/directory.hpp"
-#include "modules/execution_time.hpp"
-#include "modules/git_branch.hpp"
-#include "modules/git_status.hpp"
-#include "modules/date.hpp"
-#include "modules/time.hpp"
-#include "modules/user.hpp"
-#include "modules/host.hpp"
+#include "src/module.hpp"
+#include "src/modules/separator.hpp"
+#include "src/modules/directory.hpp"
+#include "src/modules/execution_time.hpp"
+#include "src/modules/git_branch.hpp"
+#include "src/modules/git_status.hpp"
+#include "src/modules/date.hpp"
+#include "src/modules/time.hpp"
+#include "src/modules/user.hpp"
+#include "src/modules/host.hpp"
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
