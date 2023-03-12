@@ -3,6 +3,7 @@
 
 #include "context.hpp"
 
+// Print the modules and the prompt
 void print_all(Context &context);
 
 #endif

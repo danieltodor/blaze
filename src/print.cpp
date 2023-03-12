@@ -6,8 +6,10 @@
 #include "util.hpp"
 #include "config.hpp"
 
+// Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)
 {
+    // For separators the padding in omitted by default
     if (is_separator(*current_module) && current_module->padding == control_char)
     {
         return "";
@@ -15,6 +17,7 @@ std::string get_padding(const Config &config, const Module *current_module)
     return current_module->padding != control_char ? current_module->padding : config.global.padding;
 }
 
+// Escape sequences, prefixes before the module content
 std::string pre(const Context &context, const Module *current_module, const Module *previous_module, const bool display_connector)
 {
     std::string result = "";
@@ -52,6 +55,7 @@ std::string pre(const Context &context, const Module *current_module, const Modu
     return result;
 }
 
+// Escape sequences, suffixes after the module content
 std::string post(const Context &context, const Module *current_module, const Module *next_module, const bool display_connector)
 {
     std::string result = "";
@@ -98,6 +102,7 @@ std::string post(const Context &context, const Module *current_module, const Mod
     return result;
 }
 
+// Connects the left/right side modules
 std::string connector(const Context &context, const int length)
 {
     auto multiple = [](const int n, const std::string &c)
@@ -122,6 +127,7 @@ std::string connector(const Context &context, const int length)
     return result;
 }
 
+// Basically the "PS1"
 std::string prompt(const Context &context)
 {
     std::string result = "";
@@ -132,6 +138,7 @@ std::string prompt(const Context &context)
     return result;
 }
 
+// Checks if the next module is on the next level
 bool level_changes(const Config &config, const std::size_t index)
 {
     if (index < config.modules.size() - 1 && config.modules[index + 1].level > config.modules[index].level)
@@ -144,6 +151,7 @@ bool level_changes(const Config &config, const std::size_t index)
     }
 }
 
+// Checks if the current module is the last
 bool end_reached(const Config &config, const std::size_t index)
 {
     if (index == config.modules.size() - 1)
@@ -156,6 +164,7 @@ bool end_reached(const Config &config, const std::size_t index)
     }
 }
 
+// Evaluate the content of each module
 void evaluate_content(Context &context)
 {
     Config &config = context.config;
@@ -173,6 +182,7 @@ void evaluate_content(Context &context)
     }
 }
 
+// Remove modules that shouldn`t be displayed
 void remove_surplus(Config &config)
 {
     Module *current_module;
@@ -186,16 +196,19 @@ void remove_surplus(Config &config)
             config.modules.erase(iterator--);
         }
     }
+    // TODO: Maybe this can be done in the first pass, when a module is removed
     int i = 0;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
+        // Remove separator if the next one is also a separator
         if (is_separator(*current_module) && next_module != NULL && is_separator(*next_module))
         {
             config.modules.erase(iterator--);
         }
+        // Remove separator from the beginning/end of group
         else if (is_separator(*current_module) && (next_module == NULL || previous_module == NULL))
         {
             config.modules.erase(iterator--);
@@ -207,6 +220,7 @@ void remove_surplus(Config &config)
     }
 }
 
+// Preprocess modules before printing them
 void preprocess_modules(Context &context)
 {
     evaluate_content(context);
@@ -261,7 +275,7 @@ void print_all(Context &context)
             left = "";
             if (!right.empty())
             {
-                result += connector(context, get_column() - length);
+                result += connector(context, get_columns() - length);
                 result += right;
                 right = "";
             }

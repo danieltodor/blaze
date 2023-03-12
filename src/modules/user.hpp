@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Current user
 std::string user(const Context &context)
 {
     (void)context;

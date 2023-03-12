@@ -5,6 +5,7 @@
 #include "config.hpp"
 #include "util.hpp"
 
+// Read the user`s config file
 toml::value read_data()
 {
     const std::string paths[] = {
@@ -27,6 +28,7 @@ toml::value read_data()
     return data;
 }
 
+// Set config values
 template<typename T, typename... Keys>
 void set_value(const toml::value &data, T &target, Keys&&... keys)
 {
@@ -39,6 +41,7 @@ void set_value(const toml::value &data, T &target, Keys&&... keys)
     }
 }
 
+// Load the values from the config file
 void load_values(toml::value &data, Config &config)
 {
     set_value(data, config.global.new_line, "global", "new_line");
@@ -115,6 +118,7 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.time.format, "time", "format");
 }
 
+// Sort modules in ascending order
 void sort_modules(std::vector<Module> &modules)
 {
     std::unordered_map<std::string, int> sides;
@@ -134,6 +138,7 @@ void sort_modules(std::vector<Module> &modules)
     std::sort(modules.begin(), modules.end(), compare);
 }
 
+// Set the default values, in case there is no config file
 void set_default_values(Config &config)
 {
     config.global.padding = "";

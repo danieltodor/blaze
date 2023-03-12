@@ -1,3 +1,5 @@
+# Get the RGB color of the terminal emulator
+# Works only if it is xterm compatible
 blaze_get_current_background() {
     exec < /dev/tty
     oldstty=$(stty -g)

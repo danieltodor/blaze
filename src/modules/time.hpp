@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Current time
 std::string time(const Context &context)
 {
     const Config &config = context.config;

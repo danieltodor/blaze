@@ -6,6 +6,8 @@
 
 #include "external/toml/toml.hpp"
 
+// Character that is unlikely to be used. Easy to check if the user changed the default.
+// TODO: Can i use \0 for this purpose?
 const std::string control_char = "`";
 
 struct Global
@@ -106,11 +108,22 @@ struct Config
     Time time;
 };
 
+// Read the user`s config file, or set default values if there is no such file
 Config get_config();
+
+// Previous module in the current group. Same level, same side
 Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t index);
+
+// Next module in the current group. Same level, same side
 Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t index);
+
+// Modules on the current level
 std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const int level);
+
+// At least one module on the right has content set
 bool contains_content_on_right(std::vector<Module> &modules, const int level);
+
+// Module is a separator
 bool is_separator(const Module &module);
 
 #endif

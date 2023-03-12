@@ -6,7 +6,7 @@
 #include "util.hpp"
 #include "external/boost/regex.hpp"
 
-unsigned short get_column()
+unsigned short get_columns()
 {
     winsize w;
     ioctl(0, TIOCGWINSZ, &w);
@@ -15,6 +15,8 @@ unsigned short get_column()
 
 std::size_t get_length(const std::vector<std::string> &strings)
 {
+    // TODO: For certain emojis, the returned length is not correct.
+    // Maybe counting grapheme clusters would be a better approach.
     std::size_t length = 0;
     for (const std::string &string : strings)
     {
@@ -34,10 +36,12 @@ std::vector<std::string> split(const std::string &string, const std::string &del
         result.push_back(string.substr(from, to - from));
         from = to + delimiter_length;
     }
+    // Delimiter not found
     if (from == 0 && to == std::string::npos)
     {
         result.push_back(string);
     }
+    // TODO: Could the while loop be reworked to contain this? (the last element is not added in the loop)
     else
     {
         result.push_back(string.substr(from, to - from));

@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Symbols indicating the current state of the repository
 std::string git_status(const Context &context)
 {
     std::string result = "";

@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Active branch in the repository
 std::string git_branch(const Context &context)
 {
     std::string result = "";

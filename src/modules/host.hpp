@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Hostname
 std::string host(const Context &context)
 {
     (void)context;

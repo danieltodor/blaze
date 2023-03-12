@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Current date
 std::string date(const Context &context)
 {
     const Config &config = context.config;

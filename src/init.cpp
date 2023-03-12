@@ -10,7 +10,7 @@ void init_shell(const Context &context)
 {
     const std::string file_name = "init." + context.shell;
     const std::string paths[] = {
-        context.PWD + "/src/init/" + file_name,
+        context.PWD + "/src/init/" + file_name, // TODO: This can be removed (?)
         get_env("HOME") + "/.local/share/blaze/" + file_name
     };
     std::ifstream file;

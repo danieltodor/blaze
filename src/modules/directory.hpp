@@ -6,6 +6,7 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
 
+// Current working directory
 std::string directory(const Context &context)
 {
     std::string result = "";

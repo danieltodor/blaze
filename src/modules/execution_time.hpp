@@ -11,6 +11,7 @@
 #define MINUTE 60
 #define SECOND 1
 
+// Execution time of the last command (wall time)
 std::string execution_time(const Context &context)
 {
     auto subtract_time = [](double &from, const int unit)

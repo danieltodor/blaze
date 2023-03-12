@@ -33,6 +33,7 @@ const std::unordered_map<std::string, int> foreground_color_map = {
     {"bright_white", BRIGHT_WHITE}
 };
 
+// Create escape sequence
 std::string create_sequence(const std::string &code, const Context &context)
 {
     std::string result = "";
@@ -44,6 +45,7 @@ std::string create_sequence(const std::string &code, const Context &context)
     return result;
 }
 
+// Convert color to escape sequence
 std::string to_color_code(const std::string &color, const int offset, const Context &context)
 {
     if (color.empty())

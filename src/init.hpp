@@ -3,6 +3,7 @@
 
 #include "context.hpp"
 
+// Print init script
 void init_shell(const Context &context);
 
 #endif

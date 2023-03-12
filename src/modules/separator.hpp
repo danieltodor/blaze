@@ -5,6 +5,7 @@
 
 #include "src/context.hpp"
 
+// Can be used for additional separation between modules
 std::string separator(const Context &context)
 {
     (void)context;
