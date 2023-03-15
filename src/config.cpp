@@ -116,6 +116,8 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.date.format, "date", "format");
 
     set_value(data, config.time.format, "time", "format");
+
+    set_value(data, config.exit_status.non_zero_only, "exit_status", "non_zero_only");
 }
 
 // Sort modules in ascending order

@@ -151,6 +151,10 @@ format = "%x"
 [time]
 # Time format to use
 format = "%X"
+
+[exit_status]
+# Show exit status only if non zero
+non_zero_only = false
 ```
 
 ## Builtin modules
@@ -166,6 +170,7 @@ format = "%X"
 | time | Current time [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 | user | Current user |
 | host | Hostname |
+| exit_status | Exit status of the last command |
 
 ## Creating your own modules
 You can use the programming language of your choice to create a custom module.
@@ -175,7 +180,7 @@ You can use the programming language of your choice to create a custom module.
 # At the end, write something to stdout.
 # If stdout is empty at the end, the module and it`s prefix/suffix content won`t be displayed.
 # This way you can create modules that are only used in certain directories.
-print('important stuff')
+print('something')
 ```
 2. Create a new module entry in your config file, and tell blaze how and where it can be executed.
 ``` toml

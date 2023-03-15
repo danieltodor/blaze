@@ -4,8 +4,8 @@ padding = ""
 
 [prompt]
 string = " ❯ "
-foreground = ""
-error_foreground = ""
+foreground = "green"
+error_foreground = "red"
 
 [connector]
 character = " "
@@ -43,6 +43,9 @@ format = "%F"
 
 [time]
 format = "%T"
+
+[exit_status]
+non_zero_only = true
 
 [[module]]
 name = "directory"

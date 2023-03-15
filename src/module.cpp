@@ -10,6 +10,7 @@
 #include "src/modules/time.hpp"
 #include "src/modules/user.hpp"
 #include "src/modules/host.hpp"
+#include "src/modules/exit_status.hpp"
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
@@ -21,7 +22,8 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
     {"date", &date},
     {"time", &time},
     {"user", &user},
-    {"host", &host}
+    {"host", &host},
+    {"exit_status", &exit_status}
 };
 
 std::string call_module(const std::string &name, const Context &context)

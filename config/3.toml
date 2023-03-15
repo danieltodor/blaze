@@ -4,8 +4,8 @@ padding = " "
 
 [prompt]
 string = "\n❯ "
-foreground = ""
-error_foreground = ""
+foreground = "green"
+error_foreground = "red"
 
 [connector]
 character = "─"
@@ -43,6 +43,9 @@ format = "%F"
 
 [time]
 format = "%T"
+
+[exit_status]
+non_zero_only = true
 
 [[module]]
 name = "directory"
@@ -96,6 +99,20 @@ inner_suffix = ""
 outer_prefix = ""
 outer_suffix = ""
 background = "yellow"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "exit_status"
+align = "left"
+inner_prefix = "⚠ "
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "red"
 foreground = "black"
 bold = false
 dim = false
