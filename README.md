@@ -58,6 +58,8 @@ padding = " "
 string = " "
 # Foreground color to use
 foreground = ""
+# Foreground color to use when the last command was exited with non zero code. Use only if different from foreground
+error_foreground = ""
 
 [connector]
 # This character will be used as spacing between the left and right side modules

@@ -132,7 +132,14 @@ std::string prompt(const Context &context)
 {
     std::string result = "";
     result += reset_all(context);
-    result += set_foreground(context.config.prompt.foreground, context);
+    if (context.exit_status != "0" && !context.config.prompt.error_foreground.empty())
+    {
+        result += set_foreground(context.config.prompt.error_foreground, context);
+    }
+    else
+    {
+        result += set_foreground(context.config.prompt.foreground, context);
+    }
     result += context.config.prompt.string;
     result += reset_all(context);
     return result;

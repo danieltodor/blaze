@@ -5,6 +5,7 @@ padding = " "
 [prompt]
 string = "\n❯ "
 foreground = ""
+error_foreground = ""
 
 [connector]
 character = "─"

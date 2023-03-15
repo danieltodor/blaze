@@ -20,6 +20,7 @@ struct Prompt
 {
     std::string string = " ";
     std::string foreground = "";
+    std::string error_foreground = "";
 };
 
 struct Connector

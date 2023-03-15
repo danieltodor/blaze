@@ -11,8 +11,9 @@ struct Args : public argparse::Args
 {
     std::string &shell = arg("Current shell");
     bool &init = flag("i,init", "Init current shell");
-    std::string &start_time = kwarg("s,start_time", "Time when the command was started").set_default("0");
-    std::string &finish_time = kwarg("f,finish_time", "Time when the command was finished").set_default("0");
+    std::string &start_time = kwarg("s,start-time", "Time when the command was started").set_default("0");
+    std::string &finish_time = kwarg("f,finish-time", "Time when the command was finished").set_default("0");
+    std::string &exit_status = kwarg("e,exit-status", "Exit status of the last command").set_default("0");
     std::string &background = kwarg("b,background", "Background RGB color").set_default("0;0;0");
 };
 
@@ -28,6 +29,7 @@ int main(int argc, char *argv[])
         args.shell,
         std::stod(args.start_time),
         std::stod(args.finish_time),
+        args.exit_status,
         args.background,
         get_env("PWD"),
         check_git_repository(),
