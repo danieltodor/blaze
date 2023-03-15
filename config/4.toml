@@ -118,6 +118,12 @@ italic = false
 underline = false
 
 [[module]]
+name = "separator"
+align = "left"
+background = "default"
+outer_suffix = ""
+
+[[module]]
 name = "exit_status"
 align = "left"
 inner_prefix = "⚠ "
