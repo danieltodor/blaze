@@ -1,5 +1,4 @@
-# Get the RGB color of the terminal emulator
-# Works only if it is xterm compatible
+# Get the RGB color of the terminal emulator. Works only in xterm compatible emulators.
 blaze_get_current_background() {
     exec < /dev/tty
     oldstty=$(stty -g)
@@ -43,17 +42,17 @@ blaze_run_on_exit() {
 }
 trap blaze_run_on_exit EXIT
 
-blaze_default_background=$(blaze_get_current_background)
-blaze_time_file_name=${USER}_bash_time_${BASHPID}
-blaze_exit_status_file_name=${USER}_bash_exit_status_${BASHPID}
+blaze_session="${USER}_${BASHPID}"
 
 if [[ -d "/dev/shm" ]]; then
-    blaze_time_file="/dev/shm/$blaze_time_file_name"
-    blaze_exit_status_file="/dev/shm/$blaze_exit_status_file_name"
+    blaze_file_prefix="/dev/shm/$blaze_session"
 else
-    blaze_time_file="/tmp/$blaze_time_file_name"
-    blaze_exit_status_file="/tmp/$blaze_exit_status_file_name"
+    blaze_file_prefix="/tmp/$blaze_session"
 fi
+
+blaze_default_background=$(blaze_get_current_background)
+blaze_time_file="${blaze_file_prefix}_time"
+blaze_exit_status_file="${blaze_file_prefix}_exit_status"
 
 blaze_save_start_time
 blaze_save_exit_status
