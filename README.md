@@ -1,17 +1,15 @@
 # Blaze
-- Icon
-- Short info about the program
-- Core features
-- Picture about example prompts
-- Example configs with pictures in an example dir
+**A customizable and informative terminal theme for bash, zsh, fish, on linux distributions.**
+
+![](media/demo.gif)
 
 [Installation](#installation)\
 [Configuration](#configuration)\
 [Builtin modules](#builtin-modules)\
+[Creating your own modules](#creating-your-own-modules)\
 [Removal](#removal)
 
 ## Installation
-
 1. Download and install blaze
     ``` sh
     git clone --depth=1 https://github.com/danieltodor/blaze.git
@@ -31,9 +29,9 @@ Open a new shell instance to see the new prompt.\
 The default prompt (1.toml) is built into blaze.
 If you are not happy with it, select another config with the `./use_config <n>` command.\
 For additional configuration options, check out the [configuration](#configuration) section.
+![](media/demo.png)
 
 ## Configuration
-
 Configuration files are read from these locations in order:
 1. `BLAZE_CONFIG` env variable
 2. `~/.config/blaze.toml`
@@ -158,7 +156,6 @@ non_zero_only = false
 ```
 
 ## Builtin modules
-
 | Name | Description |
 | - | - |
 | separator | Can be used for additional separation between modules |
@@ -190,7 +187,6 @@ execute = "python path/to/file.py"
 ```
 
 ## Removal
-
 1. Delete the setup line from your shell\`s rc file.
 2. cd into the downloaded blaze directory and run `make uninstall`.
 3. Delete the `blaze.toml` file if you created one.
