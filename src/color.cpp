@@ -9,10 +9,12 @@ const std::string background_rgb_prefix = "48;2;";
 const std::string foreground_id_prefix = "38;5;";
 const std::string background_id_prefix = "48;5;";
 const std::unordered_map<std::string, std::string> sequence_begin = {
-    {"bash", "\001"} // \[
+    {"bash", "\001"}, // \[
+    {"zsh", "%{"}
 };
 const std::unordered_map<std::string, std::string> sequence_end = {
-    {"bash", "\002"} // \]
+    {"bash", "\002"}, // \]
+    {"zsh", "%}"}
 };
 const std::unordered_map<std::string, int> foreground_color_map = {
     {"black", BLACK},

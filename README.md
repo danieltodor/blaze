@@ -23,6 +23,10 @@
         ``` sh
         echo 'eval "$(blaze --init bash)"' >> ~/.bashrc
         ```
+    - Zsh
+        ``` sh
+        echo 'eval "$(blaze --init zsh)"' >> ~/.zshrc
+        ```
 
 3. Configure\
 Open a new shell instance to see the new prompt.\

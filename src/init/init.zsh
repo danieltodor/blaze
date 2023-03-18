@@ -37,13 +37,14 @@ blaze_get_exit_status() {
     echo "$(cat $blaze_exit_status_file)"
 }
 
-blaze_run_on_exit() {
-    rm $blaze_time_file
-    rm $blaze_exit_status_file
-}
-trap blaze_run_on_exit EXIT
+# TODO: Create a similar trap for zsh
+# TRAPEXIT() {
+#     rm $blaze_time_file
+#     rm $blaze_exit_status_file
+#     return $(( 128 + $1 ))
+# }
 
-blaze_session="${USER}_${BASHPID}"
+blaze_session="${USER}_${PPID}"
 
 if [[ -d "/dev/shm" ]]; then
     blaze_file_prefix="/dev/shm/$blaze_session"
@@ -55,11 +56,10 @@ blaze_default_background=$(blaze_get_current_background)
 blaze_time_file="${blaze_file_prefix}_time"
 blaze_exit_status_file="${blaze_file_prefix}_exit_status"
 
-blaze_save_start_time
-blaze_save_exit_status
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec blaze_save_start_time
+add-zsh-hook precmd blaze_save_exit_status
 
-# Bash doesn`t have preexec/precmd hooks, but the behavior of these prompt variables are close enough for now
-PS0='$(blaze_save_start_time)' # Is expanded after a command is read and before the command is executed
-PROMPT_COMMAND='$(blaze_save_exit_status)' # Executed before the printing of each primary prompt
+setopt prompt_subst # Enable prompt substitution
 
-PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time) -e $(blaze_get_exit_status) -b $blaze_default_background)'
+PROMPT='$(blaze zsh -s $(blaze_get_start_time) -f $(blaze_get_current_time) -e $(blaze_get_exit_status) -b $blaze_default_background)'
