@@ -11,6 +11,7 @@ blaze_get_current_background() {
     hex_rgb=$(echo $hex_rgb | sed 's/^.*\;//;s/[^rgb:0-9a-f/]//g')
     hex_rgb=$(echo $hex_rgb | sed 's/[rgb:|/]//g')
     local bg_rgb=""
+    # Convert hex parts to decimal, and shift them to fit into range of 0-255
     bg_rgb+=$((16#${hex_rgb:0:4} >> 8))";"
     bg_rgb+=$((16#${hex_rgb:4:4} >> 8))";"
     bg_rgb+=$((16#${hex_rgb:8:4} >> 8))

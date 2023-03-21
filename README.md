@@ -23,6 +23,10 @@
         ``` sh
         echo 'eval "$(blaze --init bash)"' >> ~/.bashrc
         ```
+    - Fish
+        ``` sh
+        echo "blaze --init fish | source" >> ~/.config/fish/config.fish
+        ```
     - Zsh
         ``` sh
         echo 'eval "$(blaze --init zsh)"' >> ~/.zshrc

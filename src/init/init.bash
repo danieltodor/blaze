@@ -11,6 +11,7 @@ blaze_get_current_background() {
     hex_rgb=$(echo $hex_rgb | sed 's/^.*\;//;s/[^rgb:0-9a-f/]//g')
     hex_rgb=$(echo $hex_rgb | sed 's/[rgb:|/]//g')
     local bg_rgb=""
+    # Convert hex parts to decimal, and shift them to fit into range of 0-255
     bg_rgb+=$((16#${hex_rgb:0:4} >> 8))";"
     bg_rgb+=$((16#${hex_rgb:4:4} >> 8))";"
     bg_rgb+=$((16#${hex_rgb:8:4} >> 8))
@@ -58,7 +59,7 @@ blaze_exit_status_file="${blaze_file_prefix}_exit_status"
 blaze_save_start_time
 blaze_save_exit_status
 
-# Bash doesn`t have preexec/precmd hooks, but the behavior of these prompt variables are close enough for now
+# Bash doesn`t have preexec/precmd hooks, but the behavior of these prompt variables are close enough
 PS0='$(blaze_save_start_time)' # Is expanded after a command is read and before the command is executed
 PROMPT_COMMAND='$(blaze_save_exit_status)' # Executed before the printing of each primary prompt
 
