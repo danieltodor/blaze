@@ -24,42 +24,23 @@ function blaze_get_current_time
     echo (date +%s.%N)
 end
 
-function blaze_save_start_time --on-event fish_preexec
-    echo (blaze_get_current_time) > $blaze_time_file
+function blaze_preexec --on-event fish_preexec
+    set blaze_start_time (blaze_get_current_time)
 end
 
-function blaze_get_start_time
-    echo (cat $blaze_time_file)
-end
-
-function blaze_save_exit_status --on-event fish_prompt
-    echo $status > $blaze_exit_status_file
-end
-
-function blaze_get_exit_status
-    echo (cat $blaze_exit_status_file)
-end
-
-# TODO: Create a similar trap for fish
-# function blaze_run_on_exit
-#     rm $blaze_time_file
-#     rm $blaze_exit_status_file
-# end
-# trap blaze_run_on_exit EXIT
-
-set PPID (string trim (ps -o ppid -p $fish_pid --no-headers))
-set blaze_session "$USER"_"$PPID"
-
-if test -d /dev/shm
-    set blaze_file_prefix /dev/shm/"$blaze_session"
-else
-    set blaze_file_prefix /tmp/"$blaze_session"
+function blaze_precmd --on-event fish_prompt
+    set blaze_exit_status $status
+    set blaze_finish_time (blaze_get_current_time)
 end
 
 set blaze_default_background (blaze_get_current_background)
-set blaze_time_file "$blaze_file_prefix"_time
-set blaze_exit_status_file "$blaze_file_prefix"_exit_status
+set blaze_start_time ""
+set blaze_finish_time ""
+set blaze_exit_status ""
+
+blaze_preexec
+blaze_precmd
 
 function fish_prompt
-    blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time) -e $(blaze_get_exit_status) -b $blaze_default_background
+    blaze fish -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
 end
