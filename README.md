@@ -23,9 +23,10 @@
         ``` sh
         echo 'eval "$(blaze --init bash)"' >> ~/.bashrc
         ```
-    - Fish
+    - Fish\
+        Depending on your config, you should move the added line where only interactive shells will use it.
         ``` sh
-        echo "blaze --init fish | source" >> ~/.config/fish/config.fish
+        echo 'blaze --init fish | source' >> ~/.config/fish/config.fish
         ```
     - Zsh
         ``` sh
