@@ -1,5 +1,5 @@
 # Blaze
-**A customizable and informative terminal theme for bash, zsh, fish, on linux distributions.**
+**A customizable and informative prompt for bash, zsh, fish, on linux distributions.**
 
 ![](media/demo.gif)
 
