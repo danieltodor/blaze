@@ -18,7 +18,8 @@
     make install
     ```
 
-2. Setup your shell
+2. Setup your shell\
+    Make sure `~/.local/bin` is added to PATH.
     - Bash
         ``` sh
         echo 'eval "$(blaze --init bash)"' >> ~/.bashrc
