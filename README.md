@@ -168,6 +168,7 @@ non_zero_only = false
 ## Builtin modules
 | Name | Description |
 | - | - |
+| fixed | Can be used to display fixed text |
 | separator | Can be used for additional separation between modules |
 | directory | Current working directory |
 | execution_time | Execution time of the last command (wall time) |

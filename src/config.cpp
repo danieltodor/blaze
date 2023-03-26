@@ -246,8 +246,3 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     }
     return false;
 }
-
-bool is_separator(const Module &module)
-{
-    return module.name == "separator" ? true : false;
-}

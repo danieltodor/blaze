@@ -1,7 +1,7 @@
 #include <unordered_map>
 
 #include "src/module.hpp"
-#include "src/modules/separator.hpp"
+#include "src/modules/dummy.hpp"
 #include "src/modules/directory.hpp"
 #include "src/modules/execution_time.hpp"
 #include "src/modules/git_branch.hpp"
@@ -14,7 +14,8 @@
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
-    {"separator", &separator},
+    {"fixed", &dummy},
+    {"separator", &dummy},
     {"directory", &directory},
     {"execution_time", &execution_time},
     {"git_branch", &git_branch},

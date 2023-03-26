@@ -9,8 +9,8 @@
 // Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)
 {
-    // For separators the padding in omitted by default
-    if (is_separator(*current_module) && current_module->padding == control_char)
+    // For these modules the padding in omitted by default
+    if ((current_module->name == "separator" || current_module->name == "fixed") && current_module->padding == control_char)
     {
         return "";
     }
@@ -200,34 +200,54 @@ void evaluate_content(Context &context)
 }
 
 // Remove modules that shouldn`t be displayed
-void remove_surplus(Config &config)
+void remove_surplus(Context &context)
 {
+    Config &config = context.config;
     Module *current_module;
     Module *previous_module;
     Module *next_module;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
-        // Remove module if it`s content is empty
-        if (current_module->content.empty() && !is_separator(*current_module))
+        // Separators are processed later
+        if (current_module->name == "separator")
+        {
+            continue;
+        }
+        // Remove module if it has nothing to show
+        else if (current_module->content.empty() && current_module->name != "fixed")
+        {
+            config.modules.erase(iterator--);
+        }
+        // Remove module if prompt is displayed, and it isn`t part of it
+        else if (context.args.prompt && !(current_module->align == "left" || current_module->align == "right"))
+        {
+            config.modules.erase(iterator--);
+        }
+        // Remove module if right prompt is displayed, and it isn`t part of it
+        else if (context.args.right_prompt && current_module->align != "right_prompt")
         {
             config.modules.erase(iterator--);
         }
     }
-    // TODO: Maybe this can be done in the first pass, when a module is removed
     int i = 0;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
+        // Only separators are processed here
+        if (current_module->name != "separator")
+        {
+            continue;
+        }
         // Remove separator if the next one is also a separator
-        if (is_separator(*current_module) && next_module != NULL && is_separator(*next_module))
+        if (next_module != NULL && next_module->name == "separator")
         {
             config.modules.erase(iterator--);
         }
         // Remove separator from the beginning/end of group
-        else if (is_separator(*current_module) && (next_module == NULL || previous_module == NULL))
+        else if (next_module == NULL || previous_module == NULL)
         {
             config.modules.erase(iterator--);
         }
@@ -242,7 +262,7 @@ void remove_surplus(Config &config)
 void preprocess_modules(Context &context)
 {
     evaluate_content(context);
-    remove_surplus(context.config);
+    remove_surplus(context);
 }
 
 void print_prompt(Context &context)
