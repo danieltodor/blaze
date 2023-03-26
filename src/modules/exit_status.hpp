@@ -9,9 +9,9 @@
 std::string exit_status(const Context &context)
 {
     std::string result = "";
-    if (context.exit_status != "0" || !context.config.exit_status.non_zero_only)
+    if (context.args.exit_status != "0" || !context.config.exit_status.non_zero_only)
     {
-        result += context.exit_status;
+        result += context.args.exit_status;
     }
     return result;
 }

@@ -8,7 +8,7 @@
 
 void print_shell_init(const Context &context)
 {
-    const std::string file_name = "init." + context.shell;
+    const std::string file_name = "init." + context.args.shell;
     const std::string paths[] = {
         context.PWD + "/src/init/" + file_name, // TODO: This can be removed (?)
         get_env("HOME") + "/.local/share/blaze/" + file_name

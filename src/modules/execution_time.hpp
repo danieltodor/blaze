@@ -24,7 +24,9 @@ std::string execution_time(const Context &context)
     std::string result = "";
     const Config &config = context.config;
     const float precision = std::pow(10, -config.execution_time.precision);
-    double diff = round((context.finish_time - context.start_time) / precision) * precision;
+    const double start_time = std::stod(context.args.start_time);
+    const double finish_time = std::stod(context.args.finish_time);
+    double diff = round((finish_time - start_time) / precision) * precision;
     if (diff < config.execution_time.display_from)
     {
         return result;

@@ -41,11 +41,11 @@ const std::unordered_map<std::string, int> foreground_color_map = {
 std::string create_sequence(const std::string &code, const Context &context)
 {
     std::string result = "";
-    result += sequence_begin.at(context.shell);
+    result += sequence_begin.at(context.args.shell);
     result += csi;
     result += code;
     result += 'm';
-    result += sequence_end.at(context.shell);
+    result += sequence_end.at(context.args.shell);
     return result;
 }
 
@@ -72,7 +72,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
         std::string rgb_color = color;
         if (color == "default")
         {
-            rgb_color = context.default_background;
+            rgb_color = context.args.background;
         }
         return create_sequence(rgb_prefix + rgb_color, context);
     }

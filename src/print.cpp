@@ -132,7 +132,7 @@ std::string prompt(const Context &context)
 {
     std::string result = "";
     result += reset_all(context);
-    if (context.exit_status != "0" && !context.config.prompt.error_foreground.empty())
+    if (context.args.exit_status != "0" && !context.config.prompt.error_foreground.empty())
     {
         result += set_foreground(context.config.prompt.error_foreground, context);
     }
@@ -178,12 +178,12 @@ void evaluate_content(Context &context)
     for (Module &module : config.modules)
     {
         // Skip if prompt is displayed, and the module is not part of it
-        if (context.prompt && !(module.align == "left" || module.align == "right"))
+        if (context.args.prompt && !(module.align == "left" || module.align == "right"))
         {
             continue;
         }
         // Skip if right prompt is displayed, and the module is not part of it
-        else if (context.right_prompt && module.align != "right_prompt")
+        else if (context.args.right_prompt && module.align != "right_prompt")
         {
             continue;
         }

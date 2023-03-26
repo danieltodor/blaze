@@ -4,18 +4,13 @@
 #include <string>
 #include <time.h>
 
+#include "src/arg.hpp"
 #include "src/config.hpp"
 
 struct Context
 {
+    Args args;
     Config config;
-    std::string shell;
-    bool prompt;
-    bool right_prompt;
-    double start_time;
-    double finish_time;
-    std::string exit_status;
-    std::string default_background;
     std::string PWD;
     bool git_repository_detected;
     std::tm time_structure;
