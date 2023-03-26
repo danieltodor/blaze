@@ -236,18 +236,13 @@ void remove_surplus(Context &context)
         current_module = iterator.base();
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
-        // Only separators are processed here
-        if (current_module->name != "separator")
-        {
-            continue;
-        }
         // Remove separator if the next one is also a separator
-        if (next_module != NULL && next_module->name == "separator")
+        if (current_module->name == "separator" && next_module != NULL && next_module->name == "separator")
         {
             config.modules.erase(iterator--);
         }
         // Remove separator from the beginning/end of group
-        else if (next_module == NULL || previous_module == NULL)
+        else if (current_module->name == "separator" && (next_module == NULL || previous_module == NULL))
         {
             config.modules.erase(iterator--);
         }
