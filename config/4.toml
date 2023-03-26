@@ -1,9 +1,9 @@
 [global]
-new_line = true
-padding = " "
+new_line = false
+padding = ""
 
 [prompt]
-string = "\n❯ "
+string = " ❯ "
 foreground = "green"
 error_foreground = "red"
 
@@ -48,60 +48,51 @@ format = "%T"
 non_zero_only = true
 
 [[module]]
+name = "fixed"
+align = "left"
+outer_prefix = "╭─"
+
+[[module]]
 name = "directory"
 align = "left"
 inner_prefix = ""
 inner_suffix = ""
-outer_prefix = ""
-outer_suffix = ""
-background = "blue"
-foreground = "black"
-bold = false
+outer_prefix = " "
+outer_suffix = " "
+background = ""
+foreground = "blue"
+bold = true
 dim = false
 italic = false
 underline = false
-
-[[module]]
-name = "separator"
-align = "left"
-background = "default"
-outer_suffix = ""
 
 [[module]]
 name = "git_branch"
 align = "left"
-inner_prefix = "  "
+inner_prefix = " "
 inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = "green"
-foreground = "black"
+outer_suffix = " "
+background = ""
+foreground = "green"
 bold = false
 dim = false
 italic = false
 underline = false
-padding = ""
 
 [[module]]
 name = "git_status"
 align = "left"
-inner_prefix = " "
-inner_suffix = " "
+inner_prefix = ""
+inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = "green"
-foreground = "black"
+outer_suffix = " "
+background = ""
+foreground = "green"
 bold = false
 dim = false
 italic = false
 underline = false
-padding = ""
-
-[[module]]
-name = "separator"
-align = "left"
-background = "default"
-outer_suffix = ""
 
 [[module]]
 name = "execution_time"
@@ -109,19 +100,13 @@ align = "left"
 inner_prefix = "⌛︎"
 inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = "yellow"
-foreground = "black"
+outer_suffix = " "
+background = ""
+foreground = "yellow"
 bold = false
 dim = false
 italic = false
 underline = false
-
-[[module]]
-name = "separator"
-align = "left"
-background = "default"
-outer_suffix = ""
 
 [[module]]
 name = "exit_status"
@@ -129,10 +114,55 @@ align = "left"
 inner_prefix = "⚠ "
 inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = "red"
-foreground = "black"
+outer_suffix = " "
+background = ""
+foreground = "red"
 bold = false
 dim = false
 italic = false
 underline = false
+
+[[module]]
+name = "date"
+align = "right"
+inner_prefix = ""
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = ""
+foreground = ""
+bold = false
+dim = false
+italic = false
+underline = false
+padding = " "
+
+[[module]]
+name = "fixed"
+align = "right"
+outer_suffix = "─╮"
+
+[[module]]
+name = "time"
+align = "right_prompt"
+inner_prefix = ""
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = " "
+background = ""
+foreground = ""
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "fixed"
+align = "right_prompt"
+outer_suffix = "─╯"
+
+[[module]]
+name = "fixed"
+level = 2
+align = "left"
+outer_prefix = "╰─"

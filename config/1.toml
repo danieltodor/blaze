@@ -62,6 +62,34 @@ italic = false
 underline = false
 
 [[module]]
+name = "git_branch"
+align = "left"
+inner_prefix = " "
+inner_suffix = ""
+outer_prefix = " "
+outer_suffix = ""
+background = ""
+foreground = "green"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "git_status"
+align = "left"
+inner_prefix = ""
+inner_suffix = ""
+outer_prefix = " "
+outer_suffix = ""
+background = ""
+foreground = "green"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
 name = "execution_time"
 align = "left"
 inner_prefix = "⌛︎"
@@ -70,6 +98,20 @@ outer_prefix = " "
 outer_suffix = ""
 background = ""
 foreground = "yellow"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "exit_status"
+align = "left"
+inner_prefix = "⚠ "
+inner_suffix = ""
+outer_prefix = " "
+outer_suffix = ""
+background = ""
+foreground = "red"
 bold = false
 dim = false
 italic = false

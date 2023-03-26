@@ -1,14 +1,14 @@
 [global]
-new_line = false
-padding = ""
+new_line = true
+padding = " "
 
 [prompt]
-string = " ❯ "
+string = "\n❯ "
 foreground = "green"
 error_foreground = "red"
 
 [connector]
-character = " "
+character = "─"
 foreground = ""
 background = ""
 dim = false
@@ -53,10 +53,10 @@ align = "left"
 inner_prefix = ""
 inner_suffix = ""
 outer_prefix = ""
-outer_suffix = ""
-background = ""
-foreground = "blue"
-bold = true
+outer_suffix = ""
+background = "blue"
+foreground = "black"
+bold = false
 dim = false
 italic = false
 underline = false
@@ -64,40 +64,56 @@ underline = false
 [[module]]
 name = "git_branch"
 align = "left"
-inner_prefix = " "
+inner_prefix = "  "
 inner_suffix = ""
-outer_prefix = " "
+outer_prefix = ""
 outer_suffix = ""
-background = ""
-foreground = "green"
+background = "green"
+foreground = "black"
 bold = false
 dim = false
 italic = false
 underline = false
+padding = ""
 
 [[module]]
 name = "git_status"
 align = "left"
-inner_prefix = ""
-inner_suffix = ""
-outer_prefix = " "
-outer_suffix = ""
-background = ""
-foreground = "green"
+inner_prefix = " "
+inner_suffix = " "
+outer_prefix = ""
+outer_suffix = ""
+background = "green"
+foreground = "black"
 bold = false
 dim = false
 italic = false
 underline = false
+padding = ""
 
 [[module]]
 name = "execution_time"
 align = "left"
 inner_prefix = "⌛︎"
 inner_suffix = ""
-outer_prefix = " "
-outer_suffix = ""
-background = ""
-foreground = "yellow"
+outer_prefix = ""
+outer_suffix = ""
+background = "yellow"
+foreground = "black"
+bold = false
+dim = false
+italic = false
+underline = false
+
+[[module]]
+name = "exit_status"
+align = "left"
+inner_prefix = "⚠ "
+inner_suffix = ""
+outer_prefix = ""
+outer_suffix = ""
+background = "red"
+foreground = "black"
 bold = false
 dim = false
 italic = false
