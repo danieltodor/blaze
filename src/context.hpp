@@ -10,6 +10,8 @@ struct Context
 {
     Config config;
     std::string shell;
+    bool prompt;
+    bool rprompt;
     double start_time;
     double finish_time;
     std::string exit_status;

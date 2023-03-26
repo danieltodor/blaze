@@ -126,6 +126,7 @@ void sort_modules(std::vector<Module> &modules)
     std::unordered_map<std::string, int> sides;
     sides["left"] = 1;
     sides["right"] = 2;
+    sides["right_prompt"] = 3;
     auto compare = [&sides](const Module &a, const Module &b)
     {
         std::string a_value = "", b_value = "";

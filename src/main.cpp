@@ -11,6 +11,8 @@ struct Args : public argparse::Args
 {
     std::string &shell = arg("Current shell");
     bool &init = flag("i,init", "Init current shell");
+    bool &prompt = flag("p,prompt", "Print prompt");
+    bool &rprompt = flag("r,rprompt", "Print right prompt");
     std::string &start_time = kwarg("s,start-time", "Time when the command was started").set_default("0");
     std::string &finish_time = kwarg("f,finish-time", "Time when the command was finished").set_default("0");
     std::string &exit_status = kwarg("e,exit-status", "Exit status of the last command").set_default("0");
@@ -27,6 +29,8 @@ int main(int argc, char *argv[])
     Context context = {
         get_config(),
         args.shell,
+        args.prompt,
+        args.rprompt,
         std::stod(args.start_time),
         std::stod(args.finish_time),
         args.exit_status,
@@ -39,9 +43,13 @@ int main(int argc, char *argv[])
     {
         init_shell(context);
     }
-    else
+    else if (args.prompt)
     {
-        print_all(context);
+        print_prompt(context);
+    }
+    else if (args.rprompt)
+    {
+        print_rprompt(context);
     }
     return 0;
 }

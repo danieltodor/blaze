@@ -177,7 +177,17 @@ void evaluate_content(Context &context)
     Config &config = context.config;
     for (Module &module : config.modules)
     {
-        if (!module.name.empty())
+        // Skip if prompt is displayed, and the module is not part of it
+        if (context.prompt && !(module.align == "left" || module.align == "right"))
+        {
+            continue;
+        }
+        // Skip if right prompt is displayed, and the module is not part of it
+        else if (context.rprompt && module.align != "right_prompt")
+        {
+            continue;
+        }
+        else if (!module.name.empty())
         {
             module.content = call_module(module.name, context);
         }
@@ -198,6 +208,7 @@ void remove_surplus(Config &config)
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
+        // Remove module if it`s content is empty
         if (current_module->content.empty() && !is_separator(*current_module))
         {
             config.modules.erase(iterator--);
@@ -234,7 +245,7 @@ void preprocess_modules(Context &context)
     remove_surplus(context.config);
 }
 
-void print_all(Context &context)
+void print_prompt(Context &context)
 {
     Config &config = context.config;
     Module *current_module;
@@ -295,5 +306,27 @@ void print_all(Context &context)
         }
     }
     result += prompt(context);
+    std::cout << result;
+}
+
+void print_rprompt(Context &context)
+{
+    Config &config = context.config;
+    Module *current_module;
+    Module *previous_module;
+    Module *next_module;
+    std::string result;
+    std::string temp;
+    preprocess_modules(context);
+    for (std::size_t i = 0; i < config.modules.size(); i++)
+    {
+        current_module = &config.modules[i];
+        previous_module = get_previous_module_in_group(config.modules, i);
+        next_module = get_next_module_in_group(config.modules, i);
+        temp = current_module->content;
+        temp.insert(0, pre(context, current_module, previous_module, false));
+        temp.insert(temp.length(), post(context, current_module, next_module, false));
+        result += temp;
+    }
     std::cout << result;
 }

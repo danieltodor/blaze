@@ -20,5 +20,9 @@ blaze_preexec
 blaze_precmd
 
 function fish_prompt
-    blaze fish -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
+    blaze fish --prompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
+end
+
+function fish_right_prompt
+    blaze fish --rprompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
 end

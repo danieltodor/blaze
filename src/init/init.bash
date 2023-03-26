@@ -43,4 +43,4 @@ blaze_save_exit_status
 PS0='$(blaze_save_start_time)' # Is expanded after a command is read and before the command is executed
 PROMPT_COMMAND='$(blaze_save_exit_status)' # Executed before the printing of each primary prompt
 
-PS1='$(blaze bash -s $(blaze_get_start_time) -f $(blaze_get_current_time) -e $(blaze_get_exit_status) -b $blaze_default_background)'
+PS1='$(blaze bash --prompt -s $(blaze_get_start_time) -f $(blaze_get_current_time) -e $(blaze_get_exit_status) -b $blaze_default_background)'

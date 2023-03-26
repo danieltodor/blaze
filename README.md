@@ -22,16 +22,16 @@
     Make sure `~/.local/bin` is added to PATH.
     - Bash
         ``` sh
-        echo 'eval "$(blaze --init bash)"' >> ~/.bashrc
+        echo 'eval "$(blaze bash --init)"' >> ~/.bashrc
         ```
     - Fish\
         Depending on your config, you should move the added line where only interactive shells will use it.
         ``` sh
-        echo 'blaze --init fish | source' >> ~/.config/fish/config.fish
+        echo 'blaze fish --init | source' >> ~/.config/fish/config.fish
         ```
     - Zsh
         ``` sh
-        echo 'eval "$(blaze --init zsh)"' >> ~/.zshrc
+        echo 'eval "$(blaze zsh --init)"' >> ~/.zshrc
         ```
 
 3. Configure\
@@ -88,7 +88,7 @@ execute = ""
 level = 1
 # The position of the module (if omitted, modules will be displayed as they appear in config)
 position = 1
-# Display it on left/right side
+# Display it on left/right side. Or display it as right_prompt if the shell supports it.
 align = "left"
 # Same as global one, but takes precedence over it.
 padding = ""

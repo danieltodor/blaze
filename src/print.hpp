@@ -4,6 +4,9 @@
 #include "src/context.hpp"
 
 // Print the modules and the prompt
-void print_all(Context &context);
+void print_prompt(Context &context);
+
+// Print the right prompt
+void print_rprompt(Context &context);
 
 #endif
