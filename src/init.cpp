@@ -6,7 +6,7 @@
 #include "src/init.hpp"
 #include "src/util.hpp"
 
-void init_shell(const Context &context)
+void print_shell_init(const Context &context)
 {
     const std::string file_name = "init." + context.shell;
     const std::string paths[] = {

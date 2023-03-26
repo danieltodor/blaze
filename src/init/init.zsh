@@ -26,4 +26,4 @@ add-zsh-hook precmd blaze_precmd
 setopt prompt_subst # Enable prompt substitution
 
 PROMPT='$(blaze zsh --prompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background)'
-RPROMPT='$(blaze zsh --rprompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background)'
+RPROMPT='$(blaze zsh --right-prompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background)'

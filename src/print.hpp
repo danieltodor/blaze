@@ -7,6 +7,6 @@
 void print_prompt(Context &context);
 
 // Print the right prompt
-void print_rprompt(Context &context);
+void print_right_prompt(Context &context);
 
 #endif

@@ -183,7 +183,7 @@ void evaluate_content(Context &context)
             continue;
         }
         // Skip if right prompt is displayed, and the module is not part of it
-        else if (context.rprompt && module.align != "right_prompt")
+        else if (context.right_prompt && module.align != "right_prompt")
         {
             continue;
         }
@@ -309,7 +309,7 @@ void print_prompt(Context &context)
     std::cout << result;
 }
 
-void print_rprompt(Context &context)
+void print_right_prompt(Context &context)
 {
     Config &config = context.config;
     Module *current_module;

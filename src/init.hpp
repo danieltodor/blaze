@@ -4,6 +4,6 @@
 #include "src/context.hpp"
 
 // Print init script
-void init_shell(const Context &context);
+void print_shell_init(const Context &context);
 
 #endif
