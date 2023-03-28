@@ -36,7 +36,7 @@
 
 3. Configure\
 Open a new shell instance to see the new prompt.\
-The default prompt (1.toml) is built into blaze.
+The default prompt only uses the `directory`, `execution_time`, `exit_status` modules.
 If you are not happy with it, select another config with the `./use_config <n>` command.\
 For additional configuration options, check out the [configuration](#configuration) section.
 ![](media/demo.png)

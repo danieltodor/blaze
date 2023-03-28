@@ -146,9 +146,12 @@ void set_default_values(Config &config)
 {
     config.global.padding = "";
     config.execution_time.display_from = 2;
+    config.exit_status.non_zero_only = true;
 
     Prompt prompt;
     prompt.string = " ❯ ";
+    prompt.foreground = "green";
+    prompt.error_foreground = "red";
     config.prompt = prompt;
 
     Module directory;
@@ -165,6 +168,14 @@ void set_default_values(Config &config)
     execution_time.outer_prefix = " ";
     execution_time.foreground = "yellow";
     config.modules.push_back(execution_time);
+
+    Module exit_status;
+    exit_status.name = "exit_status";
+    exit_status.align = "left";
+    exit_status.inner_prefix = "⚠ ";
+    exit_status.outer_prefix = " ";
+    exit_status.foreground = "red";
+    config.modules.push_back(exit_status);
 }
 
 Config get_config()
