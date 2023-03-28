@@ -48,11 +48,6 @@ format = "%T"
 non_zero_only = true
 
 [[module]]
-name = "fixed"
-align = "left"
-outer_prefix = "╭─"
-
-[[module]]
 name = "directory"
 align = "left"
 inner_prefix = ""
@@ -138,11 +133,6 @@ underline = false
 padding = " "
 
 [[module]]
-name = "fixed"
-align = "right"
-outer_suffix = "─╮"
-
-[[module]]
 name = "time"
 align = "right_prompt"
 inner_prefix = ""
@@ -158,11 +148,22 @@ underline = false
 
 [[module]]
 name = "fixed"
-align = "right_prompt"
-outer_suffix = "─╯"
+position = 0
+align = "left"
+outer_prefix = "╭─"
 
 [[module]]
 name = "fixed"
 level = 2
 align = "left"
 outer_prefix = "╰─"
+
+[[module]]
+name = "fixed"
+align = "right"
+outer_suffix = "─╮"
+
+[[module]]
+name = "fixed"
+align = "right_prompt"
+outer_suffix = "─╯"
