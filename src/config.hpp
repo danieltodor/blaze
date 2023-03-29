@@ -7,7 +7,6 @@
 #include "external/toml/toml.hpp"
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
-// TODO: Can i use \0 for this purpose?
 const std::string control_char = "`";
 
 struct Global

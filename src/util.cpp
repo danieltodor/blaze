@@ -41,7 +41,6 @@ std::vector<std::string> split(const std::string &string, const std::string &del
     {
         result.push_back(string);
     }
-    // TODO: Could the while loop be reworked to contain this? (the last element is not added in the loop)
     else
     {
         result.push_back(string.substr(from, to - from));
