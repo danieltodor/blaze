@@ -38,7 +38,8 @@
 Open a new shell instance to see the new prompt.\
 The default prompt only uses the `directory`, `execution_time`, `exit_status` modules.
 If you are not happy with it, select another config with the `./use_config <n>` command.\
-For additional configuration options, check out the [configuration](#configuration) section.
+For additional configuration options, check out the [configuration](#configuration) section.\
+Note that some of these configs are suitable only for shells with right prompt.
 ![](media/demo.png)
 
 ## Configuration

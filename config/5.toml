@@ -1,5 +1,4 @@
 [global]
-new_line = false
 padding = ""
 
 [prompt]
@@ -7,112 +6,40 @@ string = " ❯ "
 foreground = "green"
 error_foreground = "red"
 
-[connector]
-character = " "
-foreground = ""
-background = ""
-dim = false
-
-[directory]
-basename_only = false
-
 [execution_time]
-precision = 1
 display_from = 2.0
-display_fractional_until = 10.0
-
-[git_branch]
-ignore = []
-
-[git_status]
-count = true
-spacing = " "
-clean = "✓"
-ahead = "↑"
-behind = "↓"
-stashed = "$"
-untracked = "?"
-conflicted = "="
-modified = "!"
-staged = "+"
-renamed = "»"
-deleted = "✘"
-
-[date]
-format = "%F"
-
-[time]
-format = "%T"
 
 [exit_status]
 non_zero_only = true
 
 [[module]]
 name = "directory"
-align = "left"
-inner_prefix = ""
-inner_suffix = ""
-outer_prefix = ""
-outer_suffix = ""
-background = ""
 foreground = "blue"
 bold = true
-dim = false
-italic = false
-underline = false
 
 [[module]]
 name = "git_branch"
 align = "right_prompt"
 inner_prefix = " "
-inner_suffix = ""
 outer_prefix = " "
-outer_suffix = ""
-background = ""
 foreground = "green"
-bold = false
-dim = false
-italic = false
-underline = false
 
 [[module]]
 name = "git_status"
 align = "right_prompt"
-inner_prefix = ""
-inner_suffix = ""
 outer_prefix = " "
-outer_suffix = ""
-background = ""
 foreground = "green"
-bold = false
-dim = false
-italic = false
-underline = false
 
 [[module]]
 name = "execution_time"
 align = "right_prompt"
 inner_prefix = "⌛︎"
-inner_suffix = ""
 outer_prefix = " "
-outer_suffix = ""
-background = ""
 foreground = "yellow"
-bold = false
-dim = false
-italic = false
-underline = false
 
 [[module]]
 name = "exit_status"
 align = "right_prompt"
 inner_prefix = "⚠ "
-inner_suffix = ""
 outer_prefix = " "
-outer_suffix = ""
-background = ""
 foreground = "red"
-bold = false
-dim = false
-italic = false
-underline = false
