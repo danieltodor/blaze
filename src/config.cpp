@@ -9,8 +9,7 @@ toml::value read_data()
 {
     const std::string paths[] = {
         get_env("BLAZE_CONFIG"),
-        get_env("HOME") + "/.config/blaze.toml",
-        "/etc/blaze.toml"
+        get_env("HOME") + "/.config/blaze.toml"
     };
     toml::value data;
     for (std::size_t i = 0; i < std::size(paths); i++)
