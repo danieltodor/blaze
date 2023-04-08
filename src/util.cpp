@@ -164,3 +164,131 @@ bool is_number(const std::string &string)
     }
     return true;
 }
+
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+
+TEST_CASE("get_length")
+{
+    CHECK(get_length({"123"}) == 3);
+    CHECK(get_length({"abc"}) == 3);
+    CHECK(get_length({"abc", "def"}) == 6);
+    CHECK(get_length({"abc", "def", "123"}) == 9);
+    CHECK(get_length({""}) == 1);
+}
+
+TEST_CASE("split")
+{
+    SUBCASE("slash")
+    {
+        const std::vector<std::string> result = split("a/s/d", "/");
+        CHECK(result.size() == 3);
+        CHECK(result[0] == "a");
+        CHECK(result[1] == "s");
+        CHECK(result[2] == "d");
+    }
+    SUBCASE("newline")
+    {
+        const std::vector<std::string> result = split("\na\ns\nd\n", "\n");
+        CHECK(result.size() == 5);
+        CHECK(result[0] == "");
+        CHECK(result[1] == "a");
+        CHECK(result[2] == "s");
+        CHECK(result[3] == "d");
+        CHECK(result[4] == "");
+    }
+}
+
+TEST_CASE("join")
+{
+    CHECK(join({"abc", "def"}, "") == "abcdef");
+    CHECK(join({"abc", "def"}, "\n") == "abc\ndef");
+    CHECK(join({"abc", "def\n"}, "\n") == "abc\ndef\n");
+    CHECK(join({"abc", "def", "\n"}, "\n") == "abc\ndef\n\n");
+}
+
+TEST_CASE("regex_replace")
+{
+    SUBCASE("1")
+    {
+        std::string string = "abc";
+        regex_replace(string, {"b"}, "");
+        CHECK(string == "ac");
+    }
+    SUBCASE("2")
+    {
+        std::string string = "a,b,c";
+        regex_replace(string, {","}, ".");
+        CHECK(string == "a.b.c");
+    }
+    SUBCASE("3")
+    {
+        std::string string = "abc/123..def";
+        regex_replace(string, {"/", "\\.\\."}, "-");
+        CHECK(string == "abc-123-def");
+    }
+}
+
+TEST_CASE("regex_find_all")
+{
+    SUBCASE("1")
+    {
+        std::vector<std::string> result = regex_find_all("abc123def", {"123"});
+        CHECK(result.size() == 1);
+        CHECK(result[0] == "123");
+    }
+    SUBCASE("2")
+    {
+        std::vector<std::string> result = regex_find_all("abc123def", {"\\d"});
+        CHECK(result.size() == 3);
+        CHECK(result[0] == "1");
+        CHECK(result[1] == "2");
+        CHECK(result[2] == "3");
+    }
+}
+
+TEST_CASE("strip")
+{
+    SUBCASE("spaces and newlines")
+    {
+        std::string string = "\n  abc\n\n";
+        strip(string);
+        CHECK(string == "abc");
+    }
+}
+
+TEST_CASE("execute_command")
+{
+    CHECK(execute_command("echo abc") == "abc\n");
+}
+
+TEST_CASE("check_git_repository")
+{
+    CHECK(check_git_repository() == true);
+}
+
+TEST_CASE("get_env")
+{
+    CHECK(get_env("HOME").find("/home/") != std::string::npos);
+}
+
+TEST_CASE("get_current_time")
+{
+    std::tm time = get_current_time();
+    CHECK(time.tm_year > 120);
+}
+
+TEST_CASE("format_time")
+{
+    CHECK(format_time(get_current_time(), "%F").find("-") != std::string::npos);
+    CHECK(format_time(get_current_time(), "%T").find(":") != std::string::npos);
+}
+
+TEST_CASE("is_number")
+{
+    CHECK(is_number("") == false);
+    CHECK(is_number("abc") == false);
+    CHECK(is_number("123a") == false);
+    CHECK(is_number("a123") == false);
+    CHECK(is_number("123") == true);
+}

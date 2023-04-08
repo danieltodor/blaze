@@ -2,13 +2,11 @@
 #include "src/print.hpp"
 #include "src/context.hpp"
 #include "src/util.hpp"
+#include "src/test.hpp"
 
 int main(int argc, char *argv[])
 {
-    if (argc == 1)
-    {
-        return 0;
-    }
+    run_tests(argc, argv);
     Context context = {
         argparse::parse<Args>(argc, argv),
         get_config(),

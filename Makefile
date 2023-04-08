@@ -63,6 +63,10 @@ info:
 	@echo "Dependencies:"
 	@echo $(DEPS)
 
+test:
+# The binary must be made with DOCTEST_CONFIG_DISABLE commented out, before running the tests
+	$(BIN_DIR)/$(BINARY) --exit
+
 $(BIN_DIR)/$(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
