@@ -65,7 +65,7 @@ info:
 
 test:
 # The binary must be made with DOCTEST_CONFIG_DISABLE commented out, before running the tests
-	$(BIN_DIR)/$(BINARY) --exit
+	$(CMD_PREFIX)$(BIN_DIR)/$(BINARY) --exit
 
 $(BIN_DIR)/$(BINARY): $(OBJS)
 	@echo "Linking..."
