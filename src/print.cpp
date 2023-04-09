@@ -260,7 +260,8 @@ void preprocess_modules(Context &context)
     remove_surplus(context);
 }
 
-void print_prompt(Context &context)
+// Prepare prompt string
+std::string prepare_prompt(Context &context)
 {
     Config &config = context.config;
     Module *current_module;
@@ -321,10 +322,11 @@ void print_prompt(Context &context)
         }
     }
     result += prompt(context);
-    std::cout << result;
+    return result;
 }
 
-void print_right_prompt(Context &context)
+// Prepare right prompt string
+std::string prepare_right_prompt(Context &context)
 {
     Config &config = context.config;
     Module *current_module;
@@ -343,5 +345,496 @@ void print_right_prompt(Context &context)
         temp.insert(temp.length(), post(context, current_module, next_module, false));
         result += temp;
     }
-    std::cout << result;
+    return result;
+}
+
+void print_prompt(Context &context)
+{
+    std::cout << prepare_prompt(context);
+}
+
+void print_right_prompt(Context &context)
+{
+    std::cout << prepare_right_prompt(context);
+}
+
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+
+TEST_CASE("get_padding")
+{
+    Config config;
+    config.global.padding = "a";
+    Module current_module;
+    current_module.name = "module";
+    current_module.padding = control_char;
+    SUBCASE("separator")
+    {
+        current_module.name = "separator";
+        const std::string result = get_padding(config, &current_module);
+        CHECK(result == "");
+    }
+    SUBCASE("fixed")
+    {
+        current_module.name = "fixed";
+        const std::string result = get_padding(config, &current_module);
+        CHECK(result == "");
+    }
+    SUBCASE("module")
+    {
+        current_module.padding = "b";
+        const std::string result = get_padding(config, &current_module);
+        CHECK(result == "b");
+    }
+    SUBCASE("global")
+    {
+        const std::string result = get_padding(config, &current_module);
+        CHECK(result == "a");
+    }
+}
+
+TEST_CASE("pre")
+{
+    Context context;
+    context.args.shell = "bash";
+    Module current_module;
+    Module previous_module;
+    bool display_connector = false;
+    SUBCASE("reset")
+    {
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[0m") != std::string::npos);
+    }
+    SUBCASE("bold")
+    {
+        current_module.bold = true;
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[1m") != std::string::npos);
+    }
+    SUBCASE("dim")
+    {
+        current_module.dim = true;
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[2m") != std::string::npos);
+    }
+    SUBCASE("italic")
+    {
+        current_module.italic = true;
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[3m") != std::string::npos);
+    }
+    SUBCASE("underline")
+    {
+        current_module.underline = true;
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[4m") != std::string::npos);
+    }
+    SUBCASE("foreground")
+    {
+        current_module.foreground = "green";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("background")
+    {
+        current_module.background = "green";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[42m") != std::string::npos);
+    }
+    SUBCASE("previous module background")
+    {
+        previous_module.background = "red";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[41m") != std::string::npos);
+    }
+    SUBCASE("connector background")
+    {
+        context.config.connector.background = "yellow";
+        display_connector = true;
+        const std::string result = pre(context, &current_module, NULL, display_connector);
+        CHECK(result.find("\033[43m") != std::string::npos);
+    }
+    SUBCASE("inner prefix")
+    {
+        current_module.inner_prefix = "abc";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+    SUBCASE("outer prefix")
+    {
+        current_module.outer_prefix = "abc";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+    SUBCASE("background as foreground")
+    {
+        current_module.background = "green";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("padding")
+    {
+        context.config.global.padding = "abc";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+}
+
+TEST_CASE("post")
+{
+    Context context;
+    context.args.shell = "bash";
+    Module current_module;
+    Module next_module;
+    bool display_connector = false;
+    SUBCASE("reset")
+    {
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[0m") != std::string::npos);
+    }
+    SUBCASE("bold")
+    {
+        current_module.bold = true;
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[1m") != std::string::npos);
+    }
+    SUBCASE("dim")
+    {
+        current_module.dim = true;
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[2m") != std::string::npos);
+    }
+    SUBCASE("italic")
+    {
+        current_module.italic = true;
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[3m") != std::string::npos);
+    }
+    SUBCASE("underline")
+    {
+        current_module.underline = true;
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[4m") != std::string::npos);
+    }
+    SUBCASE("foreground")
+    {
+        current_module.foreground = "green";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("background")
+    {
+        current_module.background = "green";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[42m") != std::string::npos);
+    }
+    SUBCASE("previous module background")
+    {
+        next_module.background = "red";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[41m") != std::string::npos);
+    }
+    SUBCASE("connector background")
+    {
+        context.config.connector.background = "yellow";
+        display_connector = true;
+        const std::string result = post(context, &current_module, NULL, display_connector);
+        CHECK(result.find("\033[43m") != std::string::npos);
+    }
+    SUBCASE("inner suffix")
+    {
+        current_module.inner_suffix = "abc";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+    SUBCASE("outer suffix")
+    {
+        current_module.outer_suffix = "abc";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+    SUBCASE("background as foreground")
+    {
+        current_module.background = "green";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("padding")
+    {
+        context.config.global.padding = "abc";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+}
+
+TEST_CASE("connector")
+{
+    Context context;
+    context.args.shell = "bash";
+    int length = 5;
+    SUBCASE("reset")
+    {
+        const std::string result = connector(context, length);
+        CHECK(result.find("\033[0m") != std::string::npos);
+    }
+    SUBCASE("dim")
+    {
+        context.config.connector.dim = true;
+        const std::string result = connector(context, length);
+        CHECK(result.find("\033[2m") != std::string::npos);
+    }
+    SUBCASE("foreground")
+    {
+        context.config.connector.foreground = "green";
+        const std::string result = connector(context, length);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("background")
+    {
+        context.config.connector.background = "green";
+        const std::string result = connector(context, length);
+        CHECK(result.find("\033[42m") != std::string::npos);
+    }
+    SUBCASE("connection")
+    {
+        context.config.connector.character = "-";
+        const std::string result = connector(context, length);
+        CHECK(result.find("-----") != std::string::npos);
+    }
+}
+
+TEST_CASE("prompt")
+{
+    Context context;
+    context.args.shell = "bash";
+    SUBCASE("reset")
+    {
+        const std::string result = prompt(context);
+        CHECK(result.find("\033[0m") != std::string::npos);
+    }
+    SUBCASE("foreground")
+    {
+        context.config.prompt.foreground = "green";
+        const std::string result = prompt(context);
+        CHECK(result.find("\033[32m") != std::string::npos);
+    }
+    SUBCASE("error foreground")
+    {
+        context.args.exit_status = "1";
+        context.config.prompt.foreground = "red";
+        const std::string result = prompt(context);
+        CHECK(result.find("\033[31m") != std::string::npos);
+    }
+    SUBCASE("string")
+    {
+        context.config.prompt.string = "abc";
+        const std::string result = prompt(context);
+        CHECK(result.find("abc") != std::string::npos);
+    }
+}
+
+TEST_CASE("level_changes")
+{
+    Config config;
+    Module directory;
+    config.modules.push_back(directory);
+    Module execution_time;
+    config.modules.push_back(execution_time);
+    Module exit_status;
+    config.modules.push_back(exit_status);
+    std::size_t index = 0;
+    SUBCASE("1")
+    {
+        CHECK(level_changes(config, index) == false);
+    }
+    SUBCASE("2")
+    {
+        config.modules[index + 1].level = 2;
+        CHECK(level_changes(config, index) == true);
+    }
+    SUBCASE("3")
+    {
+        index = 3;
+        config.modules[index + 1].level = 2;
+        CHECK(level_changes(config, index) == false);
+    }
+}
+
+TEST_CASE("end_reached")
+{
+    Config config;
+    Module directory;
+    config.modules.push_back(directory);
+    Module execution_time;
+    config.modules.push_back(execution_time);
+    Module exit_status;
+    config.modules.push_back(exit_status);
+    std::size_t index = 0;
+    SUBCASE("1")
+    {
+        CHECK(end_reached(config, index) == false);
+    }
+    SUBCASE("2")
+    {
+        index = 1;
+        CHECK(end_reached(config, index) == false);
+    }
+    SUBCASE("3")
+    {
+        index = 2;
+        CHECK(end_reached(config, index) == true);
+    }
+}
+
+TEST_CASE("evaluate_content")
+{
+    Context context;
+    context.PWD = "/PWD";
+    context.args.prompt = true;
+    Module directory;
+    directory.name = "directory";
+    context.config.modules.push_back(directory);
+    Module execution_time;
+    execution_time.name = "execution_time";
+    context.config.modules.push_back(execution_time);
+    SUBCASE("1")
+    {
+        context.args.start_time = "0";
+        context.args.finish_time = "10";
+        evaluate_content(context);
+        CHECK(context.config.modules[0].content.find("/PWD") != std::string::npos);
+        CHECK(context.config.modules[1].content.find("10s") != std::string::npos);
+    }
+}
+
+TEST_CASE("remove_surplus")
+{
+    Context context;
+    context.args.prompt = true;
+    Module directory;
+    directory.name = "directory";
+    directory.content = "/home";
+    context.config.modules.push_back(directory);
+    Module execution_time;
+    execution_time.name = "execution_time";
+    execution_time.content = "10s";
+    context.config.modules.push_back(execution_time);
+    SUBCASE("don`t remove anything")
+    {
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 2);
+    }
+    SUBCASE("remove empty")
+    {
+        context.config.modules[0].content = "";
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 1);
+        CHECK(context.config.modules[0].name == "execution_time");
+    }
+    SUBCASE("remove prompt")
+    {
+        context.args.prompt = false;
+        context.args.right_prompt = true;
+        context.config.modules[1].align = "right_prompt";
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 1);
+        CHECK(context.config.modules[0].name == "execution_time");
+    }
+    SUBCASE("remove right prompt")
+    {
+        context.config.modules[1].align = "right_prompt";
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 1);
+        CHECK(context.config.modules[0].name == "directory");
+    }
+    SUBCASE("remove separator from beginning")
+    {
+        Module separator;
+        separator.name = "separator";
+        context.config.modules.insert(context.config.modules.begin(), separator);
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 2);
+        CHECK(context.config.modules[0].name == "directory");
+        CHECK(context.config.modules[1].name == "execution_time");
+    }
+    SUBCASE("remove separator from end")
+    {
+        Module separator;
+        separator.name = "separator";
+        context.config.modules.push_back(separator);
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 2);
+        CHECK(context.config.modules[0].name == "directory");
+        CHECK(context.config.modules[1].name == "execution_time");
+    }
+    SUBCASE("don`t remove separator")
+    {
+        Module separator;
+        separator.name = "separator";
+        context.config.modules.insert(context.config.modules.begin() + 1, separator);
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 3);
+        CHECK(context.config.modules[0].name == "directory");
+        CHECK(context.config.modules[1].name == "separator");
+        CHECK(context.config.modules[2].name == "execution_time");
+    }
+    SUBCASE("remove duplicate separator")
+    {
+        Module separator;
+        separator.name = "separator";
+        context.config.modules.insert(context.config.modules.begin() + 1, separator);
+        context.config.modules.insert(context.config.modules.begin() + 1, separator);
+        remove_surplus(context);
+        CHECK(context.config.modules.size() == 3);
+        CHECK(context.config.modules[0].name == "directory");
+        CHECK(context.config.modules[1].name == "separator");
+        CHECK(context.config.modules[2].name == "execution_time");
+    }
+}
+
+TEST_CASE("prepare_prompt")
+{
+    Context context;
+    context.args.shell = "bash";
+    context.args.start_time = "0";
+    context.args.finish_time = "10";
+    context.args.prompt = true;
+    context.PWD = "/PWD";
+    Module directory;
+    directory.name = "directory";
+    context.config.modules.push_back(directory);
+    Module execution_time;
+    execution_time.name = "execution_time";
+    execution_time.align = "right";
+    context.config.modules.push_back(execution_time);
+    SUBCASE("1")
+    {
+        std::string result = prepare_prompt(context);
+        CHECK(result.find("/PWD") != std::string::npos);
+        CHECK(result.find("10s") != std::string::npos);
+    }
+}
+
+TEST_CASE("prepare_right_prompt")
+{
+    Context context;
+    context.args.shell = "bash";
+    context.args.start_time = "0";
+    context.args.finish_time = "10";
+    context.args.prompt = false;
+    context.args.right_prompt = true;
+    context.PWD = "/PWD";
+    Module directory;
+    directory.name = "directory";
+    context.config.modules.push_back(directory);
+    Module execution_time;
+    execution_time.name = "execution_time";
+    execution_time.align = "right_prompt";
+    context.config.modules.push_back(execution_time);
+    SUBCASE("1")
+    {
+        std::string result = prepare_right_prompt(context);
+        CHECK(result.find("/PWD") == std::string::npos);
+        CHECK(result.find("10s") != std::string::npos);
+    }
 }
