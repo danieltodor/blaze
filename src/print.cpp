@@ -479,6 +479,22 @@ TEST_CASE("pre")
         const std::string result = pre(context, &current_module, &previous_module, display_connector);
         CHECK(result.find("abc") != std::string::npos);
     }
+    SUBCASE("result")
+    {
+        context.config.global.padding = "abc";
+        current_module.bold = true;
+        current_module.dim = true;
+        current_module.italic = true;
+        current_module.underline = true;
+        current_module.foreground = "yellow";
+        current_module.background = "blue";
+        current_module.inner_prefix = "def";
+        current_module.outer_prefix = "ghi";
+        previous_module.background = "red";
+        const std::string test = "\001\033[0m\002\001\033[2m\002\001\033[34m\002\001\033[41m\002ghi\001\033[33m\002\001\033[44m\002abc\001\033[1m\002\001\033[3m\002\001\033[4m\002def";
+        const std::string result = pre(context, &current_module, &previous_module, display_connector);
+        CHECK(result.find(test) != std::string::npos);
+    }
 }
 
 TEST_CASE("post")
@@ -566,6 +582,22 @@ TEST_CASE("post")
         const std::string result = post(context, &current_module, &next_module, display_connector);
         CHECK(result.find("abc") != std::string::npos);
     }
+    SUBCASE("result")
+    {
+        context.config.global.padding = "abc";
+        current_module.bold = true;
+        current_module.dim = true;
+        current_module.italic = true;
+        current_module.underline = true;
+        current_module.foreground = "yellow";
+        current_module.background = "blue";
+        current_module.inner_suffix = "def";
+        current_module.outer_suffix = "ghi";
+        next_module.background = "red";
+        const std::string test = "\001\033[0m\002\001\033[1m\002\001\033[2m\002\001\033[3m\002\001\033[4m\002\001\033[33m\002\001\033[44m\002def\001\033[22m\002\001\033[23m\002\001\033[24m\002\001\033[2m\002abc\001\033[34m\002\001\033[49m\002\001\033[41m\002ghi\001\033[0m\002";
+        const std::string result = post(context, &current_module, &next_module, display_connector);
+        CHECK(result.find(test) != std::string::npos);
+    }
 }
 
 TEST_CASE("connector")
@@ -622,7 +654,7 @@ TEST_CASE("prompt")
     SUBCASE("error foreground")
     {
         context.args.exit_status = "1";
-        context.config.prompt.foreground = "red";
+        context.config.prompt.error_foreground = "red";
         const std::string result = prompt(context);
         CHECK(result.find("\033[31m") != std::string::npos);
     }
@@ -631,6 +663,15 @@ TEST_CASE("prompt")
         context.config.prompt.string = "abc";
         const std::string result = prompt(context);
         CHECK(result.find("abc") != std::string::npos);
+    }
+    SUBCASE("result")
+    {
+        context.config.prompt.string = "abc";
+        context.config.prompt.foreground = "green";
+        context.config.prompt.error_foreground = "red";
+        const std::string test = "\001\033[0m\002\001\033[31m\002abc\001\033[0m\002";
+        const std::string result = prompt(context);
+        CHECK(result.find(test) != std::string::npos);
     }
 }
 
@@ -692,6 +733,8 @@ TEST_CASE("evaluate_content")
     Context context;
     context.PWD = "/PWD";
     context.args.prompt = true;
+    context.args.start_time = "0";
+    context.args.finish_time = "10";
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
@@ -700,8 +743,6 @@ TEST_CASE("evaluate_content")
     context.config.modules.push_back(execution_time);
     SUBCASE("1")
     {
-        context.args.start_time = "0";
-        context.args.finish_time = "10";
         evaluate_content(context);
         CHECK(context.config.modules[0].content.find("/PWD") != std::string::npos);
         CHECK(context.config.modules[1].content.find("10s") != std::string::npos);
@@ -808,11 +849,44 @@ TEST_CASE("prepare_prompt")
     execution_time.name = "execution_time";
     execution_time.align = "right";
     context.config.modules.push_back(execution_time);
-    SUBCASE("1")
+    SUBCASE("module content")
     {
         std::string result = prepare_prompt(context);
         CHECK(result.find("/PWD") != std::string::npos);
         CHECK(result.find("10s") != std::string::npos);
+    }
+    SUBCASE("result")
+    {
+        context.config.global.padding = "abc";
+        context.config.global.new_line = true;
+
+        context.config.modules[0].background = "blue";
+        context.config.modules[0].foreground = "black";
+        context.config.modules[0].bold = true;
+        context.config.modules[0].dim = true;
+        context.config.modules[0].italic = true;
+        context.config.modules[0].underline = true;
+        context.config.modules[0].inner_prefix = "a";
+        context.config.modules[0].inner_suffix = "b";
+        context.config.modules[0].outer_prefix = "c";
+        context.config.modules[0].outer_suffix = "d";
+        context.config.modules[0].padding = "-";
+
+        context.config.modules[1].background = "red";
+        context.config.modules[1].foreground = "white";
+        context.config.modules[1].bold = false;
+        context.config.modules[1].dim = false;
+        context.config.modules[1].italic = false;
+        context.config.modules[1].underline = false;
+        context.config.modules[1].inner_prefix = "a";
+        context.config.modules[1].inner_suffix = "b";
+        context.config.modules[1].outer_prefix = "c";
+        context.config.modules[1].outer_suffix = "d";
+        context.config.modules[1].padding = "-";
+
+        const std::string test = "\n\001\033[0m\002\001\033[2m\002\001\033[34m\002c\001\033[30m\002\001\033[44m\002-\001\033[1m\002\001\033[3m\002\001\033[4m\002a/PWD\001\033[0m\002\001\033[1m\002\001\033[2m\002\001\033[3m\002\001\033[4m\002\001\033[30m\002\001\033[44m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002\001\033[2m\002-\001\033[34m\002\001\033[49m\002d\001\033[0m\002\001\033[0m\002                                                                                                                                                 \001\033[0m\002\001\033[0m\002\001\033[31m\002c\001\033[37m\002\001\033[41m\002-a10s\001\033[0m\002\001\033[37m\002\001\033[41m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002-\001\033[31m\002\001\033[49m\002d\001\033[0m\002\001\033[0m\002 \001\033[0m\002";
+        std::string result = prepare_prompt(context);
+        CHECK(result.find(test) != std::string::npos);
     }
 }
 
@@ -822,7 +896,6 @@ TEST_CASE("prepare_right_prompt")
     context.args.shell = "bash";
     context.args.start_time = "0";
     context.args.finish_time = "10";
-    context.args.prompt = false;
     context.args.right_prompt = true;
     context.PWD = "/PWD";
     Module directory;
@@ -832,11 +905,44 @@ TEST_CASE("prepare_right_prompt")
     execution_time.name = "execution_time";
     execution_time.align = "right_prompt";
     context.config.modules.push_back(execution_time);
-    SUBCASE("1")
+    SUBCASE("module content")
     {
         std::string result = prepare_right_prompt(context);
         CHECK(result.find("/PWD") == std::string::npos);
         CHECK(result.find("10s") != std::string::npos);
+    }
+    SUBCASE("result")
+    {
+        context.config.global.padding = "abc";
+        context.config.global.new_line = true;
+
+        context.config.modules[0].background = "blue";
+        context.config.modules[0].foreground = "black";
+        context.config.modules[0].bold = true;
+        context.config.modules[0].dim = true;
+        context.config.modules[0].italic = true;
+        context.config.modules[0].underline = true;
+        context.config.modules[0].inner_prefix = "a";
+        context.config.modules[0].inner_suffix = "b";
+        context.config.modules[0].outer_prefix = "c";
+        context.config.modules[0].outer_suffix = "d";
+        context.config.modules[0].padding = "-";
+
+        context.config.modules[1].background = "red";
+        context.config.modules[1].foreground = "white";
+        context.config.modules[1].bold = false;
+        context.config.modules[1].dim = false;
+        context.config.modules[1].italic = false;
+        context.config.modules[1].underline = false;
+        context.config.modules[1].inner_prefix = "a";
+        context.config.modules[1].inner_suffix = "b";
+        context.config.modules[1].outer_prefix = "c";
+        context.config.modules[1].outer_suffix = "d";
+        context.config.modules[1].padding = "-";
+
+        const std::string test = "\001\033[0m\002\001\033[31m\002c\001\033[37m\002\001\033[41m\002-a10s\001\033[0m\002\001\033[37m\002\001\033[41m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002-\001\033[31m\002\001\033[49m\002d\001\033[0m\002";
+        std::string result = prepare_right_prompt(context);
+        CHECK(result.find(test) != std::string::npos);
     }
 }
 
