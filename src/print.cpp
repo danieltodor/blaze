@@ -360,6 +360,7 @@ void print_right_prompt(Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #include "src/test.hpp"
+#ifdef TEST
 
 TEST_CASE("get_padding")
 {
@@ -838,3 +839,5 @@ TEST_CASE("prepare_right_prompt")
         CHECK(result.find("10s") != std::string::npos);
     }
 }
+
+#endif

@@ -64,7 +64,7 @@ info:
 	@echo $(DEPS)
 
 test:
-# The binary must be made with DOCTEST_CONFIG_DISABLE commented out, before running the tests
+# The binary must be made with "#define TEST"
 	$(CMD_PREFIX)$(BIN_DIR)/$(BINARY) --exit
 
 $(BIN_DIR)/$(BINARY): $(OBJS)

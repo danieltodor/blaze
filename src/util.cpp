@@ -167,6 +167,7 @@ bool is_number(const std::string &string)
 
 // ----------------------------------- TESTS -----------------------------------
 #include "src/test.hpp"
+#ifdef TEST
 
 TEST_CASE("get_length")
 {
@@ -292,3 +293,5 @@ TEST_CASE("is_number")
     CHECK(is_number("a123") == false);
     CHECK(is_number("123") == true);
 }
+
+#endif

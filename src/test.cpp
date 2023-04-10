@@ -1,7 +1,8 @@
-#include <cstdlib>
-
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "src/test.hpp"
+
+#ifdef TEST
+#include <cstdlib>
 
 void run_tests(int argc, const char* const* argv)
 {
@@ -14,3 +15,5 @@ void run_tests(int argc, const char* const* argv)
         std::exit(result);
     }
 }
+
+#endif

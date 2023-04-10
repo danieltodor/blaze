@@ -6,7 +6,9 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef TEST
     run_tests(argc, argv);
+#endif
     Context context = {
         argparse::parse<Args>(argc, argv),
         get_config(),
