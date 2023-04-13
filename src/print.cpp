@@ -684,21 +684,18 @@ TEST_CASE("level_changes")
     config.modules.push_back(execution_time);
     Module exit_status;
     config.modules.push_back(exit_status);
-    std::size_t index = 0;
-    SUBCASE("1")
+    SUBCASE("all modules are on the same level")
     {
-        CHECK(level_changes(config, index) == false);
+        CHECK(level_changes(config, 0) == false);
     }
-    SUBCASE("2")
+    SUBCASE("next module is on the next level")
     {
-        config.modules[index + 1].level = 2;
-        CHECK(level_changes(config, index) == true);
+        config.modules[1].level = 2;
+        CHECK(level_changes(config, 0) == true);
     }
-    SUBCASE("3")
+    SUBCASE("index is too big")
     {
-        index = 3;
-        config.modules[index + 1].level = 2;
-        CHECK(level_changes(config, index) == false);
+        CHECK(level_changes(config, 3) == false);
     }
 }
 
@@ -733,6 +730,7 @@ TEST_CASE("evaluate_content")
     Context context;
     context.PWD = "/PWD";
     context.args.prompt = true;
+    context.args.right_prompt = false;
     context.args.start_time = "0";
     context.args.finish_time = "10";
     Module directory;
@@ -753,6 +751,7 @@ TEST_CASE("remove_surplus")
 {
     Context context;
     context.args.prompt = true;
+    context.args.right_prompt = false;
     Module directory;
     directory.name = "directory";
     directory.content = "/home";
@@ -841,6 +840,7 @@ TEST_CASE("prepare_prompt")
     context.args.start_time = "0";
     context.args.finish_time = "10";
     context.args.prompt = true;
+    context.args.right_prompt = false;
     context.PWD = "/PWD";
     Module directory;
     directory.name = "directory";
@@ -896,6 +896,7 @@ TEST_CASE("prepare_right_prompt")
     context.args.shell = "bash";
     context.args.start_time = "0";
     context.args.finish_time = "10";
+    context.args.prompt = false;
     context.args.right_prompt = true;
     context.PWD = "/PWD";
     Module directory;
