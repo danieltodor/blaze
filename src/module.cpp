@@ -37,3 +37,17 @@ std::string call_module(const std::string &name, const Context &context)
     }
     return result;
 }
+
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("call_module")
+{
+    Context context;
+    context.args.exit_status = "123";
+    const std::string result = call_module("exit_status", context);
+    CHECK(result.find("123") != std::string::npos);
+}
+
+#endif
