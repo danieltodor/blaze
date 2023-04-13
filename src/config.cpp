@@ -249,6 +249,7 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     std::vector<Module *> modules_on_level = get_modules_on_level(modules, level);
     for (const Module *module : modules_on_level)
     {
+        // TODO: Content check is needed after preprocess?
         if (module->align == "right" && !module->content.empty())
         {
             return true;
@@ -256,3 +257,197 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     }
     return false;
 }
+
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("read_data")
+{
+    const toml::value data = read_data();
+    // Read user config file
+    CHECK(data.is_uninitialized() == false);
+}
+
+TEST_CASE("sort_modules")
+{
+    std::vector<Module> modules;
+
+    Module a;
+    a.name = "a";
+    a.align = "right";
+    a.level = 1;
+    a.position = 1;
+    modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    b.align = "left";
+    b.level = 1;
+    b.position = 2;
+    modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    c.align = "left";
+    c.level = 2;
+    c.position = 1;
+    modules.push_back(c);
+
+    sort_modules(modules);
+    CHECK(modules.size() == 3);
+    CHECK(modules[0].name == "b");
+    CHECK(modules[1].name == "a");
+    CHECK(modules[2].name == "c");
+}
+
+TEST_CASE("set_default_values")
+{
+    Config config;
+    set_default_values(config);
+    CHECK(config.modules.size() == 3);
+}
+
+TEST_CASE("get_config")
+{
+    const Config config = get_config();
+    // User config or default values will be loaded
+    CHECK(config.modules.size() > 1);
+}
+
+TEST_CASE("get_previous_module_in_group")
+{
+    std::vector<Module> modules;
+
+    Module a;
+    a.name = "a";
+    modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    modules.push_back(c);
+
+    SUBCASE("0")
+    {
+        const Module *module = get_previous_module_in_group(modules, 0);
+        CHECK(module == NULL);
+    }
+    SUBCASE("1")
+    {
+        const Module *module = get_previous_module_in_group(modules, 1);
+        CHECK(module->name == "a");
+    }
+    SUBCASE("2")
+    {
+        const Module *module = get_previous_module_in_group(modules, 2);
+        CHECK(module->name == "b");
+    }
+}
+
+TEST_CASE("get_next_module_in_group")
+{
+    std::vector<Module> modules;
+
+    Module a;
+    a.name = "a";
+    modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    modules.push_back(c);
+
+    SUBCASE("0")
+    {
+        const Module *module = get_next_module_in_group(modules, 0);
+        CHECK(module->name == "b");
+    }
+    SUBCASE("1")
+    {
+        const Module *module = get_next_module_in_group(modules, 1);
+        CHECK(module->name == "c");
+    }
+    SUBCASE("2")
+    {
+        const Module *module = get_next_module_in_group(modules, 2);
+        CHECK(module == NULL);
+    }
+}
+
+TEST_CASE("get_modules_on_level")
+{
+    std::vector<Module> modules;
+
+    Module a;
+    a.name = "a";
+    a.level = 1;
+    modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    b.level = 2;
+    modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    c.level = 2;
+    modules.push_back(c);
+
+    SUBCASE("1")
+    {
+        const std::vector<Module *> result = get_modules_on_level(modules, 1);
+        CHECK(result.size() == 1);
+        CHECK(result[0]->name == "a");
+    }
+    SUBCASE("2")
+    {
+        const std::vector<Module *> result = get_modules_on_level(modules, 2);
+        CHECK(result.size() == 2);
+        CHECK(result[0]->name == "b");
+        CHECK(result[1]->name == "c");
+    }
+}
+
+TEST_CASE("contains_content_on_right")
+{
+    std::vector<Module> modules;
+
+    Module a;
+    a.name = "a";
+    a.content = "a";
+    a.level = 1;
+    modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    b.content = "b";
+    b.level = 2;
+    modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    c.content = "c";
+    c.level = 2;
+    c.align = "right";
+    modules.push_back(c);
+
+    SUBCASE("1")
+    {
+        const bool result = contains_content_on_right(modules, 1);
+        CHECK(result == false);
+    }
+    SUBCASE("2")
+    {
+        const bool result = contains_content_on_right(modules, 2);
+        CHECK(result == true);
+    }
+}
+
+#endif
