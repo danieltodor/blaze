@@ -38,6 +38,7 @@ std::string git_status(const Context &context)
         add_status(std::stoul(stashed.at(0)), config.git_status.stashed);
     }
     add_status(regex_find_all(status, {"^\\? "}).size(), config.git_status.untracked);
+    add_status(regex_find_all(status, {"^u "}).size(), config.git_status.conflicted);
     add_status(regex_find_all(status, {"^\\d .M "}).size(), config.git_status.modified);
     add_status(regex_find_all(status, {"^\\d [AM]. "}).size(), config.git_status.staged);
     add_status(regex_find_all(status, {"^\\d R. "}).size(), config.git_status.renamed);
