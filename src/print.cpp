@@ -708,20 +708,17 @@ TEST_CASE("end_reached")
     config.modules.push_back(execution_time);
     Module exit_status;
     config.modules.push_back(exit_status);
-    std::size_t index = 0;
     SUBCASE("1")
     {
-        CHECK(end_reached(config, index) == false);
+        CHECK(end_reached(config, 0) == false);
     }
     SUBCASE("2")
     {
-        index = 1;
-        CHECK(end_reached(config, index) == false);
+        CHECK(end_reached(config, 1) == false);
     }
     SUBCASE("3")
     {
-        index = 2;
-        CHECK(end_reached(config, index) == true);
+        CHECK(end_reached(config, 2) == true);
     }
 }
 
