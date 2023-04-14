@@ -1,3 +1,5 @@
+#! /usr/bin/bash
+
 # Get the RGB color of the terminal emulator. Works only in xterm compatible emulators.
 get_current_background() {
     exec < /dev/tty
