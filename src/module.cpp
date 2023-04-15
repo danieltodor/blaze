@@ -4,13 +4,14 @@
 #include "src/modules/dummy.hpp"
 #include "src/modules/directory.hpp"
 #include "src/modules/execution_time.hpp"
+#include "src/modules/exit_status.hpp"
 #include "src/modules/git_branch.hpp"
+#include "src/modules/git_commit.hpp"
 #include "src/modules/git_status.hpp"
 #include "src/modules/date.hpp"
 #include "src/modules/time.hpp"
 #include "src/modules/user.hpp"
 #include "src/modules/host.hpp"
-#include "src/modules/exit_status.hpp"
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
@@ -18,13 +19,14 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
     {"separator", &dummy},
     {"directory", &directory},
     {"execution_time", &execution_time},
+    {"exit_status", &exit_status},
     {"git_branch", &git_branch},
+    {"git_commit", &git_commit},
     {"git_status", &git_status},
     {"date", &date},
     {"time", &time},
     {"user", &user},
-    {"host", &host},
-    {"exit_status", &exit_status}
+    {"host", &host}
 };
 
 std::string call_module(const std::string &name, const Context &context)

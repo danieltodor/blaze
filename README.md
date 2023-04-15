@@ -124,9 +124,17 @@ display_from = 0.0
 # Display franctional part if less than this
 display_fractional_until = 10.0
 
+[exit_status]
+# Show exit status only if non zero
+non_zero_only = false
+
 [git_branch]
 # Ignore branches that matches these regex patterns, e.g.: "^master"
 ignore = []
+
+[git_commit]
+# Commit hash length. Use -1 to disable trimming.
+length = 8
 
 [git_status]
 # Show the number of changes
@@ -161,10 +169,6 @@ format = "%x"
 [time]
 # Time format to use
 format = "%X"
-
-[exit_status]
-# Show exit status only if non zero
-non_zero_only = false
 ```
 
 ## Builtin modules
@@ -174,13 +178,14 @@ non_zero_only = false
 | separator | Can be used for additional separation between modules |
 | directory | Current working directory |
 | execution_time | Execution time of the last command (wall time) |
+| exit_status | Exit status of the last command |
 | git_branch | Active branch in the repository |
+| git_commit | Commit hash |
 | git_status | Symbols indicating the current state of the repository |
 | date | Current date [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 | time | Current time [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 | user | Current user |
 | host | Hostname |
-| exit_status | Exit status of the last command |
 
 ## Creating your own modules
 You can use the programming language of your choice to create a custom module.

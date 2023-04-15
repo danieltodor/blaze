@@ -6,6 +6,7 @@
 #include "src/init.hpp"
 #include "src/util.hpp"
 
+// Prepare shell init string
 std::string prepare_shell_init(const Context &context)
 {
     const std::string file_name = "init." + context.args.shell;

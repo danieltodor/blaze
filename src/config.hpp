@@ -68,6 +68,11 @@ struct GitBranch
     std::vector<std::string> ignore;
 };
 
+struct GitCommit
+{
+    int length = 8;
+};
+
 struct GitStatus
 {
     bool count = true;
@@ -108,6 +113,7 @@ struct Config
     Directory directory;
     ExecutionTime execution_time;
     GitBranch git_branch;
+    GitCommit git_commit;
     GitStatus git_status;
     Date date;
     Time time;
