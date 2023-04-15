@@ -249,8 +249,7 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     std::vector<Module *> modules_on_level = get_modules_on_level(modules, level);
     for (const Module *module : modules_on_level)
     {
-        // TODO: Content check is needed after preprocess?
-        if (module->align == "right" && !module->content.empty())
+        if (module->align == "right")
         {
             return true;
         }
