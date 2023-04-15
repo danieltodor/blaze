@@ -117,3 +117,142 @@ std::string reset_background(const Context &context)
 {
     return create_sequence(std::to_string(DEFAULT_COLOR + BACKGROUND_COLOR_OFFSET), context);
 }
+
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("create_sequence")
+{
+    Context context;
+    SUBCASE("bash")
+    {
+        context.args.shell = "bash";
+        const std::string result = create_sequence("32", context);
+        CHECK(result.find("\001\033[32m\002") != std::string::npos);
+    }
+    SUBCASE("fish")
+    {
+        context.args.shell = "fish";
+        const std::string result = create_sequence("32", context);
+        CHECK(result.find("\001\033[32m\002") != std::string::npos);
+    }
+    SUBCASE("zsh")
+    {
+        context.args.shell = "zsh";
+        const std::string result = create_sequence("32", context);
+        CHECK(result.find("%{\033[32m%}") != std::string::npos);
+    }
+}
+
+TEST_CASE("to_color_code")
+{
+    Context context;
+    context.args.shell = "bash";
+    SUBCASE("empty")
+    {
+        const std::string result = to_color_code("", 0, context);
+        CHECK(result == "");
+    }
+    SUBCASE("foreground named")
+    {
+        const std::string result = to_color_code("green", 0, context);
+        CHECK(result.find("\001\033[32m\002") != std::string::npos);
+    }
+    SUBCASE("background named")
+    {
+        const std::string result = to_color_code("green", 10, context);
+        CHECK(result.find("\001\033[42m\002") != std::string::npos);
+    }
+    SUBCASE("foreground color id")
+    {
+        const std::string result = to_color_code("128", 0, context);
+        CHECK(result.find("\001\033[38;5;128m\002") != std::string::npos);
+    }
+    SUBCASE("background color id")
+    {
+        const std::string result = to_color_code("128", 10, context);
+        CHECK(result.find("\001\033[48;5;128m\002") != std::string::npos);
+    }
+    SUBCASE("foreground rgb")
+    {
+        const std::string result = to_color_code("30;40;50", 0, context);
+        CHECK(result.find("\001\033[38;2;30;40;50m\002") != std::string::npos);
+    }
+    SUBCASE("background rgb")
+    {
+        const std::string result = to_color_code("30;40;50", 10, context);
+        CHECK(result.find("\001\033[48;2;30;40;50m\002") != std::string::npos);
+    }
+}
+
+TEST_CASE("set_text_mode")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = set_text_mode(1, context);
+    CHECK(result.find("\001\033[1m\002") != std::string::npos);
+}
+
+TEST_CASE("set_foreground")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = set_foreground("green", context);
+    CHECK(result.find("\001\033[32m\002") != std::string::npos);
+}
+
+TEST_CASE("set_background")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = set_background("green", context);
+    CHECK(result.find("\001\033[42m\002") != std::string::npos);
+}
+
+TEST_CASE("reset_all")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = reset_all(context);
+    CHECK(result.find("\001\033[0m\002") != std::string::npos);
+}
+
+TEST_CASE("reset_text_mode")
+{
+    Context context;
+    context.args.shell = "bash";
+    SUBCASE("bold")
+    {
+        const std::string result = reset_text_mode(1, context);
+        CHECK(result.find("\001\033[22m\002") != std::string::npos);
+    }
+    SUBCASE("dim")
+    {
+        const std::string result = reset_text_mode(2, context);
+        CHECK(result.find("\001\033[22m\002") != std::string::npos);
+    }
+    SUBCASE("italic")
+    {
+        const std::string result = reset_text_mode(3, context);
+        CHECK(result.find("\001\033[23m\002") != std::string::npos);
+    }
+}
+
+TEST_CASE("reset_foreground")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = reset_foreground(context);
+    CHECK(result.find("\001\033[39m\002") != std::string::npos);
+}
+
+TEST_CASE("reset_background")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = reset_background(context);
+    CHECK(result.find("\001\033[49m\002") != std::string::npos);
+}
+
+#endif
