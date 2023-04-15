@@ -7,14 +7,16 @@
 [Configuration](#configuration)\
 [Builtin modules](#builtin-modules)\
 [Creating your own modules](#creating-your-own-modules)\
+[Update](#update)\
 [Removal](#removal)
 
 ## Installation
-1. Download and install blaze
+1. Download and install blaze\
+    Requirements: `git`, `make`, `g++`
     ``` sh
-    git clone --depth=1 https://github.com/danieltodor/blaze.git
-    cd blaze
-    make
+    git clone --depth=1 https://github.com/danieltodor/blaze.git &&
+    cd blaze &&
+    make &&
     make install
     ```
 
@@ -197,7 +199,13 @@ execute = "python path/to/file.py"
 # Additional styling like background, foreground, etc
 ```
 
+## Update
+`cd` into the downloaded blaze directory and run this one-liner to update it.
+``` sh
+git pull && make && make install
+```
+
 ## Removal
 1. Delete the setup line from your shell\`s rc file.
-2. cd into the downloaded blaze directory and run `make uninstall`.
+2. `cd` into the downloaded blaze directory and run `make uninstall`.
 3. Delete the `blaze.toml` file if you created one.
