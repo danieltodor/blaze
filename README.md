@@ -186,6 +186,7 @@ format = "%X"
 | time | Current time [(format options)](https://en.cppreference.com/w/cpp/chrono/c/strftime) |
 | user | Current user |
 | host | Hostname |
+| shell | Currently active shell |
 
 ## Creating your own modules
 You can use the programming language of your choice to create a custom module.
