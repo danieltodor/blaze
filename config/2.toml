@@ -14,6 +14,7 @@ non_zero_only = true
 
 [[module]]
 name = "directory"
+inner_prefix = "🖿  "
 outer_suffix = ""
 background = "blue"
 foreground = "black"

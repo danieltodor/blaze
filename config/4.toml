@@ -23,6 +23,7 @@ non_zero_only = true
 
 [[module]]
 name = "directory"
+inner_prefix = "🖿  "
 outer_prefix = " "
 outer_suffix = " "
 foreground = "blue"
