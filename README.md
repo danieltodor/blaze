@@ -47,7 +47,7 @@ Note that some of these configs are suitable only for shells with right prompt.
 ## Configuration
 Configuration files are read from these locations in order:
 1. `BLAZE_CONFIG` env variable
-2. `~/.config/blaze.toml`
+2. `~/.config/blaze/config.toml`
 
 ``` toml
 # For color values you can use named values like "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white".
