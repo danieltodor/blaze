@@ -56,7 +56,7 @@ void load_values(toml::value &data, Config &config)
 
     try
     {
-        const toml::array &module_array = toml::find(data, "module").as_array();
+        const toml::array module_array = toml::find(data, "module").as_array();
         config.modules.clear();
         try
         {
