@@ -2340,7 +2340,7 @@ parse(std::istream& is, const std::string& fname = "unknown file")
         letters.push_back('\n');
     }
 
-    detail::location loc(std::move(fname), std::move(letters));
+    detail::location loc(fname, letters);
 
     // skip BOM if exists.
     // XXX component of BOM (like 0xEF) exceeds the representable range of
