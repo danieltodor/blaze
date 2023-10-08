@@ -66,7 +66,7 @@ namespace argparse {
 #ifdef _WIN32
         return input_str; // no bold for windows
 #else
-        return "\e[1m" + input_str + "\e[0m";
+        return "\033[1m" + input_str + "\033[0m";
 #endif
     }
 
@@ -228,7 +228,7 @@ namespace argparse {
 
             datap = std::make_unique<ConvertType<T>>();
             return ((ConvertType<T>*)(datap.get()))->data;
-        };
+        }
 
         // Force an ambiguous error when not using a reference.
         template <typename T> operator T() {} // When you get here  because you received an error, make sure all parameters of argparse are references (e.g. with `&`)
