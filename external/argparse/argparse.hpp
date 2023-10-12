@@ -189,12 +189,12 @@ namespace argparse {
     };
 
     struct Entry {
-        enum ARG_TYPE {ARG, KWARG, FLAG} type;
+        enum ARG_TYPE {ARG, KWARG, FLAG} ftype;
 
         Entry(ARG_TYPE type, const std::string& key, std::string help, std::optional<std::string> implicit_value=std::nullopt) :
-                type(type),
+                ftype(type),
                 keys_(split(key)),
-                help(std::move(help)),
+                fhelp(std::move(help)),
                 implicit_value_(std::move(implicit_value)) {
         }
 
@@ -235,7 +235,7 @@ namespace argparse {
 
     private:
         std::vector<std::string> keys_;
-        std::string help;
+        std::string fhelp;
         std::optional<std::string> value_;
         std::optional<std::string> implicit_value_;
         std::optional<std::string> default_str_;
@@ -248,7 +248,7 @@ namespace argparse {
         [[nodiscard]] std::string _get_keys() const {
             std::stringstream ss;
             for (size_t i = 0; i < keys_.size(); i++)
-                ss << (i? "," : "") << (type == ARG? "" : (keys_[i].size() > 1 ? "--" : "-")) + keys_[i];
+                ss << (i? "," : "") << (ftype == ARG? "" : (keys_[i].size() > 1 ? "--" : "-")) + keys_[i];
             return ss.str();
         }
 
@@ -257,9 +257,9 @@ namespace argparse {
                 this->value_ = value;
                 datap->convert(value);
             } catch (const std::invalid_argument &e) {
-                error = "Invalid argument, could not convert \"" + value + "\" for " + _get_keys() + " (" + help + ")";
+                error = "Invalid argument, could not convert \"" + value + "\" for " + _get_keys() + " (" + fhelp + ")";
             } catch (const std::runtime_error &e) {
-                error = "Invalid argument \"" + value + "\" for " + _get_keys() + " (" + help + "). Error: " + e.what();
+                error = "Invalid argument \"" + value + "\" for " + _get_keys() + " (" + fhelp + "). Error: " + e.what();
             }
         }
 
@@ -271,7 +271,7 @@ namespace argparse {
             } else if (default_str_.has_value()) {   // in cases where a string is provided to the `set_default` function
                 _convert(default_str_.value());
             } else {
-                error = "Argument missing: " + _get_keys() + " (" + help + ")";
+                error = "Argument missing: " + _get_keys() + " (" + fhelp + ")";
             }
         }
 
@@ -344,13 +344,13 @@ namespace argparse {
                 cout << entry->keys_[0] << ' ';
             cout << " [options...]" << endl;
             for (const auto &entry : arg_entries) {
-                cout << setw(17) << entry->keys_[0] << " : " << entry->help << entry->info() << endl;
+                cout << setw(17) << entry->keys_[0] << " : " << entry->fhelp << entry->info() << endl;
             }
 
             cout << endl << "Options:" << endl;
             for (const auto &entry : all_entries) {
-                if (entry->type != Entry::ARG) {
-                    cout << setw(17) << entry->_get_keys() << " : " << entry->help << entry->info() << endl;
+                if (entry->ftype != Entry::ARG) {
+                    cout << setw(17) << entry->_get_keys() << " : " << entry->fhelp << entry->info() << endl;
                 }
             }
         }
@@ -477,7 +477,7 @@ namespace argparse {
 
         void print() const {
             for (const auto &entry : all_entries) {
-                std::string snip = entry->type == Entry::ARG ? "(" + (entry->help.size() > 10 ? entry->help.substr(0, 7) + "..." : entry->help) + ")" : "";
+                std::string snip = entry->ftype == Entry::ARG ? "(" + (entry->fhelp.size() > 10 ? entry->fhelp.substr(0, 7) + "..." : entry->fhelp) + ")" : "";
                 cout << setw(21) << entry->_get_keys() + snip << " : " << (entry->is_set_by_user? bold(entry->value_.value_or("null")) : entry->value_.value_or("null")) << endl;
             }
         }
