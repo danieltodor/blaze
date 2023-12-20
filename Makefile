@@ -18,9 +18,12 @@ SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS = $(patsubst %.o, %.d, $(OBJS))
 
-objdump = false
+# Echo commands
 verbose = false
+# Add debug information to binary and skip optimisations
 debug = false
+# Run objdump on object files
+objdump = false
 
 CMD_PREFIX = @
 ifeq ($(verbose),true)
