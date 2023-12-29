@@ -214,4 +214,4 @@ git pull && make && make install
 ## Removal
 1. Delete the setup line from your shell\`s rc file.
 2. `cd` into the downloaded blaze directory and run `make uninstall`.
-3. Delete the `blaze.toml` file if you created one.
+3. Delete the `config.toml` file if you created one.
