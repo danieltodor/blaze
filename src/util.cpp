@@ -100,12 +100,13 @@ void strip(std::string &string)
     );
 }
 
-std::string execute_command(const std::string &command)
+std::string execute_command(const std::string &command, int *exit_status)
 {
     std::string result = "";
-    const std::string env = "LC_ALL=C";
+    const std::string prefix = "LC_ALL=C; ";
+    const std::string suffix = " 2>/dev/null";
     char buffer[128];
-    FILE *pipe = popen((env + "; " + command).c_str(), "r");
+    FILE *pipe = popen((prefix + command + suffix).c_str(), "r");
     if (!pipe)
     {
         return result;
@@ -114,13 +115,19 @@ std::string execute_command(const std::string &command)
     {
         result += buffer;
     }
-    pclose(pipe);
+    const int status = WEXITSTATUS(pclose(pipe));
+    if (exit_status != NULL)
+    {
+        *exit_status = status;
+    }
     return result;
 }
 
 bool check_git_repository()
 {
-    return execute_command("git rev-parse 2>&1").empty() ? true : false;
+    int exit_status = 0;
+    execute_command("git rev-parse", &exit_status);
+    return exit_status == 0 ? true : false;
 }
 
 std::string get_env(const std::string &name)
@@ -261,6 +268,12 @@ TEST_CASE("strip")
 TEST_CASE("execute_command")
 {
     CHECK(execute_command("echo abc") == "abc\n");
+    SUBCASE("exit status")
+    {
+        int exit_status = 0;
+        CHECK(execute_command("non_existing_command", &exit_status) == "");
+        CHECK(exit_status == 127);
+    }
 }
 
 TEST_CASE("check_git_repository")

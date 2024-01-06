@@ -15,7 +15,7 @@ std::string git_branch(const Context &context)
         return result;
     }
     const Config &config = context.config;
-    result += execute_command("git name-rev --name-only HEAD 2>/dev/null");
+    result += execute_command("git name-rev --name-only HEAD");
     strip(result);
     regex_replace(
         result,

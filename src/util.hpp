@@ -27,7 +27,7 @@ std::vector<std::string> regex_find_all(const std::string &string, const std::ve
 void strip(std::string &string);
 
 // Execute command in shell
-std::string execute_command(const std::string &command);
+std::string execute_command(const std::string &command, int *exit_status=NULL);
 
 // Check if git commands can be used in the current directory
 bool check_git_repository();
