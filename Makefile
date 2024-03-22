@@ -13,7 +13,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -Wshadow
 CXXFLAGS += $(addprefix -I , $(INCLUDE_DIRS))
 LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
-MAKEFLAGS += -j$(shell nproc || echo 1)
+MAKEFLAGS += -j$(shell nproc || echo 1) -R
 
 SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
