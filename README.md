@@ -14,7 +14,7 @@
 1. Download and install blaze\
     Requirements: `git`, `make`, `g++`
     ``` sh
-    git clone --depth=1 https://github.com/danieltodor/blaze.git &&
+    git clone https://github.com/danieltodor/blaze.git &&
     cd blaze &&
     make &&
     make install
@@ -133,7 +133,7 @@ non_zero_only = false
 ignore = []
 
 [git_commit]
-# Commit hash length. Use -1 to disable trimming.
+# Commit hash length. Use 0 to disable trimming.
 length = 8
 
 [git_status]

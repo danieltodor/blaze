@@ -9,11 +9,11 @@ INCLUDE_DIRS = . external
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -Wshadow
-CXXFLAGS += $(addprefix -I , $(INCLUDE_DIRS))
+CXXFLAGS = -std=c++17 -Os -Wall -Wextra -Wpedantic -Wshadow
+CXXFLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
-MAKEFLAGS += -j$(shell nproc || echo 1) -R
+MAKEFLAGS += -R -j$(shell nproc || echo 1)
 
 SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
@@ -21,7 +21,7 @@ DEPS = $(patsubst %.o, %.d, $(OBJS))
 
 # Echo commands
 verbose = false
-# Add debug information to binary and skip optimisations
+# Make binary debuggable
 debug = false
 # Run objdump on object files
 objdump = false
@@ -32,9 +32,7 @@ ifeq ($(verbose),true)
 endif
 
 ifeq ($(debug),true)
-	CXXFLAGS += -g
-else
-	CXXFLAGS += -O3
+	CXXFLAGS += -g -Og
 endif
 
 all: $(BIN_DIR)/$(BINARY)
