@@ -203,9 +203,9 @@ void evaluate_content(Context &context)
 void remove_surplus(Context &context)
 {
     Config &config = context.config;
-    Module *current_module;
-    Module *previous_module;
-    Module *next_module;
+    Module *current_module = NULL;
+    Module *previous_module = NULL;
+    Module *next_module = NULL;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
@@ -264,13 +264,13 @@ void preprocess_modules(Context &context)
 std::string prepare_prompt(Context &context)
 {
     Config &config = context.config;
-    Module *current_module;
-    Module *previous_module;
-    Module *next_module;
-    std::string result;
-    std::string temp;
-    std::string left;
-    std::string right;
+    Module *current_module = NULL;
+    Module *previous_module = NULL;
+    Module *next_module = NULL;
+    std::string result = "";
+    std::string temp = "";
+    std::string left = "";
+    std::string right = "";
     std::size_t length = 0;
     if (config.global.new_line)
     {
@@ -329,11 +329,11 @@ std::string prepare_prompt(Context &context)
 std::string prepare_right_prompt(Context &context)
 {
     Config &config = context.config;
-    Module *current_module;
-    Module *previous_module;
-    Module *next_module;
-    std::string result;
-    std::string temp;
+    Module *current_module = NULL;
+    Module *previous_module = NULL;
+    Module *next_module = NULL;
+    std::string result = "";
+    std::string temp = "";
     preprocess_modules(context);
     for (std::size_t i = 0; i < config.modules.size(); i++)
     {
