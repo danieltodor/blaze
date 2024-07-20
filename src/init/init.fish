@@ -1,28 +1,28 @@
-function blaze_get_current_time
+function _blaze_get_current_time
     echo (date +%s.%N)
 end
 
-function blaze_preexec --on-event fish_preexec
-    set blaze_start_time (blaze_get_current_time)
+function _blaze_preexec --on-event fish_preexec
+    set _blaze_start_time (_blaze_get_current_time)
 end
 
-function blaze_precmd --on-event fish_prompt
-    set blaze_exit_status $status
-    set blaze_finish_time (blaze_get_current_time)
+function _blaze_precmd --on-event fish_prompt
+    set _blaze_exit_status $status
+    set _blaze_finish_time (_blaze_get_current_time)
 end
 
-set blaze_default_background (~/.local/share/blaze/util.bash get_current_background)
-set blaze_start_time ""
-set blaze_finish_time ""
-set blaze_exit_status ""
+set _blaze_default_background (~/.local/share/blaze/util.bash _blaze_get_current_background)
+set _blaze_start_time ""
+set _blaze_finish_time ""
+set _blaze_exit_status ""
 
-blaze_preexec
-blaze_precmd
+_blaze_preexec
+_blaze_precmd
 
 function fish_prompt
-    blaze fish --prompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
+    blaze fish --prompt -s $_blaze_start_time -f $_blaze_finish_time -e $_blaze_exit_status -b $_blaze_default_background
 end
 
 function fish_right_prompt
-    blaze fish --right-prompt -s $blaze_start_time -f $blaze_finish_time -e $blaze_exit_status -b $blaze_default_background
+    blaze fish --right-prompt -s $_blaze_start_time -f $_blaze_finish_time -e $_blaze_exit_status -b $_blaze_default_background
 end
