@@ -15,7 +15,7 @@ unsigned short get_columns()
 
 std::size_t get_length(const std::vector<std::string> &strings)
 {
-    // TODO: For certain emojis, the returned length is not correct.
+    // TODO: For certain emojis/symbols, the returned length is not correct.
     // Maybe counting grapheme clusters would be a better approach.
     std::size_t length = 0;
     for (const std::string &string : strings)
@@ -23,6 +23,32 @@ std::size_t get_length(const std::vector<std::string> &strings)
         length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).size();
     }
     return length;
+}
+
+std::size_t find_nth_occurrence(const std::string &string, const std::string &substring, const std::size_t n, const bool reverse)
+{
+    std::size_t index = reverse ? string.size() - 1 : 0;
+    const std::size_t end = reverse ? 0 : string.size() - 1;
+    const short sign = reverse ? -1 : 1;
+    std::size_t count = 0;
+    std::size_t substring_size = substring.size();
+    while (count < n && index != end)
+    {
+        const std::string s = string.substr(index, substring_size);
+        if (s == substring)
+        {
+            count++;
+        }
+        index += sign * 1;
+    }
+    if (count == n)
+    {
+        return index - sign;
+    }
+    else
+    {
+        return std::string::npos;
+    }
 }
 
 std::vector<std::string> split(const std::string &string, const std::string &delimiter)
@@ -183,6 +209,30 @@ TEST_CASE("get_length")
     CHECK(get_length({"abc", "def"}) == 6);
     CHECK(get_length({"abc", "def", "123"}) == 9);
     CHECK(get_length({""}) == 1);
+}
+
+TEST_CASE("find_nth_occurrence")
+{
+    SUBCASE("single character")
+    {
+        CHECK(find_nth_occurrence("abcdefg", "h", 1) == std::string::npos);
+        CHECK(find_nth_occurrence("abcdefgh", "h", 2) == std::string::npos);
+        CHECK(find_nth_occurrence("abcdefg", "c", 1) == 2);
+        CHECK(find_nth_occurrence("abcdefg", "c", 1, true) == 2);
+        CHECK(find_nth_occurrence("abcdefcg", "c", 1, true) == 6);
+        CHECK(find_nth_occurrence("abcdefcg", "c", 2, true) == 2);
+        CHECK(find_nth_occurrence("abcdefcg", "c", 2) == 6);
+    }
+    SUBCASE("multiple characters")
+    {
+        CHECK(find_nth_occurrence("aaabbbcccdddeeefffggg", "asd", 1) == std::string::npos);
+        CHECK(find_nth_occurrence("aaabbbasdcccdddeeefffggg", "asd", 2) == std::string::npos);
+        CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffggg", "asd", 1) == 15);
+        CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffggg", "asd", 1, true) == 15);
+        CHECK(find_nth_occurrence("aaabbbasdcccdddeeeasdfffggg", "asd", 1, true) == 18);
+        CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffgggasd", "asd", 2, true) == 15);
+        CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffgggasd", "asd", 2) == 24);
+    }
 }
 
 TEST_CASE("split")

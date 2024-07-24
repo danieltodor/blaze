@@ -91,6 +91,7 @@ void load_values(toml::value &data, Config &config)
     {
     }
 
+    set_value(data, config.directory.length, "directory", "length");
     set_value(data, config.directory.basename_only, "directory", "basename_only");
 
     set_value(data, config.execution_time.precision, "execution_time", "precision");

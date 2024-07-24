@@ -11,6 +11,9 @@ unsigned short get_columns();
 // Number of displayed characters in the strings
 std::size_t get_length(const std::vector<std::string> &strings);
 
+// Find the start index of the nth occurrence of a substring in a string
+std::size_t find_nth_occurrence(const std::string &string, const std::string &substring, const std::size_t n, const bool reverse=false);
+
 // Split the string at delimiters
 std::vector<std::string> split(const std::string &string, const std::string &delimiter);
 

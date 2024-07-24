@@ -18,9 +18,21 @@ std::string directory(const Context &context)
         PWD.replace(0, HOME.length(), "~");
     }
     result += PWD;
-    if (result != "/" and config.directory.basename_only)
+    if (config.directory.basename_only && result != "/")
     {
-        regex_replace(result, {"^.*\\/"}, "");
+        const std::size_t index = find_nth_occurrence(result, "/", 1, true);
+        if (index != std::string::npos)
+        {
+            result.replace(0, index + 1, "");
+        }
+    }
+    else if (config.directory.length > 0)
+    {
+        const std::size_t index = find_nth_occurrence(result, "/", config.directory.length, true);
+        if (index != std::string::npos)
+        {
+            result.replace(0, index, "...");
+        }
     }
     return result;
 }

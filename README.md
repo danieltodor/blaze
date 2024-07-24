@@ -55,7 +55,7 @@ Configuration files are read from these locations in order:
 # You can use color ids from 0 to 255. https://www.ditig.com/256-colors-cheat-sheet
 # If your terminal emulator has truecolor support, you can also use an RGB value like "145;255;0".
 # Special values:
-#   - "default" The background color of the (xterm compatible) terminal emulator. Or black if the query failed.
+#   - "default" The background color of the (xterm compatible) terminal emulator.
 
 [global]
 # Whether to add a new line before the prompt is rendered
@@ -112,7 +112,9 @@ dim = false
 italic = false
 underline = false
 
-[current_directory]
+[directory]
+# Maximum number of parent folders to display. Use 0 to disable truncation.
+length = 0
 # Display the basename only
 basename_only = false
 

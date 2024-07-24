@@ -53,6 +53,7 @@ struct Module
 
 struct Directory
 {
+    int length = 0;
     bool basename_only = false;
 };
 
