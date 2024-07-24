@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     Context context = {
         argparse::parse<Args>(argc, argv),
         get_config(),
+        get_env("HOME"),
         get_env("PWD"),
         check_git_repository(),
         get_current_time()

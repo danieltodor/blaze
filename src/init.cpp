@@ -11,8 +11,8 @@ std::string prepare_shell_init(const Context &context)
 {
     const std::string file_name = "init." + context.args.shell;
     const std::string paths[] = {
-        // context.PWD + "/src/init/" + file_name,
-        get_env("HOME") + "/.local/share/blaze/" + file_name
+        // context.PWD + "/src/init/" + file_name, // For development
+        context.HOME + "/.local/share/blaze/" + file_name
     };
     std::ifstream file;
     for (const std::string &path : paths)
@@ -41,6 +41,7 @@ TEST_CASE("prepare_shell_init")
 {
     Context context;
     context.args.shell = "bash";
+    context.HOME = get_env("HOME");
     const std::string result = prepare_shell_init(context);
     CHECK(result.find("PS1='") != std::string::npos);
 }

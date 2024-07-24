@@ -333,6 +333,7 @@ TEST_CASE("check_git_repository")
 
 TEST_CASE("get_env")
 {
+    CHECK(get_env("ASDF") == "");
     CHECK(get_env("HOME").find("/home/") != std::string::npos);
 }
 

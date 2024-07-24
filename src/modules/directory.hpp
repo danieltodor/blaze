@@ -11,13 +11,13 @@ std::string directory(const Context &context)
 {
     std::string result = "";
     const Config &config = context.config;
-    std::string PWD = context.PWD;
-    std::string HOME = get_env("HOME");
-    if (PWD.find(HOME) != std::string::npos)
-    {
-        PWD.replace(0, HOME.length(), "~");
-    }
+    const std::string &HOME = context.HOME;
+    const std::string &PWD = context.PWD;
     result += PWD;
+    if (result.find(HOME) != std::string::npos)
+    {
+        result.replace(0, HOME.length(), "~");
+    }
     if (config.directory.basename_only && result != "/")
     {
         const std::size_t index = find_nth_occurrence(result, "/", 1, true);

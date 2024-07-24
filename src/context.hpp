@@ -11,6 +11,7 @@ struct Context
 {
     Args args;
     Config config;
+    std::string HOME;
     std::string PWD;
     bool git_repository_detected;
     std::tm time_structure;
