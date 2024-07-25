@@ -52,8 +52,8 @@ Configuration files are read from these locations in order:
 ``` toml
 # For color values you can use named values like "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white".
 # If your terminal emulator supports the aixterm specification, you can also use these colors with the "bright_" prefix.
-# You can use color ids from 0 to 255. https://www.ditig.com/256-colors-cheat-sheet
-# If your terminal emulator has truecolor support, you can also use an RGB value like "145;255;0".
+# You can use color ids from "0" to "255". https://www.ditig.com/256-colors-cheat-sheet
+# If your terminal emulator has truecolor support, you can also use RGB and hexadecimal colors like "145, 255, 0" or "#3dff59".
 # Special values:
 #   - "default" The background color of the (xterm compatible) terminal emulator.
 
@@ -64,7 +64,7 @@ new_line = false
 padding = " "
 
 [prompt]
-# This is your PS1
+# Prompt string
 string = " "
 # Foreground color to use
 foreground = ""

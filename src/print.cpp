@@ -127,7 +127,7 @@ std::string connector(const Context &context, const int length)
     return result;
 }
 
-// Basically the "PS1"
+// Prompt string
 std::string prompt(const Context &context)
 {
     std::string result = "";

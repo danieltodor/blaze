@@ -52,20 +52,31 @@ std::string create_sequence(const std::string &code, const Context &context)
 // Convert color to escape sequence
 std::string to_color_code(const std::string &color, const int offset, const Context &context)
 {
+    std::string code = "";
     if (color.empty())
     {
         return "";
     }
+    // Hexadecimal colors (#3dff27)
+    else if (color.at(0) == '#')
+    {
+        const std::string red_s = color.substr(1, 2), green_s = color.substr(3, 2), blue_s = color.substr(5, 2);
+        const int red_i = stoi(red_s, NULL, 16), green_i = stoi(green_s, NULL, 16), blue_i = stoi(blue_s, NULL, 16);
+        const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
+        code = rgb_prefix + join({std::to_string(red_i), std::to_string(green_i), std::to_string(blue_i)}, ";");
+    }
+    // Named colors (black, bright_blue, ...)
     else if (foreground_color_map.find(color) != foreground_color_map.end())
     {
-        const int code = foreground_color_map.at(color);
-        return create_sequence(std::to_string(code + offset), context);
+        code = std::to_string(foreground_color_map.at(color) + offset);
     }
+    // Numbered colors (0, ..., 255)
     else if (is_number(color))
     {
         const std::string id_prefix = offset == 0 ? foreground_id_prefix : background_id_prefix;
-        return create_sequence(id_prefix + color, context);
+        code = id_prefix + color;
     }
+    // RGB color codes (24;65;255, 43,65,0)
     else
     {
         const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
@@ -74,8 +85,11 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
         {
             rgb_color = context.args.background;
         }
-        return create_sequence(rgb_prefix + rgb_color, context);
+        regex_replace(rgb_color, {" "}, "");
+        regex_replace(rgb_color, {","}, ";");
+        code = rgb_prefix + rgb_color;
     }
+    return create_sequence(code, context);
 }
 
 std::string set_text_mode(const int code, const Context &context)
@@ -183,6 +197,21 @@ TEST_CASE("to_color_code")
     {
         const std::string result = to_color_code("30;40;50", 10, context);
         CHECK(result.find("\001\033[48;2;30;40;50m\002") != std::string::npos);
+    }
+    SUBCASE("rgb with comma and space")
+    {
+        const std::string result = to_color_code("30, 40, 50", 0, context);
+        CHECK(result.find("\001\033[38;2;30;40;50m\002") != std::string::npos);
+    }
+    SUBCASE("foreground hex")
+    {
+        const std::string result = to_color_code("#3f7fb7", 0, context);
+        CHECK(result.find("\001\033[38;2;63;127;183m\002") != std::string::npos);
+    }
+    SUBCASE("background hex")
+    {
+        const std::string result = to_color_code("#3f7fb7", 10, context);
+        CHECK(result.find("\001\033[48;2;63;127;183m\002") != std::string::npos);
     }
 }
 
