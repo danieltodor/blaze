@@ -1,0 +1,65 @@
+[global]
+new_line = true
+padding = ""
+
+[prompt]
+string = "\n❯ "
+foreground = "#ffffff"
+error_foreground = "#e83030"
+
+[execution_time]
+display_from = 2.0
+
+[exit_status]
+non_zero_only = true
+
+[git_status]
+clean = ""
+
+# [[module]]
+# name = "user"
+# inner_prefix = " "
+# outer_suffix = ""
+# background = "#513559"
+# foreground = "#ffffff"
+
+[[module]]
+name = "directory"
+inner_prefix = "   "
+outer_suffix = ""
+background = "#007aff"
+foreground = "#ffffff"
+
+[[module]]
+name = "git_branch"
+inner_prefix = "  "
+outer_suffix = ""
+background = "#25c145"
+foreground = "#ffffff"
+
+[[module]]
+name = "git_status"
+outer_suffix = ""
+background = "#25c145"
+foreground = "#ffffff"
+
+[[module]]
+name = "execution_time"
+inner_prefix = " ⌛︎"
+outer_suffix = ""
+background = "#e38029"
+foreground = "#ffffff"
+
+[[module]]
+name = "exit_status"
+inner_prefix = " ⚠ "
+outer_suffix = ""
+background = "#e83030"
+foreground = "#ffffff"
+
+# [[module]]
+# name = "time"
+# inner_prefix = "  "
+# outer_suffix = ""
+# background = "#868686"
+# foreground = "#ffffff"

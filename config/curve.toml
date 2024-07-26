@@ -3,11 +3,12 @@ padding = ""
 
 [prompt]
 string = " ❯ "
-foreground = "green"
-error_foreground = "red"
+foreground = "#ffffff"
+error_foreground = "#e83030"
 
 [connector]
 character = "─"
+foreground = "#ffffff"
 
 [execution_time]
 display_from = 2.0
@@ -21,63 +22,76 @@ format = "%T"
 [exit_status]
 non_zero_only = true
 
+[git_status]
+clean = ""
+
+# [[module]]
+# name = "user"
+# inner_suffix = " "
+# foreground = "#513559"
+
 [[module]]
 name = "directory"
-inner_prefix = "🖿  "
-outer_prefix = " "
-outer_suffix = " "
-foreground = "blue"
-bold = true
+inner_prefix = "  "
+inner_suffix = " "
+foreground = "#007aff"
 
 [[module]]
 name = "git_branch"
 inner_prefix = " "
-outer_suffix = " "
-foreground = "green"
+inner_suffix = " "
+foreground = "#25c145"
 
 [[module]]
 name = "git_status"
-outer_suffix = " "
-foreground = "green"
+inner_suffix = " "
+foreground = "#25c145"
 
 [[module]]
 name = "execution_time"
 inner_prefix = "⌛︎"
-outer_suffix = " "
-foreground = "yellow"
+inner_suffix = " "
+foreground = "#e38029"
 
 [[module]]
 name = "exit_status"
 inner_prefix = "⚠ "
-outer_suffix = " "
-foreground = "red"
+inner_suffix = " "
+foreground = "#e83030"
 
 [[module]]
 name = "date"
 align = "right"
 padding = " "
+foreground = "#ffffff"
 
 [[module]]
 name = "time"
 align = "right_prompt"
-outer_suffix = " "
+inner_suffix = " "
+foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
 position = 0
 outer_prefix = "╭─"
+outer_suffix = " "
+foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
 level = 2
 outer_prefix = "╰─"
+foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
 align = "right"
 outer_suffix = "─╮"
+foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
 align = "right_prompt"
 outer_suffix = "─╯"
+foreground = "#ffffff"

@@ -1,7 +1,7 @@
 # Blaze
 **A customizable and informative prompt for bash, zsh, fish, on linux distributions.**
 
-![](media/demo.gif)
+![](media/demo.png)
 
 [Installation](#installation)\
 [Configuration](#configuration)\
@@ -37,12 +37,11 @@
         ```
 
 3. Configure\
-Open a new shell instance, and select a configuration with the `./use_config <n>` command.\
+Open a new shell instance, and select a configuration with the `./use_config <name>` command.\
 For additional configuration options, check out the [configuration](#configuration) section.\
 It is recommended to use a [nerd font](https://www.nerdfonts.com) in your terminal emulator,
 so that the symbols are displayed correctly.\
-Note that some of these configs are suitable only for shells with right prompt.
-![](media/demo.png)
+Note that some of the configs are suitable only for shells with right prompt.
 
 ## Configuration
 Configuration files are read from these locations in order:
