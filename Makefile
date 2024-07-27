@@ -32,7 +32,7 @@ ifeq ($(verbose),true)
 endif
 
 ifeq ($(debug),true)
-	CXXFLAGS += -g -Og
+	CXXFLAGS += -g -O0
 endif
 
 all: $(BIN_DIR)/$(BINARY)
