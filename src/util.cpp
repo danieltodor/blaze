@@ -20,18 +20,18 @@ std::size_t get_length(const std::vector<std::string> &strings)
     std::size_t length = 0;
     for (const std::string &string : strings)
     {
-        length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).size();
+        length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).length();
     }
     return length;
 }
 
 std::size_t find_nth_occurrence(const std::string &string, const std::string &substring, const std::size_t n, const bool reverse)
 {
-    std::size_t index = reverse ? string.size() - 1 : 0;
-    const std::size_t end = reverse ? 0 : string.size() - 1;
+    std::size_t index = reverse ? string.length() - 1 : 0;
+    const std::size_t end = reverse ? 0 : string.length() - 1;
     const short sign = reverse ? -1 : 1;
     std::size_t count = 0;
-    std::size_t substring_size = substring.size();
+    std::size_t substring_size = substring.length();
     while (count < n && index != end)
     {
         const std::string s = string.substr(index, substring_size);

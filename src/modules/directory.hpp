@@ -18,15 +18,17 @@ std::string directory(const Context &context)
     {
         result.replace(0, HOME.length(), "~");
     }
-    if (config.directory.basename_only && result != "/")
+    if (config.directory.from_repository && context.git_repository_detected)
     {
-        const std::size_t index = find_nth_occurrence(result, "/", 1, true);
-        if (index != std::string::npos)
+        std::string git_repository_path = execute_command("git rev-parse --show-toplevel");
+        if (git_repository_path.find(HOME) != std::string::npos)
         {
-            result.replace(0, index + 1, "");
+            git_repository_path.replace(0, HOME.length(), "~");
         }
+        const std::size_t index = find_nth_occurrence(git_repository_path, "/", 1, true);
+        result.replace(0, index, "...");
     }
-    else if (config.directory.length > 0)
+    if (config.directory.length > 0)
     {
         const std::size_t index = find_nth_occurrence(result, "/", config.directory.length, true);
         if (index != std::string::npos)

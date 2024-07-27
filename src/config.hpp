@@ -54,7 +54,7 @@ struct Module
 struct Directory
 {
     int length = 0;
-    bool basename_only = false;
+    bool from_repository = false;
 };
 
 struct ExecutionTime

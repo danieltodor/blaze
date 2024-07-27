@@ -81,7 +81,7 @@ background = ""
 dim = false
 
 [[module]]
-# Name of a builtin module.
+# Name of a builtin module
 name = ""
 # Execute a user defined module
 execute = ""
@@ -89,9 +89,9 @@ execute = ""
 level = 1
 # The position of the module (if omitted, modules will be displayed as they appear in config)
 position = 1
-# Display it on left/right side. Or display it as right_prompt if the shell supports it.
+# Display it on left/right side. Or display it as right_prompt if the shell supports it
 align = "left"
-# Same as global one, but takes precedence over it.
+# Same as global one, but takes precedence over it
 padding = ""
 # Displayed inside the module, before the content (foreground used as color)
 inner_prefix = ""
@@ -112,10 +112,10 @@ italic = false
 underline = false
 
 [directory]
-# Maximum number of parent folders to display. Use 0 to disable truncation.
+# Maximum number of parent folders to display. Use 0 to disable truncation
 length = 0
-# Display the basename only
-basename_only = false
+# Show folders from the root of the repository
+from_repository = false
 
 [execution_time]
 # Digits displayed after seconds
@@ -134,7 +134,7 @@ non_zero_only = false
 ignore = []
 
 [git_commit]
-# Commit hash length. Use 0 to disable trimming.
+# Commit hash length. Use 0 to disable trimming
 length = 8
 
 [git_status]

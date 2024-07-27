@@ -92,7 +92,7 @@ void load_values(toml::value &data, Config &config)
     }
 
     set_value(data, config.directory.length, "directory", "length");
-    set_value(data, config.directory.basename_only, "directory", "basename_only");
+    set_value(data, config.directory.from_repository, "directory", "from_repository");
 
     set_value(data, config.execution_time.precision, "execution_time", "precision");
     set_value(data, config.execution_time.display_from, "execution_time", "display_from");
