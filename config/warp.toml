@@ -7,6 +7,10 @@ string = "\n❯ "
 foreground = "#ffffff"
 error_foreground = "#e83030"
 
+[directory]
+limit = 10
+from_repository = true
+
 [duration]
 display_from = 2.0
 

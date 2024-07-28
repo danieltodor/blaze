@@ -113,7 +113,7 @@ underline = false
 
 [directory]
 # Maximum number of parent folders to display. Use 0 to disable truncation
-length = 0
+limit = 0
 # Show folders from the root of the repository
 from_repository = false
 

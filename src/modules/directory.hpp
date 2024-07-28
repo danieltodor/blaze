@@ -28,9 +28,9 @@ std::string directory(const Context &context)
         const std::size_t index = find_nth_occurrence(git_repository_path, "/", 1, true);
         result.replace(0, index, "...");
     }
-    if (config.directory.length > 0)
+    if (config.directory.limit > 0)
     {
-        const std::size_t index = find_nth_occurrence(result, "/", config.directory.length, true);
+        const std::size_t index = find_nth_occurrence(result, "/", config.directory.limit, true);
         if (index != std::string::npos)
         {
             result.replace(0, index, "...");

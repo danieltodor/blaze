@@ -91,7 +91,7 @@ void load_values(toml::value &data, Config &config)
     {
     }
 
-    set_value(data, config.directory.length, "directory", "length");
+    set_value(data, config.directory.limit, "directory", "limit");
     set_value(data, config.directory.from_repository, "directory", "from_repository");
 
     set_value(data, config.duration.precision, "duration", "precision");

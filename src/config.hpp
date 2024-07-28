@@ -53,7 +53,7 @@ struct Module
 
 struct Directory
 {
-    int length = 0;
+    int limit = 0;
     bool from_repository = false;
 };
 

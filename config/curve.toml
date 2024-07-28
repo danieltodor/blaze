@@ -10,6 +10,10 @@ error_foreground = "#e83030"
 character = "─"
 foreground = "#ffffff"
 
+[directory]
+limit = 10
+from_repository = true
+
 [duration]
 display_from = 2.0
 
