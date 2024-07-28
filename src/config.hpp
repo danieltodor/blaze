@@ -57,7 +57,7 @@ struct Directory
     bool from_repository = false;
 };
 
-struct ExecutionTime
+struct Duration
 {
     int precision = 1;
     float display_from = 0;
@@ -112,7 +112,7 @@ struct Config
     Connector connector;
     std::vector<Module> modules;
     Directory directory;
-    ExecutionTime execution_time;
+    Duration duration;
     GitBranch git_branch;
     GitCommit git_commit;
     GitStatus git_status;

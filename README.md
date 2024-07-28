@@ -117,7 +117,7 @@ length = 0
 # Show folders from the root of the repository
 from_repository = false
 
-[execution_time]
+[duration]
 # Digits displayed after seconds
 precision = 1
 # Display module if execution time exceeds this
@@ -178,7 +178,7 @@ format = "%X"
 | fixed | Can be used to display fixed text |
 | separator | Can be used for additional separation between modules |
 | directory | Current working directory |
-| execution_time | Execution time of the last command (wall time) |
+| duration | Execution time of the last command (wall time) |
 | exit_status | Exit status of the last command |
 | git_branch | Active branch in the repository |
 | git_commit | Commit hash |

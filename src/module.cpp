@@ -3,7 +3,7 @@
 #include "src/module.hpp"
 #include "src/modules/dummy.hpp"
 #include "src/modules/directory.hpp"
-#include "src/modules/execution_time.hpp"
+#include "src/modules/duration.hpp"
 #include "src/modules/exit_status.hpp"
 #include "src/modules/git_branch.hpp"
 #include "src/modules/git_commit.hpp"
@@ -19,7 +19,7 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
     {"fixed", &dummy},
     {"separator", &dummy},
     {"directory", &directory},
-    {"execution_time", &execution_time},
+    {"duration", &duration},
     {"exit_status", &exit_status},
     {"git_branch", &git_branch},
     {"git_commit", &git_commit},

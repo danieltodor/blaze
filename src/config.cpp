@@ -94,9 +94,9 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.directory.length, "directory", "length");
     set_value(data, config.directory.from_repository, "directory", "from_repository");
 
-    set_value(data, config.execution_time.precision, "execution_time", "precision");
-    set_value(data, config.execution_time.display_from, "execution_time", "display_from");
-    set_value(data, config.execution_time.display_fractional_until, "execution_time", "display_fractional_until");
+    set_value(data, config.duration.precision, "duration", "precision");
+    set_value(data, config.duration.display_from, "duration", "display_from");
+    set_value(data, config.duration.display_fractional_until, "duration", "display_fractional_until");
 
     set_value(data, config.git_branch.ignore, "git_branch", "ignore");
 
@@ -147,7 +147,7 @@ void sort_modules(std::vector<Module> &modules)
 void set_default_values(Config &config)
 {
     config.global.padding = "";
-    config.execution_time.display_from = 2;
+    config.duration.display_from = 2;
     config.exit_status.non_zero_only = true;
 
     Prompt prompt;
@@ -163,13 +163,13 @@ void set_default_values(Config &config)
     directory.bold = true;
     config.modules.push_back(directory);
 
-    Module execution_time;
-    execution_time.name = "execution_time";
-    execution_time.align = "left";
-    execution_time.inner_prefix = "⌛︎";
-    execution_time.outer_prefix = " ";
-    execution_time.foreground = "yellow";
-    config.modules.push_back(execution_time);
+    Module duration;
+    duration.name = "duration";
+    duration.align = "left";
+    duration.inner_prefix = "⌛︎";
+    duration.outer_prefix = " ";
+    duration.foreground = "yellow";
+    config.modules.push_back(duration);
 
     Module exit_status;
     exit_status.name = "exit_status";

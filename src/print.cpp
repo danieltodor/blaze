@@ -680,8 +680,8 @@ TEST_CASE("level_changes")
     Config config;
     Module directory;
     config.modules.push_back(directory);
-    Module execution_time;
-    config.modules.push_back(execution_time);
+    Module duration;
+    config.modules.push_back(duration);
     Module exit_status;
     config.modules.push_back(exit_status);
     SUBCASE("all modules are on the same level")
@@ -704,8 +704,8 @@ TEST_CASE("end_reached")
     Config config;
     Module directory;
     config.modules.push_back(directory);
-    Module execution_time;
-    config.modules.push_back(execution_time);
+    Module duration;
+    config.modules.push_back(duration);
     Module exit_status;
     config.modules.push_back(exit_status);
     SUBCASE("1")
@@ -733,9 +733,9 @@ TEST_CASE("evaluate_content")
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
-    Module execution_time;
-    execution_time.name = "execution_time";
-    context.config.modules.push_back(execution_time);
+    Module duration;
+    duration.name = "duration";
+    context.config.modules.push_back(duration);
     SUBCASE("1")
     {
         evaluate_content(context);
@@ -753,10 +753,10 @@ TEST_CASE("remove_surplus")
     directory.name = "directory";
     directory.content = "/home";
     context.config.modules.push_back(directory);
-    Module execution_time;
-    execution_time.name = "execution_time";
-    execution_time.content = "10s";
-    context.config.modules.push_back(execution_time);
+    Module duration;
+    duration.name = "duration";
+    duration.content = "10s";
+    context.config.modules.push_back(duration);
     SUBCASE("don`t remove anything")
     {
         remove_surplus(context);
@@ -767,7 +767,7 @@ TEST_CASE("remove_surplus")
         context.config.modules[0].content = "";
         remove_surplus(context);
         CHECK(context.config.modules.size() == 1);
-        CHECK(context.config.modules[0].name == "execution_time");
+        CHECK(context.config.modules[0].name == "duration");
     }
     SUBCASE("remove prompt")
     {
@@ -776,7 +776,7 @@ TEST_CASE("remove_surplus")
         context.config.modules[1].align = "right_prompt";
         remove_surplus(context);
         CHECK(context.config.modules.size() == 1);
-        CHECK(context.config.modules[0].name == "execution_time");
+        CHECK(context.config.modules[0].name == "duration");
     }
     SUBCASE("remove right prompt")
     {
@@ -793,7 +793,7 @@ TEST_CASE("remove_surplus")
         remove_surplus(context);
         CHECK(context.config.modules.size() == 2);
         CHECK(context.config.modules[0].name == "directory");
-        CHECK(context.config.modules[1].name == "execution_time");
+        CHECK(context.config.modules[1].name == "duration");
     }
     SUBCASE("remove separator from end")
     {
@@ -803,7 +803,7 @@ TEST_CASE("remove_surplus")
         remove_surplus(context);
         CHECK(context.config.modules.size() == 2);
         CHECK(context.config.modules[0].name == "directory");
-        CHECK(context.config.modules[1].name == "execution_time");
+        CHECK(context.config.modules[1].name == "duration");
     }
     SUBCASE("don`t remove separator")
     {
@@ -814,7 +814,7 @@ TEST_CASE("remove_surplus")
         CHECK(context.config.modules.size() == 3);
         CHECK(context.config.modules[0].name == "directory");
         CHECK(context.config.modules[1].name == "separator");
-        CHECK(context.config.modules[2].name == "execution_time");
+        CHECK(context.config.modules[2].name == "duration");
     }
     SUBCASE("remove duplicate separator")
     {
@@ -826,7 +826,7 @@ TEST_CASE("remove_surplus")
         CHECK(context.config.modules.size() == 3);
         CHECK(context.config.modules[0].name == "directory");
         CHECK(context.config.modules[1].name == "separator");
-        CHECK(context.config.modules[2].name == "execution_time");
+        CHECK(context.config.modules[2].name == "duration");
     }
 }
 
@@ -843,10 +843,10 @@ TEST_CASE("prepare_prompt")
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
-    Module execution_time;
-    execution_time.name = "execution_time";
-    execution_time.align = "right";
-    context.config.modules.push_back(execution_time);
+    Module duration;
+    duration.name = "duration";
+    duration.align = "right";
+    context.config.modules.push_back(duration);
     SUBCASE("module content")
     {
         std::string result = prepare_prompt(context);
@@ -905,10 +905,10 @@ TEST_CASE("prepare_right_prompt")
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
-    Module execution_time;
-    execution_time.name = "execution_time";
-    execution_time.align = "right_prompt";
-    context.config.modules.push_back(execution_time);
+    Module duration;
+    duration.name = "duration";
+    duration.align = "right_prompt";
+    context.config.modules.push_back(duration);
     SUBCASE("module content")
     {
         std::string result = prepare_right_prompt(context);

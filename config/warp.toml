@@ -7,7 +7,7 @@ string = "\n❯ "
 foreground = "#ffffff"
 error_foreground = "#e83030"
 
-[execution_time]
+[duration]
 display_from = 2.0
 
 [exit_status]
@@ -44,7 +44,7 @@ background = "#25c145"
 foreground = "#ffffff"
 
 [[module]]
-name = "execution_time"
+name = "duration"
 inner_prefix = " ⌛︎"
 outer_suffix = ""
 background = "#e38029"

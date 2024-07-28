@@ -6,7 +6,7 @@ string = "❯ "
 foreground = "#ffffff"
 error_foreground = "#e83030"
 
-[execution_time]
+[duration]
 display_from = 2.0
 
 [exit_status]
@@ -35,7 +35,7 @@ inner_suffix = " "
 foreground = "#25c145"
 
 [[module]]
-name = "execution_time"
+name = "duration"
 inner_prefix = "⌛︎"
 inner_suffix = " "
 foreground = "#e38029"
