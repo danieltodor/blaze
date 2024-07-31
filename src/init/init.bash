@@ -3,11 +3,11 @@ _blaze_get_current_time() {
 }
 
 _blaze_save_start_time() {
-    echo $(_blaze_get_current_time) > $_blaze_time_file
+    echo $(_blaze_get_current_time) > $_blaze_start_time_file
 }
 
 _blaze_get_start_time() {
-    echo "$(cat $_blaze_time_file)"
+    echo "$(cat $_blaze_start_time_file)"
 }
 
 _blaze_save_exit_status() {
@@ -18,9 +18,31 @@ _blaze_get_exit_status() {
     echo "$(cat $_blaze_exit_status_file)"
 }
 
+_blaze_save_first_print() {
+    if [[ -e $_blaze_first_print_file ]]; then
+        echo "false" > $_blaze_first_print_file
+    else
+        echo "true" > $_blaze_first_print_file
+    fi
+}
+
+_blaze_get_first_print() {
+    echo "$(cat $_blaze_first_print_file)"
+}
+
+_blaze_preexec() {
+    _blaze_save_start_time
+    _blaze_save_first_print
+}
+
+_blaze_precmd() {
+    _blaze_save_exit_status
+}
+
 _blaze_run_on_exit() {
-    rm $_blaze_time_file
+    rm $_blaze_start_time_file
     rm $_blaze_exit_status_file
+    rm $_blaze_first_print_file
 }
 trap _blaze_run_on_exit EXIT
 
@@ -33,14 +55,16 @@ else
 fi
 
 _blaze_default_background=$(~/.local/share/blaze/util.bash _blaze_get_current_background)
-_blaze_time_file="${_blaze_file_prefix}_time"
+_blaze_start_time_file="${_blaze_file_prefix}_start_time"
 _blaze_exit_status_file="${_blaze_file_prefix}_exit_status"
+_blaze_first_print_file="${_blaze_file_prefix}_first_print"
 
 _blaze_save_start_time
 _blaze_save_exit_status
+_blaze_save_first_print
 
 # Bash doesn`t have preexec/precmd hooks, but the behavior of these prompt variables are close enough
-PS0=$PS0'$(_blaze_save_start_time)' # Is expanded after a command is read and before the command is executed
-PROMPT_COMMAND=$PROMPT_COMMAND'$(_blaze_save_exit_status)' # Executed before the printing of each primary prompt
+PS0=$PS0'$(_blaze_preexec)' # Is expanded after a command is read and before the command is executed
+PROMPT_COMMAND=$PROMPT_COMMAND'$(_blaze_precmd)' # Executed before the printing of each primary prompt
 
-PS1='$(blaze bash --prompt -s $(_blaze_get_start_time) -f $(_blaze_get_current_time) -e $(_blaze_get_exit_status) -b $_blaze_default_background)'
+PS1='$(blaze bash --prompt -s $(_blaze_get_start_time) -f $(_blaze_get_current_time) -e $(_blaze_get_exit_status) -b $_blaze_default_background -g $(_blaze_get_first_print))'

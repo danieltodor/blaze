@@ -272,7 +272,7 @@ std::string prepare_prompt(Context &context)
     std::string left = "";
     std::string right = "";
     std::size_t length = 0;
-    if (config.global.new_line)
+    if (config.global.new_line && !context.args.first_print)
     {
         result += "\n";
     }
