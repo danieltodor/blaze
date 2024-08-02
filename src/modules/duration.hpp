@@ -20,23 +20,20 @@ std::string duration(const Context &context)
         from -= time * unit;
         return time;
     };
-
     std::string result = "";
     const Config &config = context.config;
     const float precision = std::pow(10, -config.duration.precision);
     const double start_time = context.args.start_time;
     const double finish_time = context.args.finish_time;
     double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < config.duration.display_from)
+    if (diff < config.duration.display_from || start_time == 0 || finish_time == 0)
     {
         return result;
     }
-
     const int hours = subtract_time(diff, HOUR);
     const int minutes = subtract_time(diff, MINUTE);
     const int seconds = subtract_time(diff, SECOND);
     const double fractional = round(diff / precision) * precision;
-
     if (hours)
     {
         result += std::to_string(hours) + 'h';

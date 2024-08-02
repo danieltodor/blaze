@@ -67,4 +67,4 @@ _blaze_save_first_print
 PS0=$PS0'$(_blaze_preexec)' # Is expanded after a command is read and before the command is executed
 PROMPT_COMMAND=$PROMPT_COMMAND'$(_blaze_precmd)' # Executed before the printing of each primary prompt
 
-PS1='$(blaze bash --prompt -s $(_blaze_get_start_time) -f $(_blaze_get_current_time) -e $(_blaze_get_exit_status) -b $_blaze_default_background -g $(_blaze_get_first_print))'
+PS1='$(blaze bash --prompt -s=$(_blaze_get_start_time) -f=$(_blaze_get_current_time) -e=$(_blaze_get_exit_status) -b=$_blaze_default_background -g=$(_blaze_get_first_print))'
