@@ -132,7 +132,7 @@ std::string prompt(const Context &context)
 {
     std::string result = "";
     result += reset_all(context);
-    if (context.args.exit_status != "0" && !context.config.prompt.error_foreground.empty())
+    if (context.args.exit_status != 0 && !context.config.prompt.error_foreground.empty())
     {
         result += set_foreground(context.config.prompt.error_foreground, context);
     }
@@ -653,7 +653,7 @@ TEST_CASE("prompt")
     }
     SUBCASE("error foreground")
     {
-        context.args.exit_status = "1";
+        context.args.exit_status = 1;
         context.config.prompt.error_foreground = "red";
         const std::string result = prompt(context);
         CHECK(result.find("\033[31m") != std::string::npos);
@@ -666,10 +666,11 @@ TEST_CASE("prompt")
     }
     SUBCASE("result")
     {
+        context.args.exit_status = 0;
         context.config.prompt.string = "abc";
         context.config.prompt.foreground = "green";
         context.config.prompt.error_foreground = "red";
-        const std::string test = "\001\033[0m\002\001\033[31m\002abc\001\033[0m\002";
+        const std::string test = "\001\033[0m\002\001\033[32m\002abc\001\033[0m\002";
         const std::string result = prompt(context);
         CHECK(result.find(test) != std::string::npos);
     }
@@ -728,8 +729,8 @@ TEST_CASE("evaluate_content")
     context.PWD = "/PWD";
     context.args.prompt = true;
     context.args.right_prompt = false;
-    context.args.start_time = "0";
-    context.args.finish_time = "10";
+    context.args.start_time = 0;
+    context.args.finish_time = 10;
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
@@ -834,8 +835,8 @@ TEST_CASE("prepare_prompt")
 {
     Context context;
     context.args.shell = "bash";
-    context.args.start_time = "0";
-    context.args.finish_time = "10";
+    context.args.start_time = 0;
+    context.args.finish_time = 10;
     context.args.prompt = true;
     context.args.right_prompt = false;
     context.HOME = "/X";
@@ -897,8 +898,8 @@ TEST_CASE("prepare_right_prompt")
 {
     Context context;
     context.args.shell = "bash";
-    context.args.start_time = "0";
-    context.args.finish_time = "10";
+    context.args.start_time = 0;
+    context.args.finish_time = 10;
     context.args.prompt = false;
     context.args.right_prompt = true;
     context.PWD = "/PWD";

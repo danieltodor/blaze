@@ -24,8 +24,8 @@ std::string duration(const Context &context)
     std::string result = "";
     const Config &config = context.config;
     const float precision = std::pow(10, -config.duration.precision);
-    const double start_time = std::stod(context.args.start_time);
-    const double finish_time = std::stod(context.args.finish_time);
+    const double start_time = context.args.start_time;
+    const double finish_time = context.args.finish_time;
     double diff = round((finish_time - start_time) / precision) * precision;
     if (diff < config.duration.display_from)
     {
