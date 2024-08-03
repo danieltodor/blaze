@@ -13,4 +13,17 @@ std::string dummy(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("dummy")
+{
+    Context context;
+    const std::string result = dummy(context);
+    CHECK(result == "");
+}
+
+#endif
+
 #endif

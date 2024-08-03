@@ -16,4 +16,17 @@ std::string host(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("host")
+{
+    Context context;
+    const std::string result = host(context);
+    CHECK(result.length() > 0);
+}
+
+#endif
+
 #endif

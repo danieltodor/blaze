@@ -39,4 +39,70 @@ std::string directory(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("directory")
+{
+    Context context;
+    context.PWD = "/a/b/c";
+    context.config.directory.limit = 4;
+    SUBCASE("replace home with ~")
+    {
+        context.HOME = "/a";
+        const std::string result = directory(context);
+        CHECK(result == "~/b/c");
+    }
+    SUBCASE("PWD when not in home directory")
+    {
+        context.HOME = "/d";
+        const std::string result = directory(context);
+        CHECK(result == "/a/b/c");
+    }
+    SUBCASE("from repository")
+    {
+        context.PWD = get_env("PWD");
+        context.config.directory.from_repository = true;
+        context.git_repository_detected = true;
+        const std::string result = directory(context);
+        CHECK(result == ".../blaze");
+    }
+    SUBCASE("from repository inside subdirectory")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD") + "/a/b/c";
+        context.config.directory.from_repository = true;
+        context.git_repository_detected = true;
+        const std::string result = directory(context);
+        CHECK(result == ".../blaze/a/b/c");
+    }
+    SUBCASE("from repository directory limit")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD") + "/a/b/c/d/e/f";
+        context.config.directory.from_repository = true;
+        context.git_repository_detected = true;
+        const std::string result = directory(context);
+        CHECK(result == ".../c/d/e/f");
+    }
+    SUBCASE("directory limit reached")
+    {
+        context.HOME = "/a";
+        context.PWD = "/a/b/c/d/e";
+        const std::string result = directory(context);
+        CHECK(result == ".../b/c/d/e");
+    }
+    SUBCASE("directory limit not reached")
+    {
+        context.HOME = "/a";
+        context.PWD = "/a/b/c/d/e";
+        context.config.directory.limit = 5;
+        const std::string result = directory(context);
+        CHECK(result == "~/b/c/d/e");
+    }
+}
+
+#endif
+
 #endif

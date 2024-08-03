@@ -15,4 +15,37 @@ std::string time(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("time")
+{
+    Context context;
+    context.time_structure.tm_gmtoff = 7200;
+    context.time_structure.tm_isdst = 1;
+    context.time_structure.tm_yday = 215;
+    context.time_structure.tm_wday = 6;
+    context.time_structure.tm_year = 124;
+    context.time_structure.tm_mon = 7;
+    context.time_structure.tm_mday = 3;
+    context.time_structure.tm_hour = 20;
+    context.time_structure.tm_min = 4;
+    context.time_structure.tm_sec = 34;
+    SUBCASE("correct time %R format")
+    {
+        context.config.time.format = "%R";
+        const std::string result = time(context);
+        CHECK(result == "20:04");
+    }
+    SUBCASE("correct time %T format")
+    {
+        context.config.time.format = "%T";
+        const std::string result = time(context);
+        CHECK(result == "20:04:34");
+    }
+}
+
+#endif
+
 #endif

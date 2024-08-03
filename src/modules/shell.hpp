@@ -11,4 +11,18 @@ std::string shell(const Context &context)
     return context.args.shell;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("shell")
+{
+    Context context;
+    context.args.shell = "abc";
+    const std::string result = shell(context);
+    CHECK(result == "abc");
+}
+
+#endif
+
 #endif

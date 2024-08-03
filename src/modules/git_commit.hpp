@@ -24,4 +24,39 @@ std::string git_commit(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("git_commit")
+{
+    Context context;
+    SUBCASE("not a repository")
+    {
+        context.git_repository_detected = false;
+        const std::string result = git_commit(context);
+        CHECK(result == "");
+    }
+    SUBCASE("commit trimmed")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        context.config.git_commit.length = 8;
+        const std::string result = git_commit(context);
+        CHECK(result.length() == 8);
+    }
+    SUBCASE("commit not trimmed")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        context.config.git_commit.length = 0;
+        const std::string result = git_commit(context);
+        CHECK(result.length() > 8);
+    }
+}
+
+#endif
+
 #endif

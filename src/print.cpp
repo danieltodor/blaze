@@ -729,8 +729,8 @@ TEST_CASE("evaluate_content")
     context.PWD = "/PWD";
     context.args.prompt = true;
     context.args.right_prompt = false;
-    context.args.start_time = 0;
-    context.args.finish_time = 10;
+    context.args.start_time = 1;
+    context.args.finish_time = 11;
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
@@ -835,8 +835,8 @@ TEST_CASE("prepare_prompt")
 {
     Context context;
     context.args.shell = "bash";
-    context.args.start_time = 0;
-    context.args.finish_time = 10;
+    context.args.start_time = 1;
+    context.args.finish_time = 11;
     context.args.prompt = true;
     context.args.right_prompt = false;
     context.HOME = "/X";
@@ -898,8 +898,8 @@ TEST_CASE("prepare_right_prompt")
 {
     Context context;
     context.args.shell = "bash";
-    context.args.start_time = 0;
-    context.args.finish_time = 10;
+    context.args.start_time = 1;
+    context.args.finish_time = 11;
     context.args.prompt = false;
     context.args.right_prompt = true;
     context.PWD = "/PWD";

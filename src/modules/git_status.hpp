@@ -54,4 +54,29 @@ std::string git_status(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("git_status")
+{
+    Context context;
+    SUBCASE("not a repository")
+    {
+        context.git_repository_detected = false;
+        const std::string result = git_status(context);
+        CHECK(result == "");
+    }
+    SUBCASE("status")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        const std::string result = git_status(context);
+        CHECK(result.length() > 0);
+    }
+}
+
+#endif
+
 #endif

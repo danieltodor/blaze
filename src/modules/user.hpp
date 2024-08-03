@@ -15,4 +15,17 @@ std::string user(const Context &context)
     return result;
 }
 
+// ----------------------------------- TESTS -----------------------------------
+#include "src/test.hpp"
+#ifdef TEST
+
+TEST_CASE("user")
+{
+    Context context;
+    const std::string result = user(context);
+    CHECK(result.length() > 0);
+}
+
+#endif
+
 #endif
