@@ -274,7 +274,7 @@ std::string prepare_prompt(Context &context)
     std::size_t length = 0;
     if (config.global.new_line && !context.args.first_print)
     {
-        result += "\n";
+        result += '\n';
     }
     preprocess_modules(context);
     bool display_connector = contains_content_on_right(config.modules, 1);
@@ -348,6 +348,29 @@ std::string prepare_right_prompt(Context &context)
     return result;
 }
 
+// Prepare transient prompt string
+std::string prepare_transient_prompt(Context &context)
+{
+    Config &config = context.config;
+    if (!config.prompt.transient)
+    {
+        return "";
+    }
+    std::string result = "";
+    result += move_cursor_up(vertical_size(config), context);
+    result += erase_until_end_of_screen(context);
+    // Carriage returns are needed for bash
+    result += '\r';
+    // Remove newlines from beginning of prompt
+    regex_replace(config.prompt.string, {"^\n*"}, "");
+    result += prompt(context);
+    result += context.args.previous_command;
+    result += "\n\r";
+    // Sequence characters cannot be used when cursor position is changed
+    regex_replace(result, get_sequence_characters(context), "");
+    return result;
+}
+
 void print_prompt(Context &context)
 {
     std::cout << prepare_prompt(context);
@@ -356,6 +379,11 @@ void print_prompt(Context &context)
 void print_right_prompt(Context &context)
 {
     std::cout << prepare_right_prompt(context);
+}
+
+void print_transient_prompt(Context &context)
+{
+    std::cout << prepare_transient_prompt(context);
 }
 
 // ----------------------------------- TESTS -----------------------------------
@@ -948,6 +976,30 @@ TEST_CASE("prepare_right_prompt")
         const std::string test = "\001\033[0m\002\001\033[31m\002c\001\033[37m\002\001\033[41m\002-a10s\001\033[0m\002\001\033[37m\002\001\033[41m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002-\001\033[31m\002\001\033[49m\002d\001\033[0m\002";
         std::string result = prepare_right_prompt(context);
         CHECK(result.find(test) != std::string::npos);
+    }
+}
+
+TEST_CASE("prepare_transient_prompt")
+{
+    Context context;
+    context.args.shell = "bash";
+    context.args.transient_prompt = true;
+    context.args.previous_command = "asd";
+    context.args.exit_status = 1;
+    context.config.prompt.string = "> ";
+    Module directory;
+    directory.name = "directory";
+    context.config.modules.push_back(directory);
+    SUBCASE("transient prompt disabled")
+    {
+        std::string result = prepare_transient_prompt(context);
+        CHECK(result == "");
+    }
+    SUBCASE("transient prompt enabled")
+    {
+        context.config.prompt.transient = true;
+        std::string result = prepare_transient_prompt(context);
+        CHECK(result == "\033[1A\033[0J\r\033[0m> \033[0masd\n\r");
     }
 }
 

@@ -1,5 +1,7 @@
 # Blaze
-**A customizable and informative prompt for bash, zsh, fish, on linux distributions.**
+**A customizable and informative prompt for bash, zsh, fish, on linux distributions.**\
+**Features: easily configurable, transient prompt, git integration, command execution time,
+exit status, user defined modules, and more.**
 
 ![](media/demo.png)
 
@@ -69,6 +71,8 @@ string = " "
 foreground = ""
 # Foreground color to use when the last command was exited with non zero code. Use only if different from foreground
 error_foreground = ""
+# Modules are displayed only for the last prompt
+transient = false
 
 [connector]
 # This character will be used as spacing between the left and right side modules

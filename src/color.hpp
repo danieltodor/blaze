@@ -57,4 +57,13 @@ std::string reset_foreground(const Context &context);
 // Reset background color
 std::string reset_background(const Context &context);
 
+// Move cursor up by x lines
+std::string move_cursor_up(const int lines, const Context &context);
+
+// Erase from cursor until end of screen
+std::string erase_until_end_of_screen(const Context &context);
+
+// Get sequence characters
+std::vector<std::string> get_sequence_characters(const Context &context);
+
 #endif

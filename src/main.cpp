@@ -29,5 +29,9 @@ int main(int argc, char *argv[])
     {
         print_right_prompt(context);
     }
+    else if (context.args.transient_prompt)
+    {
+        print_transient_prompt(context);
+    }
     return 0;
 }

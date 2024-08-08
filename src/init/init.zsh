@@ -5,6 +5,9 @@ _blaze_get_current_time() {
 _blaze_preexec() {
     _blaze_start_time=$(_blaze_get_current_time)
     _blaze_first_print=false
+    _blaze_previous_command=$1
+    _blaze_previous_exit_status=$_blaze_exit_status
+    blaze zsh --transient-prompt -e=$_blaze_previous_exit_status -p=$_blaze_previous_command
 }
 
 _blaze_precmd() {
@@ -12,11 +15,19 @@ _blaze_precmd() {
     _blaze_finish_time=$(_blaze_get_current_time)
 }
 
+TRAPINT() {
+    echo
+    _blaze_preexec
+    return $(( 128 + $1 ))
+}
+
 _blaze_default_background=$(~/.local/share/blaze/util.bash _blaze_get_current_background)
 _blaze_start_time=0
 _blaze_finish_time=0
 _blaze_exit_status=0
 _blaze_first_print=true
+_blaze_previous_command=""
+_blaze_previous_exit_status=0
 
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec _blaze_preexec # Executed just after a command has been read and is about to be executed

@@ -2,7 +2,7 @@
 padding = ""
 
 [prompt]
-string = " ❯ "
+string = "❯ "
 foreground = "#ffffff"
 error_foreground = "#e83030"
 
@@ -85,7 +85,7 @@ foreground = "#ffffff"
 [[module]]
 name = "fixed"
 level = 2
-outer_prefix = "╰─"
+outer_prefix = "╰─ "
 foreground = "#ffffff"
 
 [[module]]

@@ -38,13 +38,16 @@ const std::unordered_map<std::string, int> foreground_color_map = {
 };
 
 // Create escape sequence
-std::string create_sequence(const std::string &code, const Context &context)
+std::string create_sequence(const std::string &code, const Context &context, const bool graphics_mode=true)
 {
     std::string result = "";
     result += sequence_begin.at(context.args.shell);
     result += csi;
     result += code;
-    result += 'm';
+    if (graphics_mode)
+    {
+        result += 'm';
+    }
     result += sequence_end.at(context.args.shell);
     return result;
 }
@@ -130,6 +133,21 @@ std::string reset_foreground(const Context &context)
 std::string reset_background(const Context &context)
 {
     return create_sequence(std::to_string(DEFAULT_COLOR + BACKGROUND_COLOR_OFFSET), context);
+}
+
+std::string move_cursor_up(const int lines, const Context &context)
+{
+    return create_sequence(std::to_string(lines) + 'A', context, false);
+}
+
+std::string erase_until_end_of_screen(const Context &context)
+{
+    return create_sequence("0J", context, false);
+}
+
+std::vector<std::string> get_sequence_characters(const Context &context)
+{
+    return {sequence_begin.at(context.args.shell), sequence_end.at(context.args.shell)};
 }
 
 // ----------------------------------- TESTS -----------------------------------
@@ -282,6 +300,52 @@ TEST_CASE("reset_background")
     context.args.shell = "bash";
     const std::string result = reset_background(context);
     CHECK(result.find("\001\033[49m\002") != std::string::npos);
+}
+
+TEST_CASE("move_cursor_up")
+{
+    Context context;
+    SUBCASE("1 line up in bash")
+    {
+        context.args.shell = "bash";
+        const std::string result = move_cursor_up(1, context);
+        CHECK(result == "\001\033[1A\002");
+    }
+    SUBCASE("5 line up in zsh")
+    {
+        context.args.shell = "zsh";
+        const std::string result = move_cursor_up(5, context);
+        CHECK(result == "%{\033[5A%}");
+    }
+}
+
+TEST_CASE("erase_until_end_of_screen")
+{
+    Context context;
+    context.args.shell = "bash";
+    const std::string result = erase_until_end_of_screen(context);
+    CHECK(result == "\001\033[0J\002");
+}
+
+TEST_CASE("get_sequence_characters")
+{
+    Context context;
+    SUBCASE("bash")
+    {
+        context.args.shell = "bash";
+        const std::vector<std::string> result = get_sequence_characters(context);
+        CHECK(result.size() == 2);
+        CHECK(result.at(0) == "\001");
+        CHECK(result.at(1) == "\002");
+    }
+    SUBCASE("zsh")
+    {
+        context.args.shell = "zsh";
+        const std::vector<std::string> result = get_sequence_characters(context);
+        CHECK(result.size() == 2);
+        CHECK(result.at(0) == "%{");
+        CHECK(result.at(1) == "%}");
+    }
 }
 
 #endif

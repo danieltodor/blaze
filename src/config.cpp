@@ -48,6 +48,7 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.prompt.string, "prompt", "string");
     set_value(data, config.prompt.foreground, "prompt", "foreground");
     set_value(data, config.prompt.error_foreground, "prompt", "error_foreground");
+    set_value(data, config.prompt.transient, "prompt", "transient");
 
     set_value(data, config.connector.character, "connector", "character");
     set_value(data, config.connector.foreground, "connector", "foreground");
@@ -260,6 +261,16 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     return false;
 }
 
+int vertical_size(const Config &config)
+{
+    int size = 0;
+    // Vertical space by prompt
+    size += split(config.prompt.string, "\n").size() - 1;
+    // Vertical space by modules (assuming they are sorted)
+    size += config.modules.back().level;
+    return size;
+}
+
 // ----------------------------------- TESTS -----------------------------------
 #include "src/test.hpp"
 #ifdef TEST
@@ -449,6 +460,45 @@ TEST_CASE("contains_content_on_right")
     {
         const bool result = contains_content_on_right(modules, 2);
         CHECK(result == true);
+    }
+}
+
+TEST_CASE("vertical_size")
+{
+    Config config;
+
+    Module a;
+    a.name = "a";
+    config.modules.push_back(a);
+
+    Module b;
+    b.name = "b";
+    config.modules.push_back(b);
+
+    Module c;
+    c.name = "c";
+    config.modules.push_back(c);
+
+    SUBCASE("all modules on level 1 and no newlines in prompt")
+    {
+        CHECK(vertical_size(config) == 1);
+    }
+    SUBCASE("all modules on level 1 and 2 newlines in prompt")
+    {
+        config.prompt.string = "\n\n";
+        CHECK(vertical_size(config) == 3);
+    }
+    SUBCASE("one module on level 2 and no newlines in prompt")
+    {
+        config.modules.back().level = 2;
+        config.prompt.string = "";
+        CHECK(vertical_size(config) == 2);
+    }
+    SUBCASE("one module on level 2 and 1 newline in prompt")
+    {
+        config.modules.back().level = 2;
+        config.prompt.string = "\n";
+        CHECK(vertical_size(config) == 3);
     }
 }
 

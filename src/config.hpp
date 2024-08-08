@@ -20,6 +20,7 @@ struct Prompt
     std::string string = " ";
     std::string foreground = "";
     std::string error_foreground = "";
+    bool transient = false;
 };
 
 struct Connector
@@ -135,5 +136,8 @@ std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const i
 
 // At least one module on the right has content set
 bool contains_content_on_right(std::vector<Module> &modules, const int level);
+
+// Vertical size of the displayed config
+int vertical_size(const Config &config);
 
 #endif
