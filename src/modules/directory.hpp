@@ -26,7 +26,7 @@ std::string directory(const Context &context)
             git_repository_path.replace(0, HOME.length(), "~");
         }
         const std::size_t index = find_nth_occurrence(git_repository_path, "/", 1, true);
-        result.replace(0, index, "...");
+        result.replace(0, index + 1, "");
     }
     if (config.directory.limit > 0)
     {
@@ -63,7 +63,7 @@ TEST_CASE("directory")
         context.PWD = get_env("PWD");
         context.config.directory.from_repository = true;
         context.git_repository_detected = true;
-        CHECK(directory(context) == ".../blaze");
+        CHECK(directory(context) == "blaze");
     }
     SUBCASE("from repository inside subdirectory")
     {
@@ -71,7 +71,7 @@ TEST_CASE("directory")
         context.PWD = get_env("PWD") + "/a/b/c";
         context.config.directory.from_repository = true;
         context.git_repository_detected = true;
-        CHECK(directory(context) == ".../blaze/a/b/c");
+        CHECK(directory(context) == "blaze/a/b/c");
     }
     SUBCASE("from repository directory limit")
     {

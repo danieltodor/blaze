@@ -3,7 +3,7 @@ padding = ""
 
 [prompt]
 string = "❯ "
-foreground = "#ffffff"
+foreground = "#25c145"
 error_foreground = "#e83030"
 
 [directory]
