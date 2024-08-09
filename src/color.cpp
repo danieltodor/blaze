@@ -55,13 +55,13 @@ std::string create_sequence(const std::string &code, const Context &context, con
 // Convert color to escape sequence
 std::string to_color_code(const std::string &color, const int offset, const Context &context)
 {
-    std::string code = "";
     if (color.empty())
     {
         return "";
     }
+    std::string code = "";
     // Hexadecimal colors (#3dff27)
-    else if (color.at(0) == '#')
+    if (color.at(0) == '#')
     {
         const std::string red_s = color.substr(1, 2), green_s = color.substr(3, 2), blue_s = color.substr(5, 2);
         const int red_i = stoi(red_s, NULL, 16), green_i = stoi(green_s, NULL, 16), blue_i = stoi(blue_s, NULL, 16);
@@ -79,7 +79,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
         const std::string id_prefix = offset == 0 ? foreground_id_prefix : background_id_prefix;
         code = id_prefix + color;
     }
-    // RGB color codes (24;65;255, 43,65,0)
+    // RGB colors (24;65;255) (43,65,0)
     else
     {
         const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;

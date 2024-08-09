@@ -9,8 +9,7 @@
 std::string dummy(const Context &context)
 {
     (void)context;
-    std::string result = "";
-    return result;
+    return "";
 }
 
 // ----------------------------------- TESTS -----------------------------------

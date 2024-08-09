@@ -33,13 +33,12 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
 
 std::string call_module(const std::string &name, const Context &context)
 {
-    std::string result = "";
     const auto pair = module_map.find(name);
-    if (pair != module_map.end())
+    if (pair == module_map.end())
     {
-        result = (*pair).second(context);
+        return "";
     }
-    return result;
+    return (*pair).second(context);
 }
 
 // ----------------------------------- TESTS -----------------------------------
@@ -49,8 +48,15 @@ std::string call_module(const std::string &name, const Context &context)
 TEST_CASE("call_module")
 {
     Context context;
-    context.args.status = 255;
-    CHECK(call_module("status", context) == "255");
+    SUBCASE("non-existent module")
+    {
+        CHECK(call_module("unknown", context) == "");
+    }
+    SUBCASE("existing module")
+    {
+        context.args.status = 255;
+        CHECK(call_module("status", context) == "255");
+    }
 }
 
 #endif

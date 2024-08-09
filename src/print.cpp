@@ -152,10 +152,7 @@ bool level_changes(const Config &config, const std::size_t index)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 // Checks if the current module is the last
@@ -165,10 +162,7 @@ bool end_reached(const Config &config, const std::size_t index)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 // Evaluate the content of each module

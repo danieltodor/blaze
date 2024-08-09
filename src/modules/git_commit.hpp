@@ -9,12 +9,12 @@
 // Commit hash
 std::string git_commit(const Context &context)
 {
-    std::string result = "";
     if (!context.git_repository_detected)
     {
-        return result;
+        return "";
     }
     const Config &config = context.config;
+    std::string result = "";
     result += execute_command("git rev-parse HEAD");
     strip(result);
     if (config.git_commit.length > 0)

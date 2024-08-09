@@ -76,11 +76,11 @@ std::vector<std::string> split(const std::string &string, const std::string &del
 
 std::string join(const std::vector<std::string> &strings, const std::string &delimiter)
 {
-    std::string result = "";
     if (strings.empty())
     {
-        return result;
+        return "";
     }
+    std::string result = "";
     for (std::size_t i = 0; i < strings.size() - 1; i++)
     {
         result += strings.at(i);
@@ -98,12 +98,12 @@ void regex_replace(std::string &string, const std::vector<std::string> &patterns
 
 std::vector<std::string> regex_find_all(const std::string &string, const std::vector<std::string> &patterns)
 {
+    if (string.empty() || patterns.empty())
+    {
+        return {};
+    }
     std::vector<std::string> result;
     const std::string pattern = join(patterns, "|");
-    if (pattern.empty())
-    {
-        return result;
-    }
     boost::sregex_token_iterator current(string.begin(), string.end(), boost::regex(pattern));
     const boost::sregex_token_iterator end;
     while (current != end)
@@ -128,15 +128,15 @@ void strip(std::string &string)
 
 std::string execute_command(const std::string &command, int *status)
 {
-    std::string result = "";
     const std::string prefix = "LC_ALL=C; ";
     const std::string suffix = " 2>/dev/null";
-    char buffer[128];
     FILE *pipe = popen((prefix + command + suffix).c_str(), "r");
     if (!pipe)
     {
-        return result;
+        return "";
     }
+    std::string result = "";
+    char buffer[128];
     while (fgets(buffer, sizeof(buffer), pipe) != NULL)
     {
         result += buffer;
@@ -158,13 +158,12 @@ bool check_git_repository()
 
 std::string get_env(const std::string &name)
 {
-    std::string env = "";
     const char *result = std::getenv(name.c_str());
-    if (result != NULL)
+    if (result == NULL)
     {
-        env = result;
+        return "";
     }
-    return env;
+    return result;
 }
 
 std::tm get_current_time()
@@ -175,11 +174,9 @@ std::tm get_current_time()
 
 std::string format_time(const std::tm &time_structure, const std::string &format)
 {
-    std::string result = "";
     char buffer[128];
     std::strftime(buffer, sizeof(buffer), format.c_str(), &time_structure);
-    result += buffer;
-    return result;
+    return buffer;
 }
 
 bool is_number(const std::string &string)
@@ -289,6 +286,16 @@ TEST_CASE("regex_replace")
 
 TEST_CASE("regex_find_all")
 {
+    SUBCASE("empty string")
+    {
+        std::vector<std::string> result = regex_find_all("", {"123"});
+        CHECK(result.size() == 0);
+    }
+    SUBCASE("empty pattern")
+    {
+        std::vector<std::string> result = regex_find_all("abc", {});
+        CHECK(result.size() == 0);
+    }
     SUBCASE("1")
     {
         std::vector<std::string> result = regex_find_all("abc123def", {"123"});

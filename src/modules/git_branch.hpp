@@ -9,12 +9,12 @@
 // Active branch in the repository
 std::string git_branch(const Context &context)
 {
-    std::string result = "";
     if (!context.git_repository_detected)
     {
-        return result;
+        return "";
     }
     const Config &config = context.config;
+    std::string result = "";
     result += execute_command("git name-rev --name-only HEAD");
     strip(result);
     regex_replace(
@@ -50,6 +50,14 @@ TEST_CASE("git_branch")
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
         CHECK(git_branch(context) == "master");
+    }
+    SUBCASE("ignored branch")
+    {
+        context.HOME = get_env("HOME");
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        context.config.git_branch.ignore = {"master"};
+        CHECK(git_branch(context) == "");
     }
 }
 

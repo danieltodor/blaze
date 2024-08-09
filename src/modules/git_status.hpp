@@ -9,12 +9,12 @@
 // Symbols indicating the current state of the repository
 std::string git_status(const Context &context)
 {
-    std::string result = "";
     if (!context.git_repository_detected)
     {
-        return result;
+        return "";
     }
     const Config &config = context.config;
+    std::string result = "";
     auto add_status = [&config, &result](const std::size_t count, const std::string &symbol)
     {
         if (count && !symbol.empty())

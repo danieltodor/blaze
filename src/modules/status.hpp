@@ -8,12 +8,11 @@
 // Exit status of the last command
 std::string status(const Context &context)
 {
-    std::string result = "";
-    if (context.args.status != 0 || context.config.status.show_zero)
+    if (context.args.status == 0 && !context.config.status.show_zero)
     {
-        result += std::to_string(context.args.status);
+        return "";
     }
-    return result;
+    return std::to_string(context.args.status);
 }
 
 // ----------------------------------- TESTS -----------------------------------

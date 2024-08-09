@@ -10,9 +10,7 @@
 std::string user(const Context &context)
 {
     (void)context;
-    std::string result = "";
-    result += get_env("USER");
-    return result;
+    return get_env("USER");
 }
 
 // ----------------------------------- TESTS -----------------------------------
