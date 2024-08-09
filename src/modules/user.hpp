@@ -22,8 +22,7 @@ std::string user(const Context &context)
 TEST_CASE("user")
 {
     Context context;
-    const std::string result = user(context);
-    CHECK(result.length() > 0);
+    CHECK(user(context).length() > 0);
 }
 
 #endif

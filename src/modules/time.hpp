@@ -35,14 +35,12 @@ TEST_CASE("time")
     SUBCASE("correct time %R format")
     {
         context.config.time.format = "%R";
-        const std::string result = time(context);
-        CHECK(result == "20:04");
+        CHECK(time(context) == "20:04");
     }
     SUBCASE("correct time %T format")
     {
         context.config.time.format = "%T";
-        const std::string result = time(context);
-        CHECK(result == "20:04:34");
+        CHECK(time(context) == "20:04:34");
     }
 }
 

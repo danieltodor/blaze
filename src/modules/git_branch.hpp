@@ -42,16 +42,14 @@ TEST_CASE("git_branch")
     SUBCASE("not a repository")
     {
         context.git_repository_detected = false;
-        const std::string result = git_branch(context);
-        CHECK(result == "");
+        CHECK(git_branch(context) == "");
     }
     SUBCASE("branch")
     {
         context.HOME = get_env("HOME");
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
-        const std::string result = git_branch(context);
-        CHECK(result == "master");
+        CHECK(git_branch(context) == "master");
     }
 }
 

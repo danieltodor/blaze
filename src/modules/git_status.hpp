@@ -64,16 +64,14 @@ TEST_CASE("git_status")
     SUBCASE("not a repository")
     {
         context.git_repository_detected = false;
-        const std::string result = git_status(context);
-        CHECK(result == "");
+        CHECK(git_status(context) == "");
     }
     SUBCASE("status")
     {
         context.HOME = get_env("HOME");
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
-        const std::string result = git_status(context);
-        CHECK(result.length() > 0);
+        CHECK(git_status(context).length() > 0);
     }
 }
 

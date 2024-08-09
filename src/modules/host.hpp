@@ -23,8 +23,7 @@ std::string host(const Context &context)
 TEST_CASE("host")
 {
     Context context;
-    const std::string result = host(context);
-    CHECK(result.length() > 0);
+    CHECK(host(context).length() > 0);
 }
 
 #endif

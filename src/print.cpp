@@ -755,6 +755,7 @@ TEST_CASE("evaluate_content")
 {
     Context context;
     context.PWD = "/PWD";
+    context.HOME = "/a";
     context.args.prompt = true;
     context.args.right_prompt = false;
     context.args.start_time = 1;
@@ -768,8 +769,8 @@ TEST_CASE("evaluate_content")
     SUBCASE("1")
     {
         evaluate_content(context);
-        CHECK(context.config.modules[0].content.find("/PWD") != std::string::npos);
-        CHECK(context.config.modules[1].content.find("10s") != std::string::npos);
+        CHECK(context.config.modules[0].content == "/PWD");
+        CHECK(context.config.modules[1].content == "10s");
     }
 }
 

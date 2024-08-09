@@ -27,26 +27,22 @@ TEST_CASE("exit_status")
     context.args.exit_status = 0;
     SUBCASE("empty if exit_status is zero and non_zero_only is true")
     {
-        const std::string result = exit_status(context);
-        CHECK(result == "");
+        CHECK(exit_status(context) == "");
     }
     SUBCASE("correct exit_status 0")
     {
         context.config.exit_status.non_zero_only = false;
-        const std::string result = exit_status(context);
-        CHECK(result == "0");
+        CHECK(exit_status(context) == "0");
     }
     SUBCASE("correct positive exit_status")
     {
         context.args.exit_status = 255;
-        const std::string result = exit_status(context);
-        CHECK(result == "255");
+        CHECK(exit_status(context) == "255");
     }
     SUBCASE("correct negative exit_status")
     {
         context.args.exit_status = -255;
-        const std::string result = exit_status(context);
-        CHECK(result == "-255");
+        CHECK(exit_status(context) == "-255");
     }
 }
 

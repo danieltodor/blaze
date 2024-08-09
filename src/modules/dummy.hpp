@@ -20,8 +20,7 @@ std::string dummy(const Context &context)
 TEST_CASE("dummy")
 {
     Context context;
-    const std::string result = dummy(context);
-    CHECK(result == "");
+    CHECK(dummy(context) == "");
 }
 
 #endif

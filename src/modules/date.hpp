@@ -35,14 +35,12 @@ TEST_CASE("date")
     SUBCASE("correct date %F format")
     {
         context.config.date.format = "%F";
-        const std::string result = date(context);
-        CHECK(result == "2024-08-03");
+        CHECK(date(context) == "2024-08-03");
     }
     SUBCASE("correct date %T format")
     {
         context.config.date.format = "%T";
-        const std::string result = date(context);
-        CHECK(result == "20:04:34");
+        CHECK(date(context) == "20:04:34");
     }
 }
 

@@ -19,8 +19,7 @@ TEST_CASE("shell")
 {
     Context context;
     context.args.shell = "abc";
-    const std::string result = shell(context);
-    CHECK(result == "abc");
+    CHECK(shell(context) == "abc");
 }
 
 #endif

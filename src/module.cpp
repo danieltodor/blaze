@@ -50,8 +50,7 @@ TEST_CASE("call_module")
 {
     Context context;
     context.args.exit_status = 255;
-    const std::string result = call_module("exit_status", context);
-    CHECK(result.find("255") != std::string::npos);
+    CHECK(call_module("exit_status", context) == "255");
 }
 
 #endif

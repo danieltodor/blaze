@@ -34,8 +34,7 @@ TEST_CASE("git_commit")
     SUBCASE("not a repository")
     {
         context.git_repository_detected = false;
-        const std::string result = git_commit(context);
-        CHECK(result == "");
+        CHECK(git_commit(context) == "");
     }
     SUBCASE("commit trimmed")
     {
@@ -43,8 +42,7 @@ TEST_CASE("git_commit")
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
         context.config.git_commit.length = 8;
-        const std::string result = git_commit(context);
-        CHECK(result.length() == 8);
+        CHECK(git_commit(context).length() == 8);
     }
     SUBCASE("commit not trimmed")
     {
@@ -52,8 +50,7 @@ TEST_CASE("git_commit")
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
         context.config.git_commit.length = 0;
-        const std::string result = git_commit(context);
-        CHECK(result.length() > 8);
+        CHECK(git_commit(context).length() > 8);
     }
 }
 

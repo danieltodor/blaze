@@ -76,23 +76,20 @@ TEST_CASE("duration")
     {
         context.args.start_time = 0;
         context.args.finish_time = 10;
-        const std::string result = duration(context);
-        CHECK(result == "");
+        CHECK(duration(context) == "");
     }
     SUBCASE("empty if finish time is zero")
     {
         context.args.start_time = 10;
         context.args.finish_time = 0;
-        const std::string result = duration(context);
-        CHECK(result == "");
+        CHECK(duration(context) == "");
     }
     SUBCASE("empty if less than display_from")
     {
         context.config.duration.display_from = 10;
         context.args.start_time = 1;
         context.args.finish_time = 10;
-        const std::string result = duration(context);
-        CHECK(result == "");
+        CHECK(duration(context) == "");
     }
     SUBCASE("correct fractional")
     {
@@ -100,8 +97,7 @@ TEST_CASE("duration")
         context.config.duration.display_from = 1;
         context.args.start_time = 3.5;
         context.args.finish_time = 5.512345;
-        const std::string result = duration(context);
-        CHECK(result == "2.0123s");
+        CHECK(duration(context) == "2.0123s");
     }
     SUBCASE("skip fractional above display_fractional_until")
     {
@@ -109,30 +105,26 @@ TEST_CASE("duration")
         context.config.duration.display_fractional_until = 5;
         context.args.start_time = 1;
         context.args.finish_time = 6.412345;
-        const std::string result = duration(context);
-        CHECK(result == "5s");
+        CHECK(duration(context) == "5s");
     }
     SUBCASE("correct seconds")
     {
         context.config.duration.precision = 1;
         context.args.start_time = 3;
         context.args.finish_time = 30.4;
-        const std::string result = duration(context);
-        CHECK(result == "27s");
+        CHECK(duration(context) == "27s");
     }
     SUBCASE("correct minutes")
     {
         context.args.start_time = 3;
         context.args.finish_time = 300.4;
-        const std::string result = duration(context);
-        CHECK(result == "4m 57s");
+        CHECK(duration(context) == "4m 57s");
     }
     SUBCASE("correct hours")
     {
         context.args.start_time = 3;
         context.args.finish_time = 5900.4;
-        const std::string result = duration(context);
-        CHECK(result == "1h 38m 17s");
+        CHECK(duration(context) == "1h 38m 17s");
     }
 }
 

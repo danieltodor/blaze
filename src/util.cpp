@@ -309,9 +309,9 @@ TEST_CASE("strip")
 {
     SUBCASE("spaces and newlines")
     {
-        std::string string = "\n  abc\n\n";
+        std::string string = "\n  a bc\n\n";
         strip(string);
-        CHECK(string == "abc");
+        CHECK(string == "a bc");
     }
 }
 
