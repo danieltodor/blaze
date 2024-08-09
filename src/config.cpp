@@ -96,8 +96,8 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.directory.from_repository, "directory", "from_repository");
 
     set_value(data, config.duration.precision, "duration", "precision");
-    set_value(data, config.duration.display_from, "duration", "display_from");
-    set_value(data, config.duration.display_fractional_until, "duration", "display_fractional_until");
+    set_value(data, config.duration.threshold, "duration", "threshold");
+    set_value(data, config.duration.fractional_until, "duration", "fractional_until");
 
     set_value(data, config.git_branch.ignore, "git_branch", "ignore");
 
@@ -120,7 +120,7 @@ void load_values(toml::value &data, Config &config)
 
     set_value(data, config.time.format, "time", "format");
 
-    set_value(data, config.status.non_zero_only, "status", "non_zero_only");
+    set_value(data, config.status.show_zero, "status", "show_zero");
 }
 
 // Sort modules in ascending order
@@ -148,8 +148,6 @@ void sort_modules(std::vector<Module> &modules)
 void set_default_values(Config &config)
 {
     config.global.padding = "";
-    config.duration.display_from = 2;
-    config.status.non_zero_only = true;
 
     Prompt prompt;
     prompt.string = " ❯ ";

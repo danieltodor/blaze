@@ -26,7 +26,7 @@ std::string duration(const Context &context)
     const double start_time = context.args.start_time;
     const double finish_time = context.args.finish_time;
     double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < config.duration.display_from || start_time == 0 || finish_time == 0)
+    if (diff < config.duration.threshold || start_time == 0 || finish_time == 0)
     {
         return result;
     }
@@ -43,10 +43,10 @@ std::string duration(const Context &context)
         result += hours ? " " : "";
         result += std::to_string(minutes) + 'm';
     }
-    if (seconds || fractional > config.duration.display_from)
+    if (seconds || fractional > config.duration.threshold)
     {
         result += hours || minutes ? " " : "";
-        if (seconds + minutes * MINUTE + hours * HOUR < config.duration.display_fractional_until)
+        if (seconds + minutes * MINUTE + hours * HOUR < config.duration.fractional_until)
         {
             result += std::to_string(seconds);
             result += std::to_string(fractional).substr(1, 1 + config.duration.precision);
@@ -68,8 +68,8 @@ TEST_CASE("duration")
 {
     Context context;
     context.config.duration.precision = 1;
-    context.config.duration.display_from = 1;
-    context.config.duration.display_fractional_until = 5;
+    context.config.duration.threshold = 1;
+    context.config.duration.fractional_until = 5;
     context.args.start_time = 0;
     context.args.finish_time = 0;
     SUBCASE("empty if start time is zero")
@@ -84,9 +84,9 @@ TEST_CASE("duration")
         context.args.finish_time = 0;
         CHECK(duration(context) == "");
     }
-    SUBCASE("empty if less than display_from")
+    SUBCASE("empty if less than threshold")
     {
-        context.config.duration.display_from = 10;
+        context.config.duration.threshold = 10;
         context.args.start_time = 1;
         context.args.finish_time = 10;
         CHECK(duration(context) == "");
@@ -94,15 +94,15 @@ TEST_CASE("duration")
     SUBCASE("correct fractional")
     {
         context.config.duration.precision = 4;
-        context.config.duration.display_from = 1;
+        context.config.duration.threshold = 1;
         context.args.start_time = 3.5;
         context.args.finish_time = 5.512345;
         CHECK(duration(context) == "2.0123s");
     }
-    SUBCASE("skip fractional above display_fractional_until")
+    SUBCASE("skip fractional above fractional_until")
     {
         context.config.duration.precision = 4;
-        context.config.duration.display_fractional_until = 5;
+        context.config.duration.fractional_until = 5;
         context.args.start_time = 1;
         context.args.finish_time = 6.412345;
         CHECK(duration(context) == "5s");

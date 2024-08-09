@@ -60,9 +60,9 @@ struct Directory
 
 struct Duration
 {
+    float threshold = 2;
     int precision = 1;
-    float display_from = 0;
-    float display_fractional_until = 10;
+    float fractional_until = 10;
 };
 
 struct GitBranch
@@ -103,7 +103,7 @@ struct Time
 
 struct Status
 {
-    bool non_zero_only = false;
+    bool show_zero = false;
 };
 
 struct Config

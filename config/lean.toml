@@ -10,12 +10,6 @@ error_foreground = "#e83030"
 limit = 10
 from_repository = true
 
-[duration]
-display_from = 2.0
-
-[status]
-non_zero_only = true
-
 # [[module]]
 # name = "user"
 # inner_suffix = " "

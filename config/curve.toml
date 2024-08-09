@@ -14,17 +14,11 @@ foreground = "#ffffff"
 limit = 10
 from_repository = true
 
-[duration]
-display_from = 2.0
-
 [date]
 format = "%F"
 
 [time]
 format = "%T"
-
-[status]
-non_zero_only = true
 
 [git_status]
 clean = ""

@@ -122,16 +122,16 @@ limit = 0
 from_repository = false
 
 [duration]
+# Display module if execution time exceeds threshold
+threshold = 2.0
 # Digits displayed after seconds
 precision = 1
-# Display module if execution time exceeds this
-display_from = 0.0
 # Display franctional part if less than this
-display_fractional_until = 10.0
+fractional_until = 10.0
 
 [status]
-# Show exit status only if non zero
-non_zero_only = false
+# Show exit status when it is 0 (success)
+show_zero = false
 
 [git_branch]
 # Ignore branches that matches these regex patterns, e.g.: "^master"
