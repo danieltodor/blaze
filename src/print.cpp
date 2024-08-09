@@ -132,7 +132,7 @@ std::string prompt(const Context &context)
 {
     std::string result = "";
     result += reset_all(context);
-    if (context.args.exit_status != 0 && !context.config.prompt.error_foreground.empty())
+    if (context.args.status != 0 && !context.config.prompt.error_foreground.empty())
     {
         result += set_foreground(context.config.prompt.error_foreground, context);
     }
@@ -681,7 +681,7 @@ TEST_CASE("prompt")
     }
     SUBCASE("error foreground")
     {
-        context.args.exit_status = 1;
+        context.args.status = 1;
         context.config.prompt.error_foreground = "red";
         const std::string result = prompt(context);
         CHECK(result.find("\033[31m") != std::string::npos);
@@ -694,7 +694,7 @@ TEST_CASE("prompt")
     }
     SUBCASE("result")
     {
-        context.args.exit_status = 0;
+        context.args.status = 0;
         context.config.prompt.string = "abc";
         context.config.prompt.foreground = "green";
         context.config.prompt.error_foreground = "red";
@@ -711,8 +711,8 @@ TEST_CASE("level_changes")
     config.modules.push_back(directory);
     Module duration;
     config.modules.push_back(duration);
-    Module exit_status;
-    config.modules.push_back(exit_status);
+    Module status;
+    config.modules.push_back(status);
     SUBCASE("all modules are on the same level")
     {
         CHECK(level_changes(config, 0) == false);
@@ -735,8 +735,8 @@ TEST_CASE("end_reached")
     config.modules.push_back(directory);
     Module duration;
     config.modules.push_back(duration);
-    Module exit_status;
-    config.modules.push_back(exit_status);
+    Module status;
+    config.modules.push_back(status);
     SUBCASE("1")
     {
         CHECK(end_reached(config, 0) == false);
@@ -986,7 +986,7 @@ TEST_CASE("prepare_transient_prompt")
     context.args.shell = "bash";
     context.args.transient_prompt = true;
     context.args.previous_command = "asd";
-    context.args.exit_status = 1;
+    context.args.status = 1;
     context.config.prompt.string = "> ";
     Module directory;
     directory.name = "directory";

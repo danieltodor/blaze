@@ -120,7 +120,7 @@ void load_values(toml::value &data, Config &config)
 
     set_value(data, config.time.format, "time", "format");
 
-    set_value(data, config.exit_status.non_zero_only, "exit_status", "non_zero_only");
+    set_value(data, config.status.non_zero_only, "status", "non_zero_only");
 }
 
 // Sort modules in ascending order
@@ -149,7 +149,7 @@ void set_default_values(Config &config)
 {
     config.global.padding = "";
     config.duration.display_from = 2;
-    config.exit_status.non_zero_only = true;
+    config.status.non_zero_only = true;
 
     Prompt prompt;
     prompt.string = " ❯ ";
@@ -172,13 +172,13 @@ void set_default_values(Config &config)
     duration.foreground = "yellow";
     config.modules.push_back(duration);
 
-    Module exit_status;
-    exit_status.name = "exit_status";
-    exit_status.align = "left";
-    exit_status.inner_prefix = "⚠ ";
-    exit_status.outer_prefix = " ";
-    exit_status.foreground = "red";
-    config.modules.push_back(exit_status);
+    Module status;
+    status.name = "status";
+    status.align = "left";
+    status.inner_prefix = "⚠ ";
+    status.outer_prefix = " ";
+    status.foreground = "red";
+    config.modules.push_back(status);
 }
 
 Config get_config()

@@ -13,7 +13,7 @@ from_repository = true
 [duration]
 display_from = 2.0
 
-[exit_status]
+[status]
 non_zero_only = true
 
 # [[module]]
@@ -45,7 +45,7 @@ inner_prefix = " ⌛︎"
 foreground = "#e38029"
 
 [[module]]
-name = "exit_status"
+name = "status"
 align = "right_prompt"
 inner_prefix = " ⚠ "
 foreground = "#e83030"

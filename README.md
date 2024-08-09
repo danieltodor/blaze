@@ -129,7 +129,7 @@ display_from = 0.0
 # Display franctional part if less than this
 display_fractional_until = 10.0
 
-[exit_status]
+[status]
 # Show exit status only if non zero
 non_zero_only = false
 
@@ -183,7 +183,7 @@ format = "%X"
 | separator | Can be used for additional separation between modules |
 | directory | Current working directory |
 | duration | Execution time of the last command (wall time) |
-| exit_status | Exit status of the last command |
+| status | Exit status of the last command |
 | git_branch | Active branch in the repository |
 | git_commit | Commit hash |
 | git_status | Symbols indicating the current state of the repository |

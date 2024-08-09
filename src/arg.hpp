@@ -15,7 +15,7 @@ struct Args : public argparse::Args
     bool &first_print = kwarg("g,first-print", "First print of prompt").set_default(false);
     double &start_time = kwarg("s,start-time", "Time when the command was started").set_default(0);
     double &finish_time = kwarg("f,finish-time", "Time when the command was finished").set_default(0);
-    int &exit_status = kwarg("e,exit-status", "Exit status of the last command").set_default(0);
+    int &status = kwarg("e,status", "Exit status of the last command").set_default(0);
     std::string &background = kwarg("b,background", "Background RGB color").set_default("0;0;0");
     std::string &previous_command = kwarg("p,previous-command", "Previous command").set_default("");
 };

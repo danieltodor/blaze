@@ -13,7 +13,7 @@ from_repository = true
 [duration]
 display_from = 2.0
 
-[exit_status]
+[status]
 non_zero_only = true
 
 # [[module]]
@@ -45,7 +45,7 @@ inner_suffix = " "
 foreground = "#e38029"
 
 [[module]]
-name = "exit_status"
+name = "status"
 inner_prefix = "⚠ "
 inner_suffix = " "
 foreground = "#e83030"

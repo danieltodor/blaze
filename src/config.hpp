@@ -101,7 +101,7 @@ struct Time
     std::string format = "%X";
 };
 
-struct ExitStatus
+struct Status
 {
     bool non_zero_only = false;
 };
@@ -119,7 +119,7 @@ struct Config
     GitStatus git_status;
     Date date;
     Time time;
-    ExitStatus exit_status;
+    Status status;
 };
 
 // Read the user`s config file, or set default values if there is no such file

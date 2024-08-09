@@ -88,7 +88,7 @@ background = "#e38029"
 foreground = "#ffffff"
 
 [[module]]
-name = "exit_status"
+name = "status"
 align = "right"
 inner_prefix = "⚠ "
 outer_prefix = ""

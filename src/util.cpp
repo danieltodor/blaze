@@ -126,7 +126,7 @@ void strip(std::string &string)
     );
 }
 
-std::string execute_command(const std::string &command, int *exit_status)
+std::string execute_command(const std::string &command, int *status)
 {
     std::string result = "";
     const std::string prefix = "LC_ALL=C; ";
@@ -141,19 +141,19 @@ std::string execute_command(const std::string &command, int *exit_status)
     {
         result += buffer;
     }
-    const int status = WEXITSTATUS(pclose(pipe));
-    if (exit_status != NULL)
+    const int es = WEXITSTATUS(pclose(pipe));
+    if (status != NULL)
     {
-        *exit_status = status;
+        *status = es;
     }
     return result;
 }
 
 bool check_git_repository()
 {
-    int exit_status = 0;
-    execute_command("git rev-parse", &exit_status);
-    return exit_status == 0 ? true : false;
+    int status = 0;
+    execute_command("git rev-parse", &status);
+    return status == 0 ? true : false;
 }
 
 std::string get_env(const std::string &name)
@@ -320,9 +320,9 @@ TEST_CASE("execute_command")
     CHECK(execute_command("echo abc") == "abc\n");
     SUBCASE("exit status")
     {
-        int exit_status = 0;
-        CHECK(execute_command("non_existing_command", &exit_status) == "");
-        CHECK(exit_status == 127);
+        int status = 0;
+        CHECK(execute_command("non_existing_command", &status) == "");
+        CHECK(status == 127);
     }
 }
 
