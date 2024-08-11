@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 #include <time.h>
+#include <sys/ioctl.h>
 
-// Number of columns currently in the terminal emulator
-unsigned short get_columns();
+// Terminal window size
+winsize get_winsize();
 
 // Number of displayed characters in the strings
 std::size_t get_length(const std::vector<std::string> &strings);

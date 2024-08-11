@@ -21,6 +21,7 @@ struct Prompt
     std::string foreground = "";
     std::string error_foreground = "";
     bool transient = false;
+    bool bottom = false;
 };
 
 struct Connector

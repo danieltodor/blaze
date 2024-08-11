@@ -73,6 +73,8 @@ foreground = ""
 error_foreground = ""
 # Modules are displayed only for the last prompt
 transient = false
+# Start prompt on the bottom of the terminal window
+bottom = false
 
 [connector]
 # This character will be used as spacing between the left and right side modules

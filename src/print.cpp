@@ -270,6 +270,10 @@ std::string prepare_prompt(Context &context)
     {
         result += '\n';
     }
+    else if (config.prompt.bottom && context.args.first_print)
+    {
+        result += std::string(get_winsize().ws_row - vertical_size(config), '\n');
+    }
     preprocess_modules(context);
     bool display_connector = contains_content_on_right(config.modules, 1);
     for (std::size_t i = 0; i < config.modules.size(); i++)
@@ -297,22 +301,23 @@ std::string prepare_prompt(Context &context)
         {
             left += temp;
         }
-        if (level_changes(config, i) || end_reached(config, i))
+        const bool level_change = level_changes(config, i);
+        if (level_change || end_reached(config, i))
         {
             result += left;
             left = "";
             if (!right.empty())
             {
-                result += connector(context, get_columns() - length);
+                result += connector(context, get_winsize().ws_col - length);
                 result += right;
                 right = "";
             }
             length = 0;
-        }
-        if (level_changes(config, i))
-        {
-            display_connector = contains_content_on_right(config.modules, i + 1);
-            result += '\n';
+            if (level_change)
+            {
+                display_connector = contains_content_on_right(config.modules, i + 1);
+                result += '\n';
+            }
         }
     }
     result += prompt(context);
@@ -876,6 +881,35 @@ TEST_CASE("prepare_prompt")
         std::string result = prepare_prompt(context);
         CHECK(result.find("/PWD") != std::string::npos);
         CHECK(result.find("10s") != std::string::npos);
+    }
+    SUBCASE("new line first print")
+    {
+        context.config.global.new_line = true;
+        context.args.first_print = true;
+        std::string result = prepare_prompt(context);
+        CHECK(result.at(0) != '\n');
+    }
+    SUBCASE("new line after first print")
+    {
+        context.config.global.new_line = true;
+        context.args.first_print = false;
+        std::string result = prepare_prompt(context);
+        CHECK(result.at(0) == '\n');
+    }
+    SUBCASE("bottom first print")
+    {
+        context.config.prompt.bottom = true;
+        context.args.first_print = true;
+        std::string result = prepare_prompt(context);
+        CHECK(result.at(0) == '\n');
+        CHECK(result.at(5) == '\n');
+    }
+    SUBCASE("bottom after first print")
+    {
+        context.config.prompt.bottom = true;
+        context.args.first_print = false;
+        std::string result = prepare_prompt(context);
+        CHECK(result.at(0) != '\n');
     }
     SUBCASE("result")
     {

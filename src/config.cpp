@@ -49,6 +49,7 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.prompt.foreground, "prompt", "foreground");
     set_value(data, config.prompt.error_foreground, "prompt", "error_foreground");
     set_value(data, config.prompt.transient, "prompt", "transient");
+    set_value(data, config.prompt.bottom, "prompt", "bottom");
 
     set_value(data, config.connector.character, "connector", "character");
     set_value(data, config.connector.foreground, "connector", "foreground");

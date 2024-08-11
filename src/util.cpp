@@ -1,16 +1,15 @@
 #include <regex>
-#include <sys/ioctl.h>
 #include <locale>
 #include <codecvt>
 
 #include "external/boost/regex.hpp"
 #include "src/util.hpp"
 
-unsigned short get_columns()
+winsize get_winsize()
 {
-    winsize w;
-    ioctl(0, TIOCGWINSZ, &w);
-    return w.ws_col;
+    winsize win;
+    ioctl(0, TIOCGWINSZ, &win);
+    return win;
 }
 
 std::size_t get_length(const std::vector<std::string> &strings)
@@ -198,6 +197,12 @@ bool is_number(const std::string &string)
 // ----------------------------------- TESTS -----------------------------------
 #include "src/test.hpp"
 #ifdef TEST
+
+TEST_CASE("get_winsize")
+{
+    CHECK(get_winsize().ws_col > 10);
+    CHECK(get_winsize().ws_row > 10);
+}
 
 TEST_CASE("get_length")
 {

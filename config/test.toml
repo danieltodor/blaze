@@ -40,6 +40,7 @@ padding = ""
 
 [[module]]
 name = "git_status"
+level = 2
 outer_suffix = ""
 background = "#25c145"
 foreground = "#ffffff"
