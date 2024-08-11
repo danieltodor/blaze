@@ -12,11 +12,15 @@ toml::value read_data()
         get_env("HOME") + "/.config/blaze/config.toml"
     };
     toml::value data;
-    for (std::size_t i = 0; i < std::size(paths); i++)
+    for (const std::string &path : paths)
     {
+        if (path.empty())
+        {
+            continue;
+        }
         try
         {
-            data = toml::parse(paths[i]);
+            data = toml::parse(path);
             break;
         }
         catch (const std::runtime_error &err)
@@ -62,9 +66,8 @@ void load_values(toml::value &data, Config &config)
         config.modules.clear();
         try
         {
-            for (int i = 0;; i++)
+            for (const toml::value &module_data : module_array)
             {
-                const toml::value &module_data = module_array.at(i);
                 Module current;
                 set_value(module_data, current.name, "name");
                 set_value(module_data, current.execute, "execute");
@@ -276,8 +279,8 @@ int vertical_size(const Config &config)
 
 TEST_CASE("read_data")
 {
+    // Read user's config file
     const toml::value data = read_data();
-    // Read user config file
     CHECK(data.is_uninitialized() == false);
 }
 
