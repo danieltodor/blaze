@@ -105,15 +105,6 @@ std::string post(const Context &context, const Module *current_module, const Mod
 // Connects the left/right side modules
 std::string connector(const Context &context, const int length)
 {
-    auto multiple = [](const int n, const std::string &c)
-    {
-        std::string result = "";
-        for (int i = 0; i < n; i++)
-        {
-            result += c;
-        }
-        return result;
-    };
     std::string result = "";
     result += reset_all(context);
     if (context.config.connector.dim)
@@ -122,7 +113,7 @@ std::string connector(const Context &context, const int length)
     }
     result += set_foreground(context.config.connector.foreground, context);
     result += set_background(context.config.connector.background, context);
-    result += multiple(length, context.config.connector.character);
+    result += multiply_string(length, context.config.connector.character);
     result += reset_all(context);
     return result;
 }
@@ -266,13 +257,26 @@ std::string prepare_prompt(Context &context)
     std::string left = "";
     std::string right = "";
     std::size_t length = 0;
-    if (config.global.new_line && !context.args.first_print)
+    winsize window = get_winsize();
+    if (!config.prompt.separator.empty() && !context.args.first_print)
+    {
+        if (config.prompt.new_line)
+        {
+            result += '\n';
+        }
+        result += multiply_string(window.ws_col, config.prompt.separator);
+        if (config.prompt.new_line)
+        {
+            result += "\n\n";
+        }
+    }
+    else if (config.prompt.new_line && !context.args.first_print)
     {
         result += '\n';
     }
     else if (config.prompt.bottom && context.args.first_print)
     {
-        result += std::string(get_winsize().ws_row - vertical_size(config), '\n');
+        result += std::string(window.ws_row - vertical_size(config), '\n');
     }
     preprocess_modules(context);
     bool display_connector = contains_content_on_right(config.modules, 1);
@@ -308,7 +312,7 @@ std::string prepare_prompt(Context &context)
             left = "";
             if (!right.empty())
             {
-                result += connector(context, get_winsize().ws_col - length);
+                result += connector(context, window.ws_col - length);
                 result += right;
                 right = "";
             }
@@ -657,9 +661,9 @@ TEST_CASE("connector")
     }
     SUBCASE("connection")
     {
-        context.config.connector.character = "-";
+        context.config.connector.character = "─";
         const std::string result = connector(context, length);
-        CHECK(result.find("-----") != std::string::npos);
+        CHECK(result.find("─────") != std::string::npos);
     }
 }
 
@@ -882,16 +886,39 @@ TEST_CASE("prepare_prompt")
         CHECK(result.find("/PWD") != std::string::npos);
         CHECK(result.find("10s") != std::string::npos);
     }
+    SUBCASE("separator first print")
+    {
+        context.args.first_print = true;
+        context.config.prompt.separator = "─";
+        std::string result = prepare_prompt(context);
+        CHECK(result.find("─") == std::string::npos);
+    }
+    SUBCASE("separator without new line")
+    {
+        context.args.first_print = false;
+        context.config.prompt.separator = "-";
+        std::string result = prepare_prompt(context);
+        CHECK(result.at(0) == '-');
+    }
+    SUBCASE("separator with new line")
+    {
+        context.args.first_print = false;
+        context.config.prompt.new_line = true;
+        context.config.prompt.separator = "─";
+        std::string result = prepare_prompt(context);
+        CHECK(result.find("\n───────") != std::string::npos);
+        CHECK(result.find("───────\n\n") != std::string::npos);
+    }
     SUBCASE("new line first print")
     {
-        context.config.global.new_line = true;
+        context.config.prompt.new_line = true;
         context.args.first_print = true;
         std::string result = prepare_prompt(context);
         CHECK(result.at(0) != '\n');
     }
     SUBCASE("new line after first print")
     {
-        context.config.global.new_line = true;
+        context.config.prompt.new_line = true;
         context.args.first_print = false;
         std::string result = prepare_prompt(context);
         CHECK(result.at(0) == '\n');
@@ -914,7 +941,7 @@ TEST_CASE("prepare_prompt")
     SUBCASE("result")
     {
         context.config.global.padding = "abc";
-        context.config.global.new_line = true;
+        context.config.prompt.new_line = true;
 
         context.config.modules[0].background = "blue";
         context.config.modules[0].foreground = "black";
@@ -976,7 +1003,7 @@ TEST_CASE("prepare_right_prompt")
     SUBCASE("result")
     {
         context.config.global.padding = "abc";
-        context.config.global.new_line = true;
+        context.config.prompt.new_line = true;
 
         context.config.modules[0].background = "blue";
         context.config.modules[0].foreground = "black";

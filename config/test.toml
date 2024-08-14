@@ -1,13 +1,11 @@
 # This config is intended to be used for development only.
 # Makes it easier to spot visual artifacts.
 
-[global]
-new_line = true
-
 [prompt]
 string = "\n❯ "
 foreground = "green"
 error_foreground = "red"
+new_line = true
 
 [connector]
 character = "─"

@@ -46,12 +46,13 @@ void set_value(const toml::value &data, T &target, Keys&&... keys)
 // Load the values from the config file
 void load_values(toml::value &data, Config &config)
 {
-    set_value(data, config.global.new_line, "global", "new_line");
     set_value(data, config.global.padding, "global", "padding");
 
     set_value(data, config.prompt.string, "prompt", "string");
     set_value(data, config.prompt.foreground, "prompt", "foreground");
     set_value(data, config.prompt.error_foreground, "prompt", "error_foreground");
+    set_value(data, config.prompt.new_line, "prompt", "new_line");
+    set_value(data, config.prompt.separator, "prompt", "separator");
     set_value(data, config.prompt.transient, "prompt", "transient");
     set_value(data, config.prompt.bottom, "prompt", "bottom");
 

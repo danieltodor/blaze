@@ -11,7 +11,6 @@ const std::string control_char = "`";
 
 struct Global
 {
-    bool new_line = false;
     std::string padding = " ";
 };
 
@@ -20,6 +19,8 @@ struct Prompt
     std::string string = " ";
     std::string foreground = "";
     std::string error_foreground = "";
+    bool new_line = false;
+    std::string separator = "";
     bool transient = false;
     bool bottom = false;
 };

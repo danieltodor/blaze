@@ -89,6 +89,16 @@ std::string join(const std::vector<std::string> &strings, const std::string &del
     return result;
 }
 
+std::string multiply_string(const int number, const std::string &string)
+{
+    std::string result = "";
+    for (int i = 0; i < number; i++)
+    {
+        result += string;
+    }
+    return result;
+}
+
 void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement)
 {
     const std::string pattern = join(patterns, "|");
@@ -265,6 +275,13 @@ TEST_CASE("join")
     CHECK(join({"abc", "def"}, "\n") == "abc\ndef");
     CHECK(join({"abc", "def\n"}, "\n") == "abc\ndef\n");
     CHECK(join({"abc", "def", "\n"}, "\n") == "abc\ndef\n\n");
+}
+
+TEST_CASE("multiply_string")
+{
+    CHECK(multiply_string(0, "a") == "");
+    CHECK(multiply_string(3, "a") == "aaa");
+    CHECK(multiply_string(3, "ab") == "ababab");
 }
 
 TEST_CASE("regex_replace")

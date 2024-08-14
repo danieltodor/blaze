@@ -1,11 +1,11 @@
 [global]
-new_line = true
 padding = ""
 
 [prompt]
 string = "\n❯ "
 foreground = "#25c145"
 error_foreground = "#e83030"
+new_line = true
 
 [directory]
 limit = 10

@@ -59,8 +59,6 @@ Configuration files are read from these locations in order:
 #   - "default" The background color of the (xterm compatible) terminal emulator.
 
 [global]
-# Whether to add a new line before the prompt is rendered
-new_line = false
 # This will be added before and after the string in each module
 padding = " "
 
@@ -71,6 +69,10 @@ string = " "
 foreground = ""
 # Foreground color to use when the last command was exited with non zero code. Use only if different from foreground
 error_foreground = ""
+# Separate prompts with additional new line
+new_line = false
+# Create a separator line between prompts from this character
+separator = ""
 # Modules are displayed only for the last prompt
 transient = false
 # Start prompt on the bottom of the terminal window

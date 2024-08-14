@@ -21,6 +21,9 @@ std::vector<std::string> split(const std::string &string, const std::string &del
 // Join the strings at delimiters
 std::string join(const std::vector<std::string> &strings, const std::string &delimiter);
 
+// Multiply string n times
+std::string multiply_string(const int number, const std::string &string);
+
 // Replace parts in-place
 void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement);
 
