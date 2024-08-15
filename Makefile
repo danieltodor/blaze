@@ -9,7 +9,7 @@ INCLUDE_DIRS = . external
 
 CXX = g++
 CPPFLAGS = -MMD -MP
-CXXFLAGS = -std=c++17 -Os -Wall -Wextra -Wpedantic -Wshadow
+CXXFLAGS = -std=c++17 -Os -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
 CXXFLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
