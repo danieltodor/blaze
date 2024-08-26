@@ -143,8 +143,8 @@ show_zero = false
 ignore = []
 
 [git_commit]
-# Commit hash length. Use 0 to disable trimming
-length = 8
+# Commit hash length (might be longer, depending on uniqueness). Use 0 to disable trimming
+length = 7
 
 [git_status]
 # Show the number of changes

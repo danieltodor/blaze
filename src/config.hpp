@@ -74,7 +74,7 @@ struct GitBranch
 
 struct GitCommit
 {
-    int length = 8;
+    int length = 7;
 };
 
 struct GitStatus

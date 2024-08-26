@@ -14,13 +14,10 @@ std::string git_commit(const Context &context)
         return "";
     }
     const Config &config = context.config;
+    const int length = config.git_commit.length > 0 ? config.git_commit.length : 99;
     std::string result = "";
-    result += execute_command("git rev-parse HEAD");
+    result += execute_command("git rev-parse --short=" + std::to_string(length) + " HEAD");
     strip(result);
-    if (config.git_commit.length > 0)
-    {
-        result = result.substr(0, config.git_commit.length);
-    }
     return result;
 }
 
