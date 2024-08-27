@@ -38,6 +38,12 @@ background = "#25c145"
 foreground = "#ffffff"
 
 [[module]]
+name = "git_commit"
+inner_prefix = " "
+background = "#25c145"
+foreground = "#ffffff"
+
+[[module]]
 name = "git_status"
 inner_suffix = " "
 outer_suffix = ""

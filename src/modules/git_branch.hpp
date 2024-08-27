@@ -9,7 +9,7 @@
 // Active branch in the repository
 std::string git_branch(const Context &context)
 {
-    if (!context.git_repository_detected)
+    if (!context.git_repository_detected || context.git_repository_detached)
     {
         return "";
     }
@@ -42,20 +42,28 @@ TEST_CASE("git_branch")
     SUBCASE("not a repository")
     {
         context.git_repository_detected = false;
+        context.git_repository_detached = false;
         CHECK(git_branch(context) == "");
     }
     SUBCASE("branch")
     {
-        context.HOME = get_env("HOME");
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
+        context.git_repository_detached = false;
         CHECK(git_branch(context) == "master");
+    }
+    SUBCASE("hide detached")
+    {
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        context.git_repository_detached = true;
+        CHECK(git_branch(context) == "");
     }
     SUBCASE("ignored branch")
     {
-        context.HOME = get_env("HOME");
         context.PWD = get_env("PWD");
         context.git_repository_detected = true;
+        context.git_repository_detached = false;
         context.config.git_branch.ignore = {"master"};
         CHECK(git_branch(context) == "");
     }

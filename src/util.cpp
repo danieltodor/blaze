@@ -158,11 +158,13 @@ std::string execute_command(const std::string &command, int *status)
     return result;
 }
 
-bool check_git_repository()
+void check_git_repository(bool &detected, bool &detached)
 {
     int status = 0;
-    execute_command("git rev-parse", &status);
-    return status == 0 ? true : false;
+    std::string result = execute_command("git branch --show-current", &status);
+    strip(result);
+    detected = status == 0 ? true : false;
+    detached = detected && result.empty() ? true : false;
 }
 
 std::string get_env(const std::string &name)
@@ -357,7 +359,11 @@ TEST_CASE("execute_command")
 
 TEST_CASE("check_git_repository")
 {
-    CHECK(check_git_repository() == true);
+    bool detected = false;
+    bool detached = false;
+    check_git_repository(detected, detached);
+    CHECK(detected == true);
+    CHECK(detached == false);
 }
 
 TEST_CASE("get_env")

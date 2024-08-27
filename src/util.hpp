@@ -36,8 +36,8 @@ void strip(std::string &string);
 // Execute command in shell
 std::string execute_command(const std::string &command, int *status=NULL);
 
-// Check if git commands can be used in the current directory
-bool check_git_repository();
+// Check the presence and state of the current repository
+void check_git_repository(bool &detected, bool &detached);
 
 // Read ENV variables. Always returns string to allow concatenation
 std::string get_env(const std::string &name);
