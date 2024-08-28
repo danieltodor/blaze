@@ -10,10 +10,6 @@ error_foreground = "#e83030"
 character = "─"
 foreground = "#ffffff"
 
-[directory]
-limit = 10
-from_repository = true
-
 [date]
 format = "%F"
 

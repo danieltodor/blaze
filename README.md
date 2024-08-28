@@ -122,9 +122,9 @@ underline = false
 
 [directory]
 # Maximum number of parent folders to display. Use 0 to disable truncation
-limit = 0
+limit = 10
 # Show folders from the root of the repository
-from_repository = false
+from_repository = true
 
 [duration]
 # Display module if execution time exceeds threshold
@@ -220,8 +220,10 @@ execute = "python path/to/file.py"
 ``` sh
 git pull && make && make install
 ```
+It is advised to also update the config either via the `./use_config <name>` command, or manually,
+as sometimes there are breaking changes.
 
 ## Removal
-1. Delete the setup line from your shell\`s rc file.
+1. Delete the setup line from your shell's rc file.
 2. `cd` into the downloaded blaze directory and run `make uninstall`.
 3. Delete the `config.toml` file if you created one.

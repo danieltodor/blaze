@@ -56,8 +56,8 @@ struct Module
 
 struct Directory
 {
-    int limit = 0;
-    bool from_repository = false;
+    int limit = 10;
+    bool from_repository = true;
 };
 
 struct Duration

@@ -153,46 +153,19 @@ void sort_modules(std::vector<Module> &modules)
 void set_default_values(Config &config)
 {
     config.global.padding = "";
-
-    Prompt prompt;
-    prompt.string = " ❯ ";
-    prompt.foreground = "green";
-    prompt.error_foreground = "red";
-    config.prompt = prompt;
+    config.prompt.string = " ❯ ";
 
     Module directory;
     directory.name = "directory";
-    directory.align = "left";
-    directory.foreground = "blue";
-    directory.bold = true;
     config.modules.push_back(directory);
-
-    Module duration;
-    duration.name = "duration";
-    duration.align = "left";
-    duration.inner_prefix = "⌛︎";
-    duration.outer_prefix = " ";
-    duration.foreground = "yellow";
-    config.modules.push_back(duration);
-
-    Module status;
-    status.name = "status";
-    status.align = "left";
-    status.inner_prefix = "⚠ ";
-    status.outer_prefix = " ";
-    status.foreground = "red";
-    config.modules.push_back(status);
 }
 
 Config get_config()
 {
     Config config;
     toml::value data = read_data();
-    if (data.is_uninitialized())
-    {
-        set_default_values(config);
-    }
-    else
+    set_default_values(config);
+    if (!data.is_uninitialized())
     {
         load_values(data, config);
     }
@@ -321,14 +294,26 @@ TEST_CASE("set_default_values")
 {
     Config config;
     set_default_values(config);
-    CHECK(config.modules.size() == 3);
+    CHECK(config.prompt.string == " ❯ ");
+    CHECK(config.modules.size() == 1);
 }
 
 TEST_CASE("get_config")
 {
     const Config config = get_config();
-    // User config or default values will be loaded
-    CHECK(config.modules.size() > 1);
+    // Make sure the config file is loaded with more modules than default
+    CHECK(config.modules.size() > 5);
+    int count = 0;
+    for (const Module &module : config.modules)
+    {
+        if (module.name == "directory")
+        {
+            count++;
+        }
+    }
+    // Check if modules were cleared when reading the config file
+    // Only one directory module should be present
+    CHECK(count == 1);
 }
 
 TEST_CASE("get_previous_module_in_group")

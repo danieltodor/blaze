@@ -48,6 +48,7 @@ TEST_CASE("directory")
     Context context;
     context.PWD = "/a/b/c";
     context.config.directory.limit = 4;
+    context.config.directory.from_repository = false;
     SUBCASE("replace home with ~")
     {
         context.HOME = "/a";

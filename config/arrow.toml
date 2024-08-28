@@ -4,10 +4,6 @@ foreground = "#25c145"
 error_foreground = "#e83030"
 new_line = true
 
-[directory]
-limit = 10
-from_repository = true
-
 # [[module]]
 # name = "user"
 # outer_suffix = ""
