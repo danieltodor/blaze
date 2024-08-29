@@ -2,10 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "make",
+            "label": "make build active file",
             "type": "shell",
-            "command": "/usr/bin/make",
-            "group": "build"
+            "command": "make",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

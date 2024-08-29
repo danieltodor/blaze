@@ -364,8 +364,8 @@ std::string prepare_transient_prompt(Context &context)
     result += erase_until_end_of_screen(context);
     // Carriage returns are needed for bash
     result += '\r';
-    // Remove newlines from beginning of prompt
-    regex_replace(config.prompt.string, {"^\n*"}, "");
+    // Remove whitespace at beginning of prompt
+    regex_replace(config.prompt.string, {"^\\s*"}, "");
     result += prompt(context);
     result += context.args.previous_command;
     result += "\n\r";
@@ -1042,7 +1042,7 @@ TEST_CASE("prepare_transient_prompt")
     context.args.transient_prompt = true;
     context.args.previous_command = "asd";
     context.args.status = 1;
-    context.config.prompt.string = "> ";
+    context.config.prompt.string = "\n > ";
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
@@ -1055,7 +1055,7 @@ TEST_CASE("prepare_transient_prompt")
     {
         context.config.prompt.transient = true;
         std::string result = prepare_transient_prompt(context);
-        CHECK(result == "\033[1A\033[0J\r\033[0m> \033[0masd\n\r");
+        CHECK(result == "\033[2A\033[0J\r\033[0m> \033[0masd\n\r");
     }
 }
 

@@ -8,9 +8,7 @@
             "program": "${workspaceFolder}/build/bin/blaze",
             // "args": ["bash", "--init"],
             "args": ["bash", "--prompt", "-s", "1669573672.173649637", "-f", "1669573895.264739827", "-e", "1", "-b", "0;0;0", "-p", "ls"],
-            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
@@ -20,11 +18,7 @@
                     "ignoreFailures": true
                 }
             ],
-            // "preLaunchTask": "make",
-            "presentation": {
-                "group": "c",
-                "order": 1
-            }
+            // "preLaunchTask": "make build active file"
         }
     ]
 }
