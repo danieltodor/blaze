@@ -9,11 +9,15 @@
 // Active branch in the repository
 std::string git_branch(const Context &context)
 {
-    if (!context.git_repository_detected || context.git_repository_detached)
+    const Config &config = context.config;
+    if (!context.git_repository_detected)
     {
         return "";
     }
-    const Config &config = context.config;
+    else if (context.git_repository_detached && !config.git_branch.show_when_detached)
+    {
+        return "";
+    }
     std::string result = "";
     result += execute_command("git name-rev --name-only HEAD");
     strip(result);
@@ -58,6 +62,14 @@ TEST_CASE("git_branch")
         context.git_repository_detected = true;
         context.git_repository_detached = true;
         CHECK(git_branch(context) == "");
+    }
+    SUBCASE("show detached")
+    {
+        context.PWD = get_env("PWD");
+        context.git_repository_detected = true;
+        context.git_repository_detached = true;
+        context.config.git_branch.show_when_detached = true;
+        CHECK(git_branch(context) != "");
     }
     SUBCASE("ignored branch")
     {

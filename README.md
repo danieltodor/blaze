@@ -139,10 +139,14 @@ fractional_until = 10.0
 show_zero = false
 
 [git_branch]
+# Show branch name even when the HEAD is in a detached state
+show_when_detached = false
 # Ignore branches that matches these regex patterns, e.g.: "^master"
 ignore = []
 
 [git_commit]
+# Show commit hash even when the HEAD points to a branch
+show_when_attached = false
 # Commit hash length (might be longer, depending on uniqueness). Use 0 to disable trimming
 length = 7
 

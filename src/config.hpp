@@ -69,11 +69,13 @@ struct Duration
 
 struct GitBranch
 {
+    bool show_when_detached = false;
     std::vector<std::string> ignore;
 };
 
 struct GitCommit
 {
+    bool show_when_attached = false;
     int length = 7;
 };
 

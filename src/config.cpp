@@ -104,8 +104,10 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.duration.threshold, "duration", "threshold");
     set_value(data, config.duration.fractional_until, "duration", "fractional_until");
 
+    set_value(data, config.git_branch.show_when_detached, "git_branch", "show_when_detached");
     set_value(data, config.git_branch.ignore, "git_branch", "ignore");
 
+    set_value(data, config.git_commit.show_when_attached, "git_commit", "show_when_attached");
     set_value(data, config.git_commit.length, "git_commit", "length");
 
     set_value(data, config.git_status.count, "git_status", "count");
