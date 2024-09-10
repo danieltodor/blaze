@@ -15,7 +15,7 @@ LDFLAGS =
 OBJDUMPFLAGS = --disassemble --demangle
 MAKEFLAGS += -R -j$(shell nproc || echo 1)
 
-SRCS = $(shell find $(SRC_DIR) -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
+SRCS = $(shell find $(SRC_DIR) -name "*.cpp" | sort -k 1nr | cut -f2-)
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS = $(patsubst %.o, %.d, $(OBJS))
 
@@ -27,11 +27,11 @@ debug = false
 objdump = false
 
 CMD_PREFIX = @
-ifeq ($(verbose),true)
+ifeq ($(verbose), true)
 	CMD_PREFIX =
 endif
 
-ifeq ($(debug),true)
+ifeq ($(debug), true)
 	CXXFLAGS += -g -O0
 endif
 
@@ -78,8 +78,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
-
-ifeq ($(objdump),true)
+ifeq ($(objdump), true)
 	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
 	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
 	$(CMD_PREFIX)touch $(filename)
