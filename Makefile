@@ -1,24 +1,4 @@
-BINARY = blaze
-BUILD_DIR = build
-OBJ_DIR = $(BUILD_DIR)/obj
-OBJ_DUMP_DIR = $(BUILD_DIR)/dump
-BIN_DIR = $(BUILD_DIR)/bin
-INSTALL_DIR = ~/.local
-SRC_DIR = src
-INCLUDE_DIRS = . external
-
-CXX = g++
-CPPFLAGS = -MMD -MP
-CXXFLAGS = -std=c++17 -Os -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
-CXXFLAGS += $(addprefix -I, $(INCLUDE_DIRS))
-LDFLAGS =
-OBJDUMPFLAGS = --disassemble --demangle
-MAKEFLAGS += -R -j$(shell nproc || echo 1)
-
-SRCS = $(shell find $(SRC_DIR) -name "*.cpp" | sort -k 1nr | cut -f2-)
-OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
-DEPS = $(patsubst %.o, %.d, $(OBJS))
-
+# --- User flags ---
 # Echo commands
 verbose = false
 # Make binary debuggable
@@ -26,15 +6,48 @@ debug = false
 # Run objdump on object files
 objdump = false
 
+# --- Directory structure ---
+BINARY = blaze
+SRC_DIR = src
+INCLUDE_DIRS = . external
+INSTALL_DIR = ~/.local
+BUILD_DIR = build
+BIN_DIR = $(BUILD_DIR)/bin
+OBJ_DIR = $(BUILD_DIR)/obj
+OBJ_DUMP_DIR = $(BUILD_DIR)/dump
+SRCS = $(shell find $(SRC_DIR) -name "*.cpp" | sort -k 1nr | cut -f2-)
+OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
+DEPS = $(patsubst %.o, %.d, $(OBJS))
+
+# --- Compiler/linker attributes ---
+COMPILER = g++
+COMPILER_FLAGS = -std=c++17 -Os
+COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
+COMPILER_FLAGS += -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
+# Generate dependency files
+COMPILER_FLAGS += -MMD -MP
+LINKER_FLAGS =
+OBJDUMP_FLAGS = --disassemble --demangle
+
+# --- Make attributes ---
+# Disable implicit variables and rules
+MAKE_FLAGS = -r -R
+# Use multiple threads for faster compilation
+MAKE_FLAGS += -j$(shell nproc || echo 1)
+MAKEFLAGS = $(MAKE_FLAGS)
+
+# Make shell commands visible
 CMD_PREFIX = @
 ifeq ($(verbose), true)
 	CMD_PREFIX =
 endif
 
+# Add debug symbols and disable optimisation
 ifeq ($(debug), true)
-	CXXFLAGS += -g -O0
+	COMPILER_FLAGS += -g -O0
 endif
 
+# --- Recipes ---
 all: $(BIN_DIR)/$(BINARY)
 
 install:
@@ -72,17 +85,18 @@ test:
 $(BIN_DIR)/$(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(CXX) $(OBJS) $(LDFLAGS) -o $@
+	$(CMD_PREFIX)$(COMPILER) $(OBJS) $(LINKER_FLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
+	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
 ifeq ($(objdump), true)
 	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
 	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
 	$(CMD_PREFIX)touch $(filename)
-	$(CMD_PREFIX)objdump $(OBJDUMPFLAGS) $@ > $(filename)
+	$(CMD_PREFIX)objdump $(OBJDUMP_FLAGS) $@ > $(filename)
 endif
 
+# Include dependencies to know which files need to be recompiled after modification
 -include $(DEPS)
