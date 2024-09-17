@@ -24,7 +24,7 @@ INSTALL_DIR = ~/.local
 COMPILER = g++
 LINKER = $(COMPILER)
 COMPILER_FLAGS = -std=c++17
-COMPILER_FLAGS += -Os -flto
+COMPILER_FLAGS += -Os -flto=auto
 COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 COMPILER_FLAGS += -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
 # Generate dependency files
