@@ -7,35 +7,39 @@ debug = false
 objdump = false
 
 # --- Directory structure ---
-BINARY = blaze
-SRC_DIR = src
+BIN_NAME = blaze
+# Space separated directories
 INCLUDE_DIRS = . external
-INSTALL_DIR = ~/.local
+SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = $(BUILD_DIR)/bin
 OBJ_DIR = $(BUILD_DIR)/obj
 OBJ_DUMP_DIR = $(BUILD_DIR)/dump
-SRCS = $(shell find $(SRC_DIR) -name "*.cpp" | sort -k 1nr | cut -f2-)
+SRCS = $(shell find $(SRC_DIR) -name "*.s" -or -name "*.c" -or -name "*.cpp" | sort -k 1nr | cut -f2-)
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS = $(patsubst %.o, %.d, $(OBJS))
+INSTALL_DIR = ~/.local
 
 # --- Compiler/linker attributes ---
 COMPILER = g++
-COMPILER_FLAGS = -std=c++17 -Os
+LINKER = $(COMPILER)
+COMPILER_FLAGS = -std=c++17
+COMPILER_FLAGS += -Os -flto
 COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 COMPILER_FLAGS += -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
 # Generate dependency files
 COMPILER_FLAGS += -MMD -MP
-LINKER_FLAGS =
+LINKER_FLAGS = $(COMPILER_FLAGS)
 OBJDUMP_FLAGS = --disassemble --demangle
 
 # --- Make attributes ---
 # Disable implicit variables and rules
 MAKE_FLAGS = -r -R
 # Use multiple threads for faster compilation
-MAKE_FLAGS += -j$(shell nproc || echo 1)
+MAKE_FLAGS += -j $(shell nproc || echo 2)
 MAKEFLAGS = $(MAKE_FLAGS)
 
+# --- Conditions ---
 # Make shell commands visible
 CMD_PREFIX = @
 ifeq ($(verbose), true)
@@ -44,23 +48,23 @@ endif
 
 # Add debug symbols and disable optimisation
 ifeq ($(debug), true)
-	COMPILER_FLAGS += -g -O0
+	COMPILER_FLAGS += -g -O0 -fno-lto
 endif
 
 # --- Recipes ---
-all: $(BIN_DIR)/$(BINARY)
+all: $(BIN_DIR)/$(BIN_NAME)
 
 install:
 	@echo "Installing binary to $(INSTALL_DIR)/bin"
 	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/bin
-	$(CMD_PREFIX)cp $(BIN_DIR)/$(BINARY) $(INSTALL_DIR)/bin
+	$(CMD_PREFIX)cp $(BIN_DIR)/$(BIN_NAME) $(INSTALL_DIR)/bin
 	@echo "Installing init scripts to $(INSTALL_DIR)/share/blaze"
 	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/share/blaze
 	$(CMD_PREFIX)cp $(SRC_DIR)/init/* $(INSTALL_DIR)/share/blaze
 
 uninstall:
 	@echo "Removing binary from $(INSTALL_DIR)/bin"
-	$(CMD_PREFIX)rm -f $(INSTALL_DIR)/bin/$(BINARY)
+	$(CMD_PREFIX)rm -f $(INSTALL_DIR)/bin/$(BIN_NAME)
 	@echo "Removing init scripts from $(INSTALL_DIR)/share/blaze"
 	$(CMD_PREFIX)rm -rf $(INSTALL_DIR)/share/blaze
 
@@ -80,12 +84,12 @@ info:
 
 test:
 # The binary must be made with "#define TEST"
-	$(CMD_PREFIX)$(BIN_DIR)/$(BINARY) --exit
+	$(CMD_PREFIX)$(BIN_DIR)/$(BIN_NAME) --exit
 
-$(BIN_DIR)/$(BINARY): $(OBJS)
+$(BIN_DIR)/$(BIN_NAME): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(COMPILER) $(OBJS) $(LINKER_FLAGS) -o $@
+	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
@@ -98,5 +102,6 @@ ifeq ($(objdump), true)
 	$(CMD_PREFIX)objdump $(OBJDUMP_FLAGS) $@ > $(filename)
 endif
 
+# --- Misc ---
 # Include dependencies to know which files need to be recompiled after modification
 -include $(DEPS)

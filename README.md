@@ -222,7 +222,7 @@ execute = "python path/to/file.py"
 ## Update
 `cd` into the downloaded blaze directory and run this one-liner to update it.
 ``` sh
-git pull && make && make install
+git pull && make clean && make && make install
 ```
 It is advised to also update the config either via the `./use_config <name>` command, or manually,
 as sometimes there are breaking changes.
