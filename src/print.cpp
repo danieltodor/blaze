@@ -970,7 +970,7 @@ TEST_CASE("prepare_prompt")
         // Left and right side needs to be tested separately, as the number of spaces depends on window size when running the test
         const std::string test_left = "\n\001\033[0m\002\001\033[2m\002\001\033[34m\002c\001\033[30m\002\001\033[44m\002-\001\033[1m\002\001\033[3m\002\001\033[4m\002a/PWD\001\033[0m\002\001\033[1m\002\001\033[2m\002\001\033[3m\002\001\033[4m\002\001\033[30m\002\001\033[44m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002\001\033[2m\002-\001\033[34m\002\001\033[49m\002d\001\033[0m\002\001\033[0m\002";
         const std::string test_middle = "                                               ";
-        const std::string test_right = "\001\033[0m\002\001\033[0m\002\001\033[31m\002c\001\033[37m\002\001\033[41m\002-a10s\001\033[0m\002\001\033[37m\002\001\033[41m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002-\001\033[31m\002\001\033[49m\002d\001\033[0m\002\001\033[0m\002 \001\033[0m\002";
+        const std::string test_right = "\001\033[0m\002\001\033[0m\002\001\033[31m\002c\001\033[37m\002\001\033[41m\002-a10s\001\033[0m\002\001\033[37m\002\001\033[41m\002b\001\033[22m\002\001\033[23m\002\001\033[24m\002-\001\033[31m\002\001\033[49m\002d\001\033[0m\002\001\033[0m\002 ❯ \001\033[0m\002";
         std::string result = prepare_prompt(context);
         CHECK(result.find(test_left) != std::string::npos);
         CHECK(result.find(test_middle) != std::string::npos);

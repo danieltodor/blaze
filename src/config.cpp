@@ -154,9 +154,7 @@ void sort_modules(std::vector<Module> &modules)
 // Set the default values, in case there is no config file
 void set_default_values(Config &config)
 {
-    config.global.padding = "";
-    config.prompt.string = " ❯ ";
-
+    // Add modules only. Don't change other values.
     Module directory;
     directory.name = "directory";
     config.modules.push_back(directory);

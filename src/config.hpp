@@ -11,12 +11,12 @@ const std::string control_char = "`";
 
 struct Global
 {
-    std::string padding = " ";
+    std::string padding = "";
 };
 
 struct Prompt
 {
-    std::string string = " ";
+    std::string string = " ❯ ";
     std::string foreground = "";
     std::string error_foreground = "";
     bool new_line = false;

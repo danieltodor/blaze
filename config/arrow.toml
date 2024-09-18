@@ -1,3 +1,6 @@
+[global]
+padding = " "
+
 [prompt]
 string = "\n❯ "
 foreground = "#25c145"

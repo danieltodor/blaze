@@ -61,11 +61,11 @@ Configuration files are read from these locations in order:
 
 [global]
 # This will be added before and after the string in each module
-padding = " "
+padding = ""
 
 [prompt]
 # Prompt string
-string = " "
+string = " ❯ "
 # Foreground color to use
 foreground = ""
 # Foreground color to use when the last command was exited with non zero code. Use only if different from foreground

@@ -1,6 +1,3 @@
-[global]
-padding = ""
-
 [prompt]
 string = "❯ "
 foreground = "#25c145"
