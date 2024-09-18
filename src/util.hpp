@@ -34,7 +34,7 @@ std::vector<std::string> regex_find_all(const std::string &string, const std::ve
 void strip(std::string &string);
 
 // Execute command in shell
-std::string execute_command(const std::string &command, int *status=NULL);
+std::string execute_command(const std::string &command, int *status=nullptr);
 
 // Check the presence and state of the current repository
 void check_git_repository(bool &detected, bool &detached);

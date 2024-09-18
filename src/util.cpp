@@ -146,12 +146,12 @@ std::string execute_command(const std::string &command, int *status)
     }
     std::string result = "";
     char buffer[128];
-    while (fgets(buffer, sizeof(buffer), pipe) != NULL)
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
     {
         result += buffer;
     }
     const int es = WEXITSTATUS(pclose(pipe));
-    if (status != NULL)
+    if (status != nullptr)
     {
         *status = es;
     }
@@ -170,7 +170,7 @@ void check_git_repository(bool &detected, bool &detached)
 std::string get_env(const std::string &name)
 {
     const char *result = std::getenv(name.c_str());
-    if (result == NULL)
+    if (result == nullptr)
     {
         return "";
     }
@@ -179,7 +179,7 @@ std::string get_env(const std::string &name)
 
 std::tm get_current_time()
 {
-    std::time_t now = std::time(NULL);
+    std::time_t now = std::time(nullptr);
     return *std::localtime(&now);
 }
 
@@ -348,8 +348,17 @@ TEST_CASE("strip")
 
 TEST_CASE("execute_command")
 {
-    CHECK(execute_command("echo abc") == "abc\n");
-    SUBCASE("exit status")
+    SUBCASE("good command without status")
+    {
+        CHECK(execute_command("echo abc") == "abc\n");
+    }
+    SUBCASE("good command with status")
+    {
+        int status = 0;
+        CHECK(execute_command("echo abc") == "abc\n");
+        CHECK(status == 0);
+    }
+    SUBCASE("bad command with status")
     {
         int status = 0;
         CHECK(execute_command("non_existing_command", &status) == "");

@@ -177,7 +177,7 @@ Config get_config()
 
 Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t index)
 {
-    Module *previous = NULL;
+    Module *previous = nullptr;
     if (index == 0)
     {
         return previous;
@@ -192,7 +192,7 @@ Module *get_previous_module_in_group(std::vector<Module> &modules, const std::si
 
 Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t index)
 {
-    Module *next = NULL;
+    Module *next = nullptr;
     if (index == modules.size() - 1)
     {
         return next;
@@ -337,7 +337,7 @@ TEST_CASE("get_previous_module_in_group")
     SUBCASE("0")
     {
         const Module *module = get_previous_module_in_group(modules, 0);
-        CHECK(module == NULL);
+        CHECK(module == nullptr);
     }
     SUBCASE("1")
     {
@@ -380,7 +380,7 @@ TEST_CASE("get_next_module_in_group")
     SUBCASE("2")
     {
         const Module *module = get_next_module_in_group(modules, 2);
-        CHECK(module == NULL);
+        CHECK(module == nullptr);
     }
 }
 

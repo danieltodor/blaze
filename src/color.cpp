@@ -64,7 +64,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
     if (color.at(0) == '#')
     {
         const std::string red_s = color.substr(1, 2), green_s = color.substr(3, 2), blue_s = color.substr(5, 2);
-        const int red_i = stoi(red_s, NULL, 16), green_i = stoi(green_s, NULL, 16), blue_i = stoi(blue_s, NULL, 16);
+        const int red_i = stoi(red_s, nullptr, 16), green_i = stoi(green_s, nullptr, 16), blue_i = stoi(blue_s, nullptr, 16);
         const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
         code = rgb_prefix + join({std::to_string(red_i), std::to_string(green_i), std::to_string(blue_i)}, ";");
     }

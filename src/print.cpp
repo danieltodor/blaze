@@ -27,7 +27,7 @@ std::string pre(const Context &context, const Module *current_module, const Modu
         result += set_text_mode(DIM, context);
     }
     result += set_foreground(current_module->background, context);
-    if (previous_module != NULL && previous_module->outer_suffix.empty())
+    if (previous_module != nullptr && previous_module->outer_suffix.empty())
     {
         result += set_background(previous_module->background, context);
     }
@@ -89,7 +89,7 @@ std::string post(const Context &context, const Module *current_module, const Mod
     result += get_padding(context.config, current_module);
     result += set_foreground(current_module->background, context);
     result += reset_background(context);
-    if (next_module != NULL && next_module->outer_prefix.empty())
+    if (next_module != nullptr && next_module->outer_prefix.empty())
     {
         result += set_background(next_module->background, context);
     }
@@ -188,9 +188,9 @@ void evaluate_content(Context &context)
 void remove_surplus(Context &context)
 {
     Config &config = context.config;
-    Module *current_module = NULL;
-    Module *previous_module = NULL;
-    Module *next_module = NULL;
+    Module *current_module = nullptr;
+    Module *previous_module = nullptr;
+    Module *next_module = nullptr;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
@@ -222,12 +222,12 @@ void remove_surplus(Context &context)
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
         // Remove separator if the next one is also a separator
-        if (current_module->name == "separator" && next_module != NULL && next_module->name == "separator")
+        if (current_module->name == "separator" && next_module != nullptr && next_module->name == "separator")
         {
             config.modules.erase(iterator--);
         }
         // Remove separator from the beginning/end of group
-        else if (current_module->name == "separator" && (next_module == NULL || previous_module == NULL))
+        else if (current_module->name == "separator" && (next_module == nullptr || previous_module == nullptr))
         {
             config.modules.erase(iterator--);
         }
@@ -249,9 +249,9 @@ void preprocess_modules(Context &context)
 std::string prepare_prompt(Context &context)
 {
     Config &config = context.config;
-    Module *current_module = NULL;
-    Module *previous_module = NULL;
-    Module *next_module = NULL;
+    Module *current_module = nullptr;
+    Module *previous_module = nullptr;
+    Module *next_module = nullptr;
     std::string result = "";
     std::string temp = "";
     std::string left = "";
@@ -332,9 +332,9 @@ std::string prepare_prompt(Context &context)
 std::string prepare_right_prompt(Context &context)
 {
     Config &config = context.config;
-    Module *current_module = NULL;
-    Module *previous_module = NULL;
-    Module *next_module = NULL;
+    Module *current_module = nullptr;
+    Module *previous_module = nullptr;
+    Module *next_module = nullptr;
     std::string result = "";
     std::string temp = "";
     preprocess_modules(context);
@@ -483,7 +483,7 @@ TEST_CASE("pre")
     {
         context.config.connector.background = "yellow";
         display_connector = true;
-        const std::string result = pre(context, &current_module, NULL, display_connector);
+        const std::string result = pre(context, &current_module, nullptr, display_connector);
         CHECK(result.find("\033[43m") != std::string::npos);
     }
     SUBCASE("inner prefix")
@@ -586,7 +586,7 @@ TEST_CASE("post")
     {
         context.config.connector.background = "yellow";
         display_connector = true;
-        const std::string result = post(context, &current_module, NULL, display_connector);
+        const std::string result = post(context, &current_module, nullptr, display_connector);
         CHECK(result.find("\033[43m") != std::string::npos);
     }
     SUBCASE("inner suffix")
