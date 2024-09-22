@@ -23,9 +23,8 @@ OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS = $(patsubst %.o, %.d, $(OBJS))
 INSTALL_DIR = ~/.local
 
-# --- Compiler/linker attributes ---
+# --- Build attributes ---
 COMPILER = g++
-LINKER = $(COMPILER)
 # Language standard
 COMPILER_FLAGS = -std=c++17
 # Optimisations
@@ -36,7 +35,10 @@ COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 COMPILER_FLAGS += -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
 # Generate dependency files
 COMPILER_FLAGS += -MMD -MP
+LINKER = $(COMPILER)
 LINKER_FLAGS = $(COMPILER_FLAGS)
+STRIP = strip
+STRIP_FLAGS = --strip-all
 OBJDUMP = objdump
 OBJDUMP_FLAGS = --disassemble --demangle
 
@@ -61,6 +63,26 @@ endif
 
 # --- Recipes ---
 all: $(BINARY)
+ifeq ($(debug), false)
+	@echo "Stripping binary..."
+	$(CMD_PREFIX)$(STRIP) $(STRIP_FLAGS) $(BINARY) -o $(BINARY)
+endif
+
+$(BINARY): $(OBJS)
+	@echo "Linking..."
+	$(CMD_PREFIX)mkdir -p $(@D)
+	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%
+	@echo "Compiling: $<"
+	$(CMD_PREFIX)mkdir -p $(@D)
+	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
+ifeq ($(objdump), true)
+	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
+	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
+	$(CMD_PREFIX)touch $(filename)
+	$(CMD_PREFIX)$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(filename)
+endif
 
 clean:
 	@echo "Removing files and directories..."
@@ -93,22 +115,6 @@ uninstall:
 test:
 # The binary must be made with "#define TEST"
 	$(CMD_PREFIX)$(BINARY) --exit
-
-$(BINARY): $(OBJS)
-	@echo "Linking..."
-	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%
-	@echo "Compiling: $<"
-	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
-ifeq ($(objdump), true)
-	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
-	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
-	$(CMD_PREFIX)touch $(filename)
-	$(CMD_PREFIX)$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(filename)
-endif
 
 # --- Misc ---
 # Include dependencies to know which files need to be recompiled after modification
