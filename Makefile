@@ -1,15 +1,19 @@
 # --- User flags ---
+# Default off value
+off = 0
+# Default on value
+on = 1
 # Echo commands
-verbose = false
+verbose = $(off)
 # Make binary debuggable
-debug = false
+debug = $(off)
 # Run objdump on object files
-objdump = false
+objdump = $(off)
 
 # --- Directory structure ---
 # Name of the generated binary
 BIN_NAME = blaze
-# Space separated list of directories to include
+# Directories to search for header files
 INCLUDE_DIRS = . external
 # Directory for the main source code
 SRC_DIR = src
@@ -31,6 +35,8 @@ COMPILER_FLAGS = -std=c++17
 COMPILER_FLAGS += -Os -flto=auto
 # Includes
 COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
+# Defines
+COMPILER_FLAGS += $(addprefix -D, )
 # Warnings
 COMPILER_FLAGS += -Wno-psabi -Wall -Wextra -Wpedantic -Wshadow
 # Generate dependency files
@@ -52,18 +58,18 @@ MAKEFLAGS = $(MAKE_FLAGS)
 # --- Conditions ---
 # Make shell commands visible
 CMD_PREFIX = @
-ifeq ($(verbose), true)
+ifneq ($(verbose), $(off))
 	CMD_PREFIX =
 endif
 
 # Add debug symbols and disable optimisation
-ifeq ($(debug), true)
+ifneq ($(debug), $(off))
 	COMPILER_FLAGS += -g -O0 -fno-lto
 endif
 
 # --- Recipes ---
 all: $(BINARY)
-ifeq ($(debug), false)
+ifeq ($(debug), $(off))
 	@echo "Stripping binary..."
 	$(CMD_PREFIX)$(STRIP) $(STRIP_FLAGS) $(BINARY) -o $(BINARY)
 endif
@@ -77,7 +83,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
-ifeq ($(objdump), true)
+ifneq ($(objdump), $(off))
 	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
 	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
 	$(CMD_PREFIX)touch $(filename)
