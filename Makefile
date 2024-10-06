@@ -67,17 +67,17 @@ ifneq ($(debug), $(off))
 	COMPILER_FLAGS += -g -O0 -fno-lto
 endif
 
-# --- Recipes ---
+# --- Base recipes ---
 all: $(BINARY)
-ifeq ($(debug), $(off))
-	@echo "Stripping binary..."
-	$(CMD_PREFIX)$(STRIP) $(STRIP_FLAGS) $(BINARY) -o $(BINARY)
-endif
 
 $(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
+ifeq ($(debug), $(off))
+	@echo "Stripping binary..."
+	$(CMD_PREFIX)$(STRIP) $(STRIP_FLAGS) $(BINARY) -o $(BINARY)
+endif
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
@@ -104,7 +104,8 @@ info:
 	@echo "Dependencies:"
 	@echo $(DEPS)
 
-install:
+# --- Project recipes ---
+install: all
 	@echo "Installing binary to $(INSTALL_DIR)/bin"
 	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/bin
 	$(CMD_PREFIX)cp $(BINARY) $(INSTALL_DIR)/bin
@@ -118,8 +119,8 @@ uninstall:
 	@echo "Removing init scripts from $(INSTALL_DIR)/share/blaze"
 	$(CMD_PREFIX)rm -rf $(INSTALL_DIR)/share/blaze
 
-test:
-# The binary must be made with "#define TEST"
+test: COMPILER_FLAGS += -DTEST
+test: all
 	$(CMD_PREFIX)$(BINARY) --exit
 
 # --- Misc ---

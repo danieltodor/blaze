@@ -5,6 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**"
             ],
+            "defines": [
+                "TEST"
+            ],
             "compilerPath": "/usr/bin/g++",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64"
