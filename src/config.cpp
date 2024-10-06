@@ -133,19 +133,16 @@ void load_values(toml::value &data, Config &config)
 // Sort modules in ascending order
 void sort_modules(std::vector<Module> &modules)
 {
-    std::unordered_map<std::string, int> sides;
-    sides["left"] = 1;
-    sides["right"] = 2;
-    sides["right_prompt"] = 3;
+    std::unordered_map<std::string, int> sides = {
+        {"left", 1},
+        {"right", 2},
+        {"right_prompt", 3}
+    };
     auto compare = [&sides](const Module &a, const Module &b)
     {
         std::string a_value = "", b_value = "";
-        a_value += std::to_string(a.level);
-        a_value += std::to_string(sides[a.align]);
-        a_value += std::to_string(a.position);
-        b_value += std::to_string(b.level);
-        b_value += std::to_string(sides[b.align]);
-        b_value += std::to_string(b.position);
+        a_value += std::to_string(a.level) + std::to_string(sides[a.align]) + std::to_string(a.position);
+        b_value += std::to_string(b.level) + std::to_string(sides[b.align]) + std::to_string(b.position);
         return a_value < b_value;
     };
     std::sort(modules.begin(), modules.end(), compare);
@@ -278,16 +275,39 @@ TEST_CASE("sort_modules")
 
     Module c;
     c.name = "c";
-    c.align = "left";
+    c.align = "right";
     c.level = 2;
     c.position = 1;
     modules.push_back(c);
 
+    Module d;
+    d.name = "d";
+    d.align = "left";
+    d.level = 2;
+    d.position = 2;
+    modules.push_back(d);
+
+    Module e;
+    e.name = "e";
+    e.align = "left";
+    e.level = 2;
+    e.position = 1;
+    modules.push_back(e);
+
+    Module f;
+    f.name = "f";
+    f.align = "left";
+    f.level = 2;
+    f.position = 1;
+    modules.push_back(f);
+
     sort_modules(modules);
-    CHECK(modules.size() == 3);
-    CHECK(modules[0].name == "b");
-    CHECK(modules[1].name == "a");
-    CHECK(modules[2].name == "c");
+    CHECK(modules.size() == 6);
+    const std::string order[] = {"b", "a", "e", "f", "d", "c"};
+    for (std::size_t i = 0; i < modules.size(); i++)
+    {
+        CHECK(modules[i].name == order[i]);
+    }
 }
 
 TEST_CASE("set_default_values")
