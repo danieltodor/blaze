@@ -67,7 +67,7 @@ ifneq ($(debug), $(off))
 	COMPILER_FLAGS += -g -O0 -fno-lto
 endif
 
-# --- Base recipes ---
+# --- Recipes ---
 all: $(BINARY)
 
 $(BINARY): $(OBJS)
@@ -104,7 +104,6 @@ info:
 	@echo "Dependencies:"
 	@echo $(DEPS)
 
-# --- Project recipes ---
 install: all
 	@echo "Installing binary to $(INSTALL_DIR)/bin"
 	$(CMD_PREFIX)mkdir -p $(INSTALL_DIR)/bin

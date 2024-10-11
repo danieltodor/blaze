@@ -1,5 +1,8 @@
-# Generated files
+# Build files
 /build
 
 # VS Code files
 /.vscode/settings.json
+
+# Other
+/TODO.md

@@ -2,9 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "make build active file",
+            "label": "make build project",
             "type": "shell",
             "command": "make",
+            "args": [
+                "debug=1"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true

@@ -18,7 +18,11 @@
                     "ignoreFailures": true
                 }
             ],
-            // "preLaunchTask": "make build active file"
+            "preLaunchTask": "make build project",
+            "presentation": {
+                "group": "project",
+                "order": 1
+            }
         }
     ]
 }
