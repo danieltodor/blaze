@@ -48,7 +48,7 @@ COMPILER_FLAGS += -g -O0
 endif
 # Warnings
 ifdef release
-COMPILER_FLAGS +=
+COMPILER_FLAGS += -Wno-psabi
 else
 COMPILER_FLAGS += -Wall -Wextra -Wpedantic -Wshadow
 endif
