@@ -5,9 +5,7 @@
             "label": "make build project",
             "type": "shell",
             "command": "make",
-            "args": [
-                "debug=1"
-            ],
+            "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true

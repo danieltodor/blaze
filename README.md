@@ -19,7 +19,7 @@ exit status, user defined modules, and more.**
     ``` sh
     git clone https://github.com/danieltodor/blaze.git &&
     cd blaze &&
-    make install
+    make install release=1
     ```
 
 2. Setup your shell\
@@ -221,7 +221,7 @@ execute = "python path/to/file.py"
 ## Update
 `cd` into the downloaded blaze directory and run this one-liner to update it.
 ``` sh
-git pull && make clean && make install
+git pull && make clean && make install release=1
 ```
 It is advised to also update the config either via the `./use_config <name>` command, or manually,
 as sometimes there are breaking changes.

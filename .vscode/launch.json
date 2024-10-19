@@ -5,7 +5,7 @@
             "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/blaze",
+            "program": "${workspaceFolder}/build/debug/bin/blaze",
             // "args": ["bash", "--init"],
             "args": ["bash", "--prompt", "-s", "1669573672.173649637", "-f", "1669573895.264739827", "-e", "1", "-b", "0;0;0", "-p", "ls"],
             "cwd": "${workspaceFolder}",
