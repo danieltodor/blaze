@@ -52,6 +52,12 @@ COMPILER_FLAGS += -Wno-psabi
 else
 COMPILER_FLAGS += -Wall -Wextra -Wpedantic -Wshadow
 endif
+# Instrumentation
+ifdef release
+COMPILER_FLAGS +=
+else
+COMPILER_FLAGS += -fsanitize=address,undefined
+endif
 # Defines
 ifdef release
 COMPILER_FLAGS += $(addprefix -D, )

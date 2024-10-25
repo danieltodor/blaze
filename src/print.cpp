@@ -871,6 +871,7 @@ TEST_CASE("prepare_prompt")
     context.args.finish_time = 11;
     context.args.prompt = true;
     context.args.right_prompt = false;
+    context.args.first_print = false;
     context.HOME = "/X";
     context.PWD = "/PWD";
     Module directory;
