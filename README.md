@@ -22,7 +22,7 @@ exit status, user defined modules, and more.**
     make install release=y
     ```
 
-2. Setup your shell\
+2. Setup your shell
     - Bash
         ``` sh
         echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
@@ -209,7 +209,7 @@ You can use the programming language of your choice to create a custom module.
 ``` py
 # Check the PWD and/or the file/directory contents, or whatever you need.
 # At the end, write something to stdout.
-# If stdout is empty at the end, the module and it`s prefix/suffix content won`t be displayed.
+# If stdout is empty at the end, the module and its prefix/suffix content won't be displayed.
 # This way you can create modules that are only used in certain directories.
 print('something')
 ```

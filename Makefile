@@ -97,7 +97,7 @@ OBJDUMP_FLAGS = --disassemble --demangle --full-contents
 # Disable implicit variables and rules
 MAKE_FLAGS = -r -R
 # Use multiple threads for faster compilation
-MAKE_FLAGS += -j $(shell nproc || echo 2)
+MAKE_FLAGS += -j $(shell nproc 2>/dev/null || echo 4)
 MAKEFLAGS = $(MAKE_FLAGS)
 
 # --- Recipes ---
