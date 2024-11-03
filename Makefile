@@ -1,10 +1,12 @@
+KERNEL = $(shell uname -s)
+
 # --- User flags ---
 # Echo commands
 verbose =
 # Create release build
 release =
-# Run objdump on object files
-objdump =
+# Create analysis during/after compilation
+analyze =
 
 # --- Conditions ---
 # Make shell commands visible
@@ -12,6 +14,11 @@ ifdef verbose
 CMD_PREFIX =
 else
 CMD_PREFIX = @
+endif
+
+# Detect macOS
+ifeq "$(KERNEL)" "Darwin"
+MACOS = 1
 endif
 
 # --- Directory structure ---
@@ -27,9 +34,9 @@ BUILD_TYPE = release
 else
 BUILD_TYPE = debug
 endif
-BIN_DIR = $(BUILD_DIR)/$(BUILD_TYPE)/bin
-OBJ_DIR = $(BUILD_DIR)/$(BUILD_TYPE)/obj
-OBJ_DUMP_DIR = $(BUILD_DIR)/$(BUILD_TYPE)/dump
+TYPE_DIR = $(BUILD_DIR)/$(BUILD_TYPE)
+BIN_DIR = $(TYPE_DIR)/bin
+OBJ_DIR = $(TYPE_DIR)/obj
 BINARY = $(BIN_DIR)/$(BIN_NAME)
 SRCS = $(shell find $(SRC_DIR) -name "*.cpp" -or -name "*.c" -or -name "*.s" | sort -k 1nr | cut -f2-)
 OBJS = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%.o, $(SRCS))
@@ -48,7 +55,7 @@ COMPILER_FLAGS += -g -O0
 endif
 # Warnings
 ifdef release
-COMPILER_FLAGS += -Wno-psabi
+COMPILER_FLAGS += -Wno-psabi -Wno-deprecated
 else
 COMPILER_FLAGS += -Wall -Wextra -Wpedantic -Wshadow
 endif
@@ -73,13 +80,18 @@ COMPILER_FLAGS += -MMD -MP
 LINKER = $(COMPILER)
 LINKER_FLAGS = $(COMPILER_FLAGS)
 
-# --- Strip attributes ---
-STRIP = strip
-STRIP_FLAGS = --strip-all
+# --- Stripper attributes ---
+STRIPPER = strip
+STRIPPER_FLAGS = --strip-all
 
-# --- Objdump attributes ---
-OBJDUMP = objdump
-OBJDUMP_FLAGS = --disassemble --demangle
+# --- Analysis attributes ---
+FILE_FLAGS =
+LDD_FLAGS =
+HEXDUMP_FLAGS = --canonical
+STRINGS_FLAGS =
+READELF_FLAGS = --all
+NM_FLAGS =
+OBJDUMP_FLAGS = --disassemble --demangle --full-contents
 
 # --- Make attributes ---
 # Disable implicit variables and rules
@@ -95,25 +107,32 @@ ifdef release
 else
 	@echo "Debug build finished"
 endif
+ifdef analyze
+	$(CMD_PREFIX)file $(FILE_FLAGS) $< > $<.file
+	$(CMD_PREFIX)ldd $(LDD_FLAGS) $< > $<.ldd
+	$(CMD_PREFIX)hexdump $(HEXDUMP_FLAGS) $< > $<.hexdump
+	$(CMD_PREFIX)strings $(STRINGS_FLAGS) $< > $<.strings
+	$(CMD_PREFIX)readelf $(READELF_FLAGS) $< > $<.readelf
+	$(CMD_PREFIX)nm $(NM_FLAGS) $< > $<.nm
+endif
 
 $(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
 ifdef release
+ifndef MACOS
 	@echo "Stripping binary..."
-	$(CMD_PREFIX)$(STRIP) $(STRIP_FLAGS) $(BINARY) -o $(BINARY)
+	$(CMD_PREFIX)$(STRIPPER) $(STRIPPER_FLAGS) $(BINARY) -o $(BINARY)
+endif
 endif
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
-ifdef objdump
-	$(eval filename = $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DUMP_DIR)/%.dump, $@))
-	$(CMD_PREFIX)mkdir -p $(shell dirname $(filename))
-	$(CMD_PREFIX)touch $(filename)
-	$(CMD_PREFIX)$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(filename)
+ifdef analyze
+	$(CMD_PREFIX)objdump $(OBJDUMP_FLAGS) $@ > $@.objdump
 endif
 
 clean:

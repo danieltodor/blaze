@@ -1,5 +1,5 @@
 # Blaze
-**A customizable and informative prompt for bash, zsh, fish, on linux distributions.**
+**A customizable and informative prompt for bash, zsh, fish, on linux and macOS.**
 
 **Features: easily configurable, transient prompt, git integration, command execution time,
 exit status, user defined modules, and more.**
@@ -19,22 +19,24 @@ exit status, user defined modules, and more.**
     ``` sh
     git clone https://github.com/danieltodor/blaze.git &&
     cd blaze &&
-    make install release=1
+    make install release=y
     ```
 
 2. Setup your shell\
-    Make sure `~/.local/bin` is added to PATH.
     - Bash
         ``` sh
+        echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
         echo 'eval "$(blaze bash --init)"' >> ~/.bashrc
         ```
     - Fish\
-        Depending on your config, you should move the added line where only interactive shells will use it.
+        Depending on your config, you should move the added lines where only interactive shells will use it.
         ``` sh
+        echo 'PATH=$PATH:~/.local/bin' >> ~/.config/fish/config.fish
         echo 'blaze fish --init | source' >> ~/.config/fish/config.fish
         ```
     - Zsh
         ``` sh
+        echo 'PATH=$PATH:~/.local/bin' >> ~/.zshrc
         echo 'eval "$(blaze zsh --init)"' >> ~/.zshrc
         ```
 
@@ -221,7 +223,7 @@ execute = "python path/to/file.py"
 ## Update
 `cd` into the downloaded blaze directory and run this one-liner to update it.
 ``` sh
-git pull && make clean && make install release=1
+git pull && make clean && make install release=y
 ```
 It is advised to also update the config either via the `./use_config <name>` command, or manually,
 as sometimes there are breaking changes.

@@ -1,7 +1,11 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
 
 # Get the RGB color of the terminal emulator. Works only in xterm compatible emulators.
 _blaze_get_current_background() {
+    if [[ $COLORTERM != "truecolor" ]]; then
+        echo "0;0;0"
+        return
+    fi
     exec < /dev/tty
     local oldstty=$(stty -g)
     stty raw -echo min 0

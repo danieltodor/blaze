@@ -150,10 +150,11 @@ std::string execute_command(const std::string &command, int *status)
     {
         result += buffer;
     }
-    const int es = WEXITSTATUS(pclose(pipe));
+    const int child_status = pclose(pipe);
+    const int exit_status = WEXITSTATUS(child_status);
     if (status != nullptr)
     {
-        *status = es;
+        *status = exit_status;
     }
     return result;
 }
