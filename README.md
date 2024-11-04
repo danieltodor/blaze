@@ -31,7 +31,7 @@ exit status, user defined modules, and more.**
     - Fish\
         Depending on your config, you should move the added lines where only interactive shells will use it.
         ``` sh
-        echo 'PATH=$PATH:~/.local/bin' >> ~/.config/fish/config.fish
+        echo 'set PATH $PATH:~/.local/bin' >> ~/.config/fish/config.fish
         echo 'blaze fish --init | source' >> ~/.config/fish/config.fish
         ```
     - Zsh

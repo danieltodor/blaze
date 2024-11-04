@@ -184,7 +184,7 @@ void evaluate_content(Context &context)
     }
 }
 
-// Remove modules that shouldn`t be displayed
+// Remove modules that shouldn't be displayed
 void remove_surplus(Context &context)
 {
     Config &config = context.config;
@@ -204,12 +204,12 @@ void remove_surplus(Context &context)
         {
             config.modules.erase(iterator--);
         }
-        // Remove module if prompt is displayed, and it isn`t part of it
+        // Remove module if prompt is displayed, and it isn't part of it
         else if (context.args.prompt && !(current_module->align == "left" || current_module->align == "right"))
         {
             config.modules.erase(iterator--);
         }
-        // Remove module if right prompt is displayed, and it isn`t part of it
+        // Remove module if right prompt is displayed, and it isn't part of it
         else if (context.args.right_prompt && current_module->align != "right_prompt")
         {
             config.modules.erase(iterator--);
@@ -790,7 +790,7 @@ TEST_CASE("remove_surplus")
     duration.name = "duration";
     duration.content = "10s";
     context.config.modules.push_back(duration);
-    SUBCASE("don`t remove anything")
+    SUBCASE("don't remove anything")
     {
         remove_surplus(context);
         CHECK(context.config.modules.size() == 2);
@@ -838,7 +838,7 @@ TEST_CASE("remove_surplus")
         CHECK(context.config.modules[0].name == "directory");
         CHECK(context.config.modules[1].name == "duration");
     }
-    SUBCASE("don`t remove separator")
+    SUBCASE("don't remove separator")
     {
         Module separator;
         separator.name = "separator";

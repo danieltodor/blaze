@@ -89,7 +89,7 @@ _blaze_save_first_print
 _blaze_save_previous_command
 _blaze_save_previous_status
 
-# Bash doesn`t have preexec/precmd hooks, but the behavior of these prompt variables are close enough
+# Bash doesn't have preexec/precmd hooks, but the behavior of these prompt variables are close enough
 PS0=$PS0'$(_blaze_preexec)' # Is expanded after a command is read and before the command is executed
 PROMPT_COMMAND=$PROMPT_COMMAND'$(_blaze_precmd)' # Executed before the printing of each primary prompt
 

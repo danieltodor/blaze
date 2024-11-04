@@ -18,7 +18,7 @@ endif
 
 # Detect macOS
 ifeq "$(KERNEL)" "Darwin"
-MACOS = 1
+MACOS = y
 endif
 
 # --- Directory structure ---

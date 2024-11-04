@@ -126,7 +126,7 @@ struct Config
     Status status;
 };
 
-// Read the user`s config file, or set default values if there is no such file
+// Read the user's config file, or set default values if there is no such file
 Config get_config();
 
 // Previous module in the current group. Same level, same side

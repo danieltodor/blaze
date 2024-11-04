@@ -4,7 +4,7 @@
 #include "src/config.hpp"
 #include "src/util.hpp"
 
-// Read the user`s config file
+// Read the user's config file
 toml::value read_data()
 {
     const std::string paths[] = {

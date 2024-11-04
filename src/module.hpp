@@ -5,7 +5,7 @@
 
 #include "src/context.hpp"
 
-// Call the module function by it`s name
+// Call the module function by its name
 std::string call_module(const std::string &name, const Context &context);
 
 #endif
