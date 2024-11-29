@@ -1,5 +1,5 @@
 # Blaze
-**A customizable and informative prompt for bash, zsh, fish, on linux and macOS.**
+**A customizable and informative prompt for bash, fish, zsh, on linux and macOS.**
 
 **Features: easily configurable, transient prompt, git integration, command execution time,
 exit status, user defined modules, and more.**
@@ -22,21 +22,19 @@ exit status, user defined modules, and more.**
     make install release=y
     ```
 
-2. Setup your shell
+2. Setup your shell\
+    Make sure `~/.local/bin` is added to PATH.
     - Bash
         ``` sh
-        echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
         echo 'eval "$(blaze bash --init)"' >> ~/.bashrc
         ```
     - Fish\
-        Depending on your config, you should move the added lines where only interactive shells will use it.
+        Depending on your config, you should move the added line where only interactive shells will use it.
         ``` sh
-        echo 'set PATH $PATH:~/.local/bin' >> ~/.config/fish/config.fish
         echo 'blaze fish --init | source' >> ~/.config/fish/config.fish
         ```
     - Zsh
         ``` sh
-        echo 'PATH=$PATH:~/.local/bin' >> ~/.zshrc
         echo 'eval "$(blaze zsh --init)"' >> ~/.zshrc
         ```
 
