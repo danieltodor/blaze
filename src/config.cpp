@@ -61,6 +61,38 @@ void load_values(toml::value &data, Config &config)
     set_value(data, config.connector.background, "connector", "background");
     set_value(data, config.connector.dim, "connector", "dim");
 
+    set_value(data, config.directory.limit, "directory", "limit");
+    set_value(data, config.directory.from_repository, "directory", "from_repository");
+
+    set_value(data, config.duration.precision, "duration", "precision");
+    set_value(data, config.duration.threshold, "duration", "threshold");
+    set_value(data, config.duration.fractional_until, "duration", "fractional_until");
+
+    set_value(data, config.git_branch.show_when_detached, "git_branch", "show_when_detached");
+    set_value(data, config.git_branch.ignore, "git_branch", "ignore");
+
+    set_value(data, config.git_commit.show_when_attached, "git_commit", "show_when_attached");
+    set_value(data, config.git_commit.length, "git_commit", "length");
+
+    set_value(data, config.git_status.count, "git_status", "count");
+    set_value(data, config.git_status.spacing, "git_status", "spacing");
+    set_value(data, config.git_status.clean, "git_status", "clean");
+    set_value(data, config.git_status.ahead, "git_status", "ahead");
+    set_value(data, config.git_status.behind, "git_status", "behind");
+    set_value(data, config.git_status.stashed, "git_status", "stashed");
+    set_value(data, config.git_status.untracked, "git_status", "untracked");
+    set_value(data, config.git_status.conflicted, "git_status", "conflicted");
+    set_value(data, config.git_status.modified, "git_status", "modified");
+    set_value(data, config.git_status.staged, "git_status", "staged");
+    set_value(data, config.git_status.renamed, "git_status", "renamed");
+    set_value(data, config.git_status.deleted, "git_status", "deleted");
+
+    set_value(data, config.date.format, "date", "format");
+
+    set_value(data, config.time.format, "time", "format");
+
+    set_value(data, config.status.show_zero, "status", "show_zero");
+
     try
     {
         const toml::array module_array = toml::find(data, "module").as_array();
@@ -96,38 +128,6 @@ void load_values(toml::value &data, Config &config)
     catch (const std::out_of_range &err)
     {
     }
-
-    set_value(data, config.directory.limit, "directory", "limit");
-    set_value(data, config.directory.from_repository, "directory", "from_repository");
-
-    set_value(data, config.duration.precision, "duration", "precision");
-    set_value(data, config.duration.threshold, "duration", "threshold");
-    set_value(data, config.duration.fractional_until, "duration", "fractional_until");
-
-    set_value(data, config.git_branch.show_when_detached, "git_branch", "show_when_detached");
-    set_value(data, config.git_branch.ignore, "git_branch", "ignore");
-
-    set_value(data, config.git_commit.show_when_attached, "git_commit", "show_when_attached");
-    set_value(data, config.git_commit.length, "git_commit", "length");
-
-    set_value(data, config.git_status.count, "git_status", "count");
-    set_value(data, config.git_status.spacing, "git_status", "spacing");
-    set_value(data, config.git_status.clean, "git_status", "clean");
-    set_value(data, config.git_status.ahead, "git_status", "ahead");
-    set_value(data, config.git_status.behind, "git_status", "behind");
-    set_value(data, config.git_status.stashed, "git_status", "stashed");
-    set_value(data, config.git_status.untracked, "git_status", "untracked");
-    set_value(data, config.git_status.conflicted, "git_status", "conflicted");
-    set_value(data, config.git_status.modified, "git_status", "modified");
-    set_value(data, config.git_status.staged, "git_status", "staged");
-    set_value(data, config.git_status.renamed, "git_status", "renamed");
-    set_value(data, config.git_status.deleted, "git_status", "deleted");
-
-    set_value(data, config.date.format, "date", "format");
-
-    set_value(data, config.time.format, "time", "format");
-
-    set_value(data, config.status.show_zero, "status", "show_zero");
 }
 
 // Sort modules in ascending order

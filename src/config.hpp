@@ -7,7 +7,7 @@
 #include "external/toml/toml.hpp"
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
-const std::string control_char = "`";
+#define CONTROL_CHAR "`"
 
 struct Global
 {
@@ -31,27 +31,6 @@ struct Connector
     std::string foreground = "";
     std::string background = "";
     bool dim = false;
-};
-
-struct Module
-{
-    std::string content = "";
-    std::string name = "";
-    std::string execute = "";
-    int level = 1;
-    int position = 1;
-    std::string align = "left";
-    std::string padding = control_char;
-    std::string inner_prefix = "";
-    std::string inner_suffix = "";
-    std::string outer_prefix = "";
-    std::string outer_suffix = "";
-    std::string foreground = "";
-    std::string background = "";
-    bool bold = false;
-    bool dim = false;
-    bool italic = false;
-    bool underline = false;
 };
 
 struct Directory
@@ -110,12 +89,32 @@ struct Status
     bool show_zero = false;
 };
 
+struct Module
+{
+    std::string content = "";
+    std::string name = "";
+    std::string execute = "";
+    int level = 1;
+    int position = 1;
+    std::string align = "left";
+    std::string padding = CONTROL_CHAR;
+    std::string inner_prefix = "";
+    std::string inner_suffix = "";
+    std::string outer_prefix = "";
+    std::string outer_suffix = "";
+    std::string foreground = "";
+    std::string background = "";
+    bool bold = false;
+    bool dim = false;
+    bool italic = false;
+    bool underline = false;
+};
+
 struct Config
 {
     Global global;
     Prompt prompt;
     Connector connector;
-    std::vector<Module> modules;
     Directory directory;
     Duration duration;
     GitBranch git_branch;
@@ -124,6 +123,7 @@ struct Config
     Date date;
     Time time;
     Status status;
+    std::vector<Module> modules;
 };
 
 // Read the user's config file, or set default values if there is no such file

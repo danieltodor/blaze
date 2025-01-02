@@ -10,11 +10,11 @@
 std::string get_padding(const Config &config, const Module *current_module)
 {
     // For these modules the padding in omitted by default
-    if ((current_module->name == "separator" || current_module->name == "fixed") && current_module->padding == control_char)
+    if ((current_module->name == "separator" || current_module->name == "fixed") && current_module->padding == CONTROL_CHAR)
     {
         return "";
     }
-    return current_module->padding != control_char ? current_module->padding : config.global.padding;
+    return current_module->padding != CONTROL_CHAR ? current_module->padding : config.global.padding;
 }
 
 // Escape sequences, prefixes before the module content
@@ -399,7 +399,7 @@ TEST_CASE("get_padding")
     config.global.padding = "a";
     Module current_module;
     current_module.name = "module";
-    current_module.padding = control_char;
+    current_module.padding = CONTROL_CHAR;
     SUBCASE("separator")
     {
         current_module.name = "separator";

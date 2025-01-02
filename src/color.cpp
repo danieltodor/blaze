@@ -3,11 +3,41 @@
 #include "src/color.hpp"
 #include "src/util.hpp"
 
-const std::string csi = "\033["; // Control Sequence Introducer
-const std::string foreground_rgb_prefix = "38;2;";
-const std::string background_rgb_prefix = "48;2;";
-const std::string foreground_id_prefix = "38;5;";
-const std::string background_id_prefix = "48;5;";
+// Sequence parts
+#define CONTROL_SEQUENCE_INTRODUCER "\033["
+#define GRAPHICS_MODE 'm'
+#define FOREGROUND_RGB_PREFIX "38;2;"
+#define BACKGROUND_RGB_PREFIX "48;2;"
+#define FOREGROUND_ID_PREFIX "38;5;"
+#define BACKGROUND_ID_PREFIX "48;5;"
+// Set/Reset codes
+#define RESET 0
+#define BACKGROUND_COLOR_OFFSET 10
+#define TEXT_TYPE_RESET_OFFSET 20
+#define DEFAULT_COLOR 39
+// Normal colors
+#define BLACK 30
+#define RED 31
+#define GREEN 32
+#define YELLOW 33
+#define BLUE 34
+#define MAGENTA 35
+#define CYAN 36
+#define WHITE 37
+// Bright colors
+#define BRIGHT_BLACK 90
+#define BRIGHT_RED 91
+#define BRIGHT_GREEN 92
+#define BRIGHT_YELLOW 93
+#define BRIGHT_BLUE 94
+#define BRIGHT_MAGENTA 95
+#define BRIGHT_CYAN 96
+#define BRIGHT_WHITE 97
+// Cursor controls
+#define CURSOR_UP 'A'
+// Erase functions
+#define ERASE_UNTIL_END "0J"
+
 const std::unordered_map<std::string, std::string> sequence_begin = {
     {"bash", "\001"}, // \[
     {"fish", "\001"}, // \[
@@ -42,11 +72,11 @@ std::string create_sequence(const std::string &code, const Context &context, con
 {
     std::string result = "";
     result += sequence_begin.at(context.args.shell);
-    result += csi;
+    result += CONTROL_SEQUENCE_INTRODUCER;
     result += code;
     if (graphics_mode)
     {
-        result += 'm';
+        result += GRAPHICS_MODE;
     }
     result += sequence_end.at(context.args.shell);
     return result;
@@ -65,7 +95,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
     {
         const std::string red_s = color.substr(1, 2), green_s = color.substr(3, 2), blue_s = color.substr(5, 2);
         const int red_i = stoi(red_s, nullptr, 16), green_i = stoi(green_s, nullptr, 16), blue_i = stoi(blue_s, nullptr, 16);
-        const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
+        const std::string rgb_prefix = offset == 0 ? FOREGROUND_RGB_PREFIX : BACKGROUND_RGB_PREFIX;
         code = rgb_prefix + join({std::to_string(red_i), std::to_string(green_i), std::to_string(blue_i)}, ";");
     }
     // Named colors (black, bright_blue, ...)
@@ -76,13 +106,13 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
     // Numbered colors (0, ..., 255)
     else if (is_number(color))
     {
-        const std::string id_prefix = offset == 0 ? foreground_id_prefix : background_id_prefix;
+        const std::string id_prefix = offset == 0 ? FOREGROUND_ID_PREFIX : BACKGROUND_ID_PREFIX;
         code = id_prefix + color;
     }
     // RGB colors (24;65;255) (43,65,0)
     else
     {
-        const std::string rgb_prefix = offset == 0 ? foreground_rgb_prefix : background_rgb_prefix;
+        const std::string rgb_prefix = offset == 0 ? FOREGROUND_RGB_PREFIX : BACKGROUND_RGB_PREFIX;
         std::string rgb_color = color;
         if (color == "default")
         {
@@ -118,6 +148,7 @@ std::string reset_all(const Context &context)
 std::string reset_text_mode(const int code, const Context &context)
 {
     int special_offset = 0;
+    // Bold has the same offset as dim
     if (code == BOLD)
     {
         special_offset = 1;
@@ -137,12 +168,12 @@ std::string reset_background(const Context &context)
 
 std::string move_cursor_up(const int lines, const Context &context)
 {
-    return create_sequence(std::to_string(lines) + 'A', context, false);
+    return create_sequence(std::to_string(lines) + CURSOR_UP, context, false);
 }
 
 std::string erase_until_end_of_screen(const Context &context)
 {
-    return create_sequence("0J", context, false);
+    return create_sequence(ERASE_UNTIL_END, context, false);
 }
 
 std::vector<std::string> get_sequence_characters(const Context &context)

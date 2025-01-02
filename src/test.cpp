@@ -1,4 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT
+
 #include "src/test.hpp"
 
 #ifdef TEST
