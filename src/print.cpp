@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "external/thread-pool/BS_thread_pool.hpp"
 #include "src/print.hpp"
 #include "src/color.hpp"
 #include "src/module.hpp"
@@ -160,6 +161,7 @@ bool end_reached(const Config &config, const std::size_t index)
 void evaluate_content(Context &context)
 {
     Config &config = context.config;
+    BS::thread_pool pool(std::min((int)config.modules.size(), (int)std::thread::hardware_concurrency()));
     for (Module &module : config.modules)
     {
         // Skip if prompt is displayed, and the module is not part of it
@@ -174,14 +176,25 @@ void evaluate_content(Context &context)
         }
         else if (!module.name.empty())
         {
-            module.content = call_module(module.name, context);
+            pool.detach_task(
+                [&module, &context]
+                {
+                    module.content = call_module(module.name, context);
+                }
+            );
         }
         else if (!module.execute.empty())
         {
-            module.content = execute_command(module.execute);
-            strip(module.content);
+            pool.detach_task(
+                [&module]
+                {
+                    module.content = execute_command(module.execute);
+                    strip(module.content);
+                }
+            );
         }
     }
+    pool.wait();
 }
 
 // Remove modules that shouldn't be displayed
