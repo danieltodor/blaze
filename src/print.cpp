@@ -11,7 +11,7 @@
 std::string get_padding(const Config &config, const Module *current_module)
 {
     // For these modules the padding in omitted by default
-    if ((current_module->name == "separator" || current_module->name == "fixed") && current_module->padding == CONTROL_CHAR)
+    if ((current_module->name == "fixed" || current_module->name == "separator") && current_module->padding == CONTROL_CHAR)
     {
         return "";
     }
@@ -170,6 +170,11 @@ void evaluate_content(Context &context)
         }
         // Skip if right prompt is displayed, and the module is not part of it
         else if (context.args.right_prompt && module.align != "right_prompt")
+        {
+            continue;
+        }
+        // Skip if module has predefined content
+        else if (module.name == "fixed" || module.name == "separator")
         {
             continue;
         }
@@ -775,17 +780,29 @@ TEST_CASE("evaluate_content")
     context.args.right_prompt = false;
     context.args.start_time = 1;
     context.args.finish_time = 11;
+    context.git_repository_detected = false;
+    context.git_repository_detached = false;
     Module directory;
     directory.name = "directory";
     context.config.modules.push_back(directory);
     Module duration;
     duration.name = "duration";
     context.config.modules.push_back(duration);
+    Module fixed;
+    fixed.name = "fixed";
+    fixed.content = "a";
+    context.config.modules.push_back(fixed);
+    Module separator;
+    separator.name = "separator";
+    separator.content = "b";
+    context.config.modules.push_back(separator);
     SUBCASE("1")
     {
         evaluate_content(context);
         CHECK(context.config.modules[0].content == "/PWD");
         CHECK(context.config.modules[1].content == "10s");
+        CHECK(context.config.modules[2].content == "a");
+        CHECK(context.config.modules[3].content == "b");
     }
 }
 

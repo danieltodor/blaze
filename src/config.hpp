@@ -91,9 +91,9 @@ struct Status
 
 struct Module
 {
-    std::string content = "";
     std::string name = "";
     std::string execute = "";
+    std::string content = "";
     int level = 1;
     int position = 1;
     std::string align = "left";

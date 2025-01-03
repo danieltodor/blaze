@@ -3,7 +3,6 @@
 #include "src/module.hpp"
 #include "src/modules/date.hpp"
 #include "src/modules/directory.hpp"
-#include "src/modules/dummy.hpp"
 #include "src/modules/duration.hpp"
 #include "src/modules/git_branch.hpp"
 #include "src/modules/git_commit.hpp"
@@ -18,8 +17,6 @@ const std::unordered_map<std::string, std::string (*)(const Context &)> module_m
 {
     {"date", &date},
     {"directory", &directory},
-    {"fixed", &dummy},
-    {"separator", &dummy},
     {"duration", &duration},
     {"git_branch", &git_branch},
     {"git_commit", &git_commit},

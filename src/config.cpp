@@ -104,6 +104,7 @@ void load_values(toml::value &data, Config &config)
                 Module current;
                 set_value(module_data, current.name, "name");
                 set_value(module_data, current.execute, "execute");
+                set_value(module_data, current.content, "content");
                 set_value(module_data, current.level, "level");
                 set_value(module_data, current.position, "position");
                 set_value(module_data, current.align, "align");

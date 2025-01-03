@@ -70,25 +70,24 @@ foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
+content = "╭─ "
 position = 0
-outer_prefix = "╭─"
-outer_suffix = " "
 foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
+content = "╰─"
 level = 2
-outer_prefix = "╰─"
 foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
+content = "─╮"
 align = "right"
-outer_suffix = "─╮"
 foreground = "#ffffff"
 
 [[module]]
 name = "fixed"
+content = "─╯"
 align = "right_prompt"
-outer_suffix = "─╯"
 foreground = "#ffffff"

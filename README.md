@@ -93,6 +93,8 @@ dim = false
 name = ""
 # Execute a user defined module
 execute = ""
+# Optional content for certain modules
+content = ""
 # Which level the module should be displayed on (required only for multilevel prompt)
 level = 1
 # The position of the module (if omitted, modules will be displayed as they appear in config)
