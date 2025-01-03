@@ -1,19 +1,34 @@
 #include "src/context.hpp"
 #include "src/util.hpp"
+#include "src/pool.hpp"
 
 Context get_context(int argc, char *argv[])
 {
     bool git_repository_detected = false;
     bool git_repository_detached = false;
-    check_git_repository(git_repository_detected, git_repository_detached);
+    Config config;
+    pool.detach_task(
+        [&git_repository_detected, &git_repository_detached]
+        {
+            check_git_repository(git_repository_detected, git_repository_detached);
+        }
+    );
+    pool.detach_task(
+        [&config]
+        {
+            config = get_config();
+        }
+    );
+    const Args args = argparse::parse<Args>(argc, argv);
+    pool.wait();
     Context context = {
-        argparse::parse<Args>(argc, argv),
+        args,
+        config,
         get_env("HOME"),
         get_env("PWD"),
         git_repository_detected,
         git_repository_detached,
-        get_current_time(),
-        get_config()
+        get_current_time()
     };
     return context;
 }

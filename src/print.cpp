@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "external/thread-pool/BS_thread_pool.hpp"
 #include "src/print.hpp"
 #include "src/color.hpp"
 #include "src/module.hpp"
 #include "src/util.hpp"
 #include "src/config.hpp"
+#include "src/pool.hpp"
 
 // Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)
@@ -161,7 +161,6 @@ bool end_reached(const Config &config, const std::size_t index)
 void evaluate_content(Context &context)
 {
     Config &config = context.config;
-    BS::thread_pool pool(std::min((int)config.modules.size(), (int)std::thread::hardware_concurrency()));
     for (Module &module : config.modules)
     {
         // Skip if prompt is displayed, and the module is not part of it
