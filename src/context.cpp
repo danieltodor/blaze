@@ -7,20 +7,20 @@ Context get_context(int argc, char *argv[])
     bool git_repository_detected = false;
     bool git_repository_detached = false;
     Config config;
-    pool.detach_task(
+    thread_pool.detach_task(
         [&git_repository_detected, &git_repository_detached]
         {
             check_git_repository(git_repository_detected, git_repository_detached);
         }
     );
-    pool.detach_task(
+    thread_pool.detach_task(
         [&config]
         {
             config = get_config();
         }
     );
     const Args args = argparse::parse<Args>(argc, argv);
-    pool.wait();
+    thread_pool.wait();
     Context context = {
         args,
         config,

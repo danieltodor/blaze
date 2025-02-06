@@ -180,7 +180,7 @@ void evaluate_content(Context &context)
         }
         else if (!module.name.empty())
         {
-            pool.detach_task(
+            thread_pool.detach_task(
                 [&module, &context]
                 {
                     module.content = call_module(module.name, context);
@@ -189,7 +189,7 @@ void evaluate_content(Context &context)
         }
         else if (!module.execute.empty())
         {
-            pool.detach_task(
+            thread_pool.detach_task(
                 [&module]
                 {
                     module.content = execute_command(module.execute);
@@ -198,7 +198,7 @@ void evaluate_content(Context &context)
             );
         }
     }
-    pool.wait();
+    thread_pool.wait();
 }
 
 // Remove modules that shouldn't be displayed
