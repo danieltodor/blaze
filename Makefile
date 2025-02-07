@@ -119,11 +119,11 @@ endif
 $(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $(OBJS) -o $@
+	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $^ -o $@
 ifdef release
 ifndef MACOS
 	@echo "Stripping binary..."
-	$(CMD_PREFIX)$(STRIPPER) $(STRIPPER_FLAGS) $(BINARY) -o $(BINARY)
+	$(CMD_PREFIX)$(STRIPPER) $(STRIPPER_FLAGS) $@ -o $@
 endif
 endif
 
