@@ -135,9 +135,9 @@ void load_values(toml::value &data, Config &config)
 void sort_modules(std::vector<Module> &modules)
 {
     std::unordered_map<std::string, int> sides = {
-        {"left", 1},
-        {"right", 2},
-        {"right_prompt", 3}
+        {LEFT_ALIGNMENT, 1},
+        {RIGHT_ALIGNMENT, 2},
+        {RP_ALIGNMENT, 3}
     };
     auto compare = [&sides](const Module &a, const Module &b)
     {
@@ -227,7 +227,7 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level)
     std::vector<Module *> modules_on_level = get_modules_on_level(modules, level);
     for (const Module *module : modules_on_level)
     {
-        if (module->align == "right")
+        if (module->align == RIGHT_ALIGNMENT)
         {
             return true;
         }
@@ -262,42 +262,42 @@ TEST_CASE("sort_modules")
 
     Module a;
     a.name = "a";
-    a.align = "right";
+    a.align = RIGHT_ALIGNMENT;
     a.level = 1;
     a.position = 1;
     modules.push_back(a);
 
     Module b;
     b.name = "b";
-    b.align = "left";
+    b.align = LEFT_ALIGNMENT;
     b.level = 1;
     b.position = 2;
     modules.push_back(b);
 
     Module c;
     c.name = "c";
-    c.align = "right";
+    c.align = RIGHT_ALIGNMENT;
     c.level = 2;
     c.position = 1;
     modules.push_back(c);
 
     Module d;
     d.name = "d";
-    d.align = "left";
+    d.align = LEFT_ALIGNMENT;
     d.level = 2;
     d.position = 2;
     modules.push_back(d);
 
     Module e;
     e.name = "e";
-    e.align = "left";
+    e.align = LEFT_ALIGNMENT;
     e.level = 2;
     e.position = 1;
     modules.push_back(e);
 
     Module f;
     f.name = "f";
-    f.align = "left";
+    f.align = LEFT_ALIGNMENT;
     f.level = 2;
     f.position = 1;
     modules.push_back(f);
@@ -457,7 +457,7 @@ TEST_CASE("contains_content_on_right")
     c.name = "c";
     c.content = "c";
     c.level = 2;
-    c.align = "right";
+    c.align = RIGHT_ALIGNMENT;
     modules.push_back(c);
 
     SUBCASE("1")

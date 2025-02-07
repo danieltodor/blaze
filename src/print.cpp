@@ -7,11 +7,15 @@
 #include "src/config.hpp"
 #include "src/pool.hpp"
 
+// Virtual modules
+#define FIXED_MODULE "fixed"
+#define SEPARATOR_MODULE "separator"
+
 // Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)
 {
     // For these modules the padding in omitted by default
-    if ((current_module->name == "fixed" || current_module->name == "separator") && current_module->padding == CONTROL_CHAR)
+    if ((current_module->name == FIXED_MODULE || current_module->name == SEPARATOR_MODULE) && current_module->padding == CONTROL_CHAR)
     {
         return "";
     }
@@ -164,17 +168,17 @@ void evaluate_content(Context &context)
     for (Module &module : config.modules)
     {
         // Skip if prompt is displayed, and the module is not part of it
-        if (context.args.prompt && !(module.align == "left" || module.align == "right"))
+        if (context.args.prompt && !(module.align == LEFT_ALIGNMENT || module.align == RIGHT_ALIGNMENT))
         {
             continue;
         }
         // Skip if right prompt is displayed, and the module is not part of it
-        else if (context.args.right_prompt && module.align != "right_prompt")
+        else if (context.args.right_prompt && module.align != RP_ALIGNMENT)
         {
             continue;
         }
         // Skip if module has predefined content
-        else if (module.name == "fixed" || module.name == "separator")
+        else if (module.name == FIXED_MODULE || module.name == SEPARATOR_MODULE)
         {
             continue;
         }
@@ -212,22 +216,22 @@ void remove_surplus(Context &context)
     {
         current_module = iterator.base();
         // Separators are processed later
-        if (current_module->name == "separator")
+        if (current_module->name == SEPARATOR_MODULE)
         {
             continue;
         }
         // Remove module if it has nothing to show
-        else if (current_module->content.empty() && current_module->name != "fixed")
+        else if (current_module->content.empty() && current_module->name != FIXED_MODULE)
         {
             config.modules.erase(iterator--);
         }
         // Remove module if prompt is displayed, and it isn't part of it
-        else if (context.args.prompt && !(current_module->align == "left" || current_module->align == "right"))
+        else if (context.args.prompt && !(current_module->align == LEFT_ALIGNMENT || current_module->align == RIGHT_ALIGNMENT))
         {
             config.modules.erase(iterator--);
         }
         // Remove module if right prompt is displayed, and it isn't part of it
-        else if (context.args.right_prompt && current_module->align != "right_prompt")
+        else if (context.args.right_prompt && current_module->align != RP_ALIGNMENT)
         {
             config.modules.erase(iterator--);
         }
@@ -239,12 +243,12 @@ void remove_surplus(Context &context)
         previous_module = get_previous_module_in_group(config.modules, i);
         next_module = get_next_module_in_group(config.modules, i);
         // Remove separator if the next one is also a separator
-        if (current_module->name == "separator" && next_module != nullptr && next_module->name == "separator")
+        if (current_module->name == SEPARATOR_MODULE && next_module != nullptr && next_module->name == SEPARATOR_MODULE)
         {
             config.modules.erase(iterator--);
         }
         // Remove separator from the beginning/end of group
-        else if (current_module->name == "separator" && (next_module == nullptr || previous_module == nullptr))
+        else if (current_module->name == SEPARATOR_MODULE && (next_module == nullptr || previous_module == nullptr))
         {
             config.modules.erase(iterator--);
         }
@@ -314,7 +318,7 @@ std::string prepare_prompt(Context &context)
         });
         temp.insert(0, pre(context, current_module, previous_module, display_connector));
         temp.insert(temp.length(), post(context, current_module, next_module, display_connector));
-        if (current_module->align == "right")
+        if (current_module->align == RIGHT_ALIGNMENT)
         {
             right += temp;
         }
@@ -419,13 +423,13 @@ TEST_CASE("get_padding")
     current_module.padding = CONTROL_CHAR;
     SUBCASE("separator")
     {
-        current_module.name = "separator";
+        current_module.name = SEPARATOR_MODULE;
         const std::string result = get_padding(config, &current_module);
         CHECK(result == "");
     }
     SUBCASE("fixed")
     {
-        current_module.name = "fixed";
+        current_module.name = FIXED_MODULE;
         const std::string result = get_padding(config, &current_module);
         CHECK(result == "");
     }
@@ -789,11 +793,11 @@ TEST_CASE("evaluate_content")
     duration.name = "duration";
     context.config.modules.push_back(duration);
     Module fixed;
-    fixed.name = "fixed";
+    fixed.name = FIXED_MODULE;
     fixed.content = "a";
     context.config.modules.push_back(fixed);
     Module separator;
-    separator.name = "separator";
+    separator.name = SEPARATOR_MODULE;
     separator.content = "b";
     context.config.modules.push_back(separator);
     SUBCASE("1")
@@ -835,14 +839,14 @@ TEST_CASE("remove_surplus")
     {
         context.args.prompt = false;
         context.args.right_prompt = true;
-        context.config.modules[1].align = "right_prompt";
+        context.config.modules[1].align = RP_ALIGNMENT;
         remove_surplus(context);
         CHECK(context.config.modules.size() == 1);
         CHECK(context.config.modules[0].name == "duration");
     }
     SUBCASE("remove right prompt")
     {
-        context.config.modules[1].align = "right_prompt";
+        context.config.modules[1].align = RP_ALIGNMENT;
         remove_surplus(context);
         CHECK(context.config.modules.size() == 1);
         CHECK(context.config.modules[0].name == "directory");
@@ -850,7 +854,7 @@ TEST_CASE("remove_surplus")
     SUBCASE("remove separator from beginning")
     {
         Module separator;
-        separator.name = "separator";
+        separator.name = SEPARATOR_MODULE;
         context.config.modules.insert(context.config.modules.begin(), separator);
         remove_surplus(context);
         CHECK(context.config.modules.size() == 2);
@@ -860,7 +864,7 @@ TEST_CASE("remove_surplus")
     SUBCASE("remove separator from end")
     {
         Module separator;
-        separator.name = "separator";
+        separator.name = SEPARATOR_MODULE;
         context.config.modules.push_back(separator);
         remove_surplus(context);
         CHECK(context.config.modules.size() == 2);
@@ -870,7 +874,7 @@ TEST_CASE("remove_surplus")
     SUBCASE("don't remove separator")
     {
         Module separator;
-        separator.name = "separator";
+        separator.name = SEPARATOR_MODULE;
         context.config.modules.insert(context.config.modules.begin() + 1, separator);
         remove_surplus(context);
         CHECK(context.config.modules.size() == 3);
@@ -881,7 +885,7 @@ TEST_CASE("remove_surplus")
     SUBCASE("remove duplicate separator")
     {
         Module separator;
-        separator.name = "separator";
+        separator.name = SEPARATOR_MODULE;
         context.config.modules.insert(context.config.modules.begin() + 1, separator);
         context.config.modules.insert(context.config.modules.begin() + 1, separator);
         remove_surplus(context);
@@ -908,7 +912,7 @@ TEST_CASE("prepare_prompt")
     context.config.modules.push_back(directory);
     Module duration;
     duration.name = "duration";
-    duration.align = "right";
+    duration.align = RIGHT_ALIGNMENT;
     context.config.modules.push_back(duration);
     SUBCASE("module content")
     {
@@ -1022,7 +1026,7 @@ TEST_CASE("prepare_right_prompt")
     context.config.modules.push_back(directory);
     Module duration;
     duration.name = "duration";
-    duration.align = "right_prompt";
+    duration.align = RP_ALIGNMENT;
     context.config.modules.push_back(duration);
     SUBCASE("module content")
     {

@@ -37,6 +37,8 @@
 #define CURSOR_UP 'A'
 // Erase functions
 #define ERASE_UNTIL_END "0J"
+// Virtual colors
+#define CONTEXT_DEFAULT "default"
 
 const std::unordered_map<std::string, std::string> sequence_begin = {
     {"bash", "\001"}, // \[
@@ -114,7 +116,7 @@ std::string to_color_code(const std::string &color, const int offset, const Cont
     {
         const std::string rgb_prefix = offset == 0 ? FOREGROUND_RGB_PREFIX : BACKGROUND_RGB_PREFIX;
         std::string rgb_color = color;
-        if (color == "default")
+        if (color == CONTEXT_DEFAULT)
         {
             rgb_color = context.args.background;
         }

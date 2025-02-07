@@ -8,6 +8,10 @@
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
 #define CONTROL_CHAR "`"
+// Alignments
+#define LEFT_ALIGNMENT "left"
+#define RIGHT_ALIGNMENT "right"
+#define RP_ALIGNMENT "right_prompt"
 
 struct Global
 {
@@ -96,7 +100,7 @@ struct Module
     std::string content = "";
     int level = 1;
     int position = 1;
-    std::string align = "left";
+    std::string align = LEFT_ALIGNMENT;
     std::string padding = CONTROL_CHAR;
     std::string inner_prefix = "";
     std::string inner_suffix = "";
