@@ -2,7 +2,7 @@
 
 #define THREAD_LIMIT 4U
 
-static BS::thread_pool thread_pool(std::min(std::thread::hardware_concurrency(), THREAD_LIMIT));
+inline BS::thread_pool thread_pool(std::min(std::thread::hardware_concurrency(), THREAD_LIMIT));
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
