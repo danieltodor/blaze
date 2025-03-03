@@ -24,16 +24,17 @@ std::string duration(const Context &context)
     const float precision = std::pow(10, -config.duration.precision);
     const double start_time = context.args.start_time;
     const double finish_time = context.args.finish_time;
-    double diff = round((finish_time - start_time) / precision) * precision;
-    if (diff < config.duration.threshold || start_time == 0 || finish_time == 0)
+    const double difference = round((finish_time - start_time) / precision) * precision;
+    if (difference < config.duration.threshold || start_time == 0 || finish_time == 0)
     {
         return "";
     }
     std::string result = "";
-    const int hours = subtract_time(diff, HOUR);
-    const int minutes = subtract_time(diff, MINUTE);
-    const int seconds = subtract_time(diff, SECOND);
-    const double fractional = round(diff / precision) * precision;
+    double remainder = difference;
+    const int hours = subtract_time(remainder, HOUR);
+    const int minutes = subtract_time(remainder, MINUTE);
+    const int seconds = subtract_time(remainder, SECOND);
+    const double fractional = round(remainder / precision) * precision;
     if (hours)
     {
         result += std::to_string(hours) + 'h';
@@ -43,17 +44,17 @@ std::string duration(const Context &context)
         result += hours ? " " : "";
         result += std::to_string(minutes) + 'm';
     }
-    if (seconds || fractional > config.duration.threshold)
+    if (seconds || fractional)
     {
         result += hours || minutes ? " " : "";
-        if (seconds + minutes * MINUTE + hours * HOUR < config.duration.fractional_until)
+        if (difference < config.duration.fractional_until)
         {
             result += std::to_string(seconds);
             result += std::to_string(fractional).substr(1, 1 + config.duration.precision);
         }
         else
         {
-            result += std::to_string((int)round(seconds + fractional));
+            result += std::to_string(static_cast<int>(round(seconds + fractional)));
         }
         result += 's';
     }
@@ -106,6 +107,22 @@ TEST_CASE("duration")
         context.args.start_time = 1;
         context.args.finish_time = 6.412345;
         CHECK(duration(context) == "5s");
+    }
+    SUBCASE("correct rounding down")
+    {
+        context.config.duration.threshold = 1;
+        context.config.duration.fractional_until = 5;
+        context.args.start_time = 1;
+        context.args.finish_time = 6.4;
+        CHECK(duration(context) == "5s");
+    }
+    SUBCASE("correct rounding up")
+    {
+        context.config.duration.threshold = 1;
+        context.config.duration.fractional_until = 5;
+        context.args.start_time = 1;
+        context.args.finish_time = 6.5;
+        CHECK(duration(context) == "6s");
     }
     SUBCASE("correct seconds")
     {

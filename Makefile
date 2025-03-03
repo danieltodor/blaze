@@ -91,7 +91,9 @@ HEXDUMP_FLAGS = --canonical
 STRINGS_FLAGS =
 READELF_FLAGS = --all
 NM_FLAGS =
-OBJDUMP_FLAGS = --disassemble --demangle --full-contents
+SIZE_FLAGS =
+OBJDUMP_FLAGS = --disassemble --demangle --source-comment --wide --visualize-jumps --decompress --no-addresses \
+				--no-show-raw-insn
 
 # --- Make attributes ---
 # Disable implicit variables and rules
@@ -114,6 +116,7 @@ ifdef analyze
 	$(CMD_PREFIX)strings $(STRINGS_FLAGS) $< > $<.strings
 	$(CMD_PREFIX)readelf $(READELF_FLAGS) $< > $<.readelf
 	$(CMD_PREFIX)nm $(NM_FLAGS) $< > $<.nm
+	$(CMD_PREFIX)size $(SIZE_FLAGS) $< > $<.size
 endif
 
 $(BINARY): $(OBJS)
