@@ -5,8 +5,8 @@
 static BS::thread_pool thread_pool(std::min(std::thread::hardware_concurrency(), THREAD_LIMIT));
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("thread count")
 {

@@ -39,8 +39,8 @@ std::string call_module(const std::string &name, const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("call_module")
 {

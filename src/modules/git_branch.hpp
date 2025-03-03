@@ -37,8 +37,8 @@ std::string git_branch(const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("git_branch")
 {

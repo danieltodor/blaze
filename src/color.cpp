@@ -184,8 +184,8 @@ std::vector<std::string> get_sequence_characters(const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("create_sequence")
 {

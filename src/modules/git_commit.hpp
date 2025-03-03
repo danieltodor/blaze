@@ -26,8 +26,8 @@ std::string git_commit(const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("git_commit")
 {

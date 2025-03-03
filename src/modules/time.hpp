@@ -14,8 +14,8 @@ std::string time(const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("time")
 {

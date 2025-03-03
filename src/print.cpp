@@ -411,8 +411,8 @@ void print_transient_prompt(Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("get_padding")
 {

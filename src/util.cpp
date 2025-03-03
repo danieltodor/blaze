@@ -208,8 +208,8 @@ bool is_number(const std::string &string)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("get_winsize")
 {

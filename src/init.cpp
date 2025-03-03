@@ -34,8 +34,8 @@ void print_shell_init(const Context &context)
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("prepare_shell_init")
 {

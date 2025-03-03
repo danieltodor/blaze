@@ -34,8 +34,8 @@ Context get_context(int argc, char *argv[])
 }
 
 // ----------------------------------- TESTS -----------------------------------
-#include "src/test.hpp"
 #ifdef TEST
+#include "src/test.hpp"
 
 TEST_CASE("get_context")
 {
