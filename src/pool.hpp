@@ -10,7 +10,9 @@ inline BS::thread_pool thread_pool(std::min(std::thread::hardware_concurrency(),
 
 TEST_CASE("thread count")
 {
-    CHECK(thread_pool.get_thread_count() <= THREAD_LIMIT);
+    const std::size_t thread_count = thread_pool.get_thread_count();
+    CHECK(thread_count > 0);
+    CHECK(thread_count <= THREAD_LIMIT);
 }
 
 #endif
