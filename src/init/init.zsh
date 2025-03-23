@@ -16,7 +16,7 @@ _blaze_precmd() {
 }
 
 TRAPINT() {
-    echo
+    echo # ^C needs an extra new line to prevent overwriting content during transient prompt
     _blaze_preexec
     return $(( 128 + $1 ))
 }

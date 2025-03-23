@@ -44,7 +44,7 @@ void set_value(const toml::value &data, T &target, Keys&&... keys)
 }
 
 // Load the values from the config file
-void load_values(toml::value &data, Config &config)
+void load_values(const toml::value &data, Config &config)
 {
     set_value(data, config.global.padding, "global", "padding");
 

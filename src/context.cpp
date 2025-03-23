@@ -4,13 +4,14 @@
 
 Context get_context(int argc, char *argv[])
 {
+    Args args;
+    Config config;
     bool git_repository_detected = false;
     bool git_repository_detached = false;
-    Config config;
     thread_pool.detach_task(
-        [&git_repository_detected, &git_repository_detached]
+        [&args, argc, argv]
         {
-            check_git_repository(git_repository_detected, git_repository_detached);
+            args = std::move(argparse::parse<Args>(argc, argv));
         }
     );
     thread_pool.detach_task(
@@ -19,7 +20,12 @@ Context get_context(int argc, char *argv[])
             config = get_config();
         }
     );
-    const Args args = argparse::parse<Args>(argc, argv);
+    thread_pool.detach_task(
+        [&git_repository_detected, &git_repository_detached]
+        {
+            check_git_repository(git_repository_detected, git_repository_detached);
+        }
+    );
     thread_pool.wait();
     Context context = {
         args,
@@ -41,7 +47,7 @@ TEST_CASE("get_context")
 {
     const int argc = 2;
     const char *argv[] = {"name", "bash"};
-    Context context = get_context(argc, (char **)argv);
+    Context context = get_context(argc, const_cast<char**>(argv));
     CHECK(!context.HOME.empty());
     CHECK(context.args.shell == "bash");
 }

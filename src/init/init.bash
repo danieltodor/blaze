@@ -66,7 +66,7 @@ _blaze_run_on_exit() {
     rm $_blaze_previous_status_file
 }
 trap _blaze_run_on_exit EXIT
-trap "echo; _blaze_preexec" SIGINT
+trap "echo; _blaze_preexec" SIGINT # ^C needs an extra new line to prevent overwriting content during transient prompt
 
 _blaze_session="_blaze_${USER}_${BASHPID}"
 
