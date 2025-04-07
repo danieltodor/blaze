@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_GIT_COMMIT_HPP_INCLUDED
-#define BLAZE_MODULES_GIT_COMMIT_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -70,7 +69,5 @@ TEST_CASE("git_commit")
         CHECK(git_commit(context).length() > 8);
     }
 }
-
-#endif
 
 #endif

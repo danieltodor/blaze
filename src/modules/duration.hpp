@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_DURATION_HPP_INCLUDED
-#define BLAZE_MODULES_DURATION_HPP_INCLUDED
+#pragma once
 
 #include <string>
 #include <cmath>
@@ -144,7 +143,5 @@ TEST_CASE("duration")
         CHECK(duration(context) == "1h 38m 17s");
     }
 }
-
-#endif
 
 #endif

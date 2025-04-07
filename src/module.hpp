@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULE_HPP_INCLUDED
-#define BLAZE_MODULE_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -7,5 +6,3 @@
 
 // Call the module function by its name
 std::string call_module(const std::string &name, const Context &context);
-
-#endif

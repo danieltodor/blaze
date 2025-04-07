@@ -1,5 +1,4 @@
-#ifndef BLAZE_UTIL_HPP_INCLUDED
-#define BLAZE_UTIL_HPP_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -50,5 +49,3 @@ std::string format_time(const std::tm &time_structure, const std::string &format
 
 // Check if every character in the string is a digit
 bool is_number(const std::string &string);
-
-#endif

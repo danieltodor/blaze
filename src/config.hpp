@@ -1,5 +1,4 @@
-#ifndef BLAZE_CONFIG_HPP_INCLUDED
-#define BLAZE_CONFIG_HPP_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -147,5 +146,3 @@ bool contains_content_on_right(std::vector<Module> &modules, const int level);
 
 // Vertical size of the displayed config
 int vertical_size(const Config &config);
-
-#endif

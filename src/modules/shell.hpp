@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_SHELL_HPP_INCLUDED
-#define BLAZE_MODULES_SHELL_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -21,7 +20,5 @@ TEST_CASE("shell")
     context.args.shell = "abc";
     CHECK(shell(context) == "abc");
 }
-
-#endif
 
 #endif

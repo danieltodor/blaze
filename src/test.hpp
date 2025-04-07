@@ -1,5 +1,4 @@
-#ifndef BLAZE_TEST_HPP_INCLUDED
-#define BLAZE_TEST_HPP_INCLUDED
+#pragma once
 
 #ifdef TEST
 
@@ -7,7 +6,5 @@
 
 // Run test cases
 void run_tests(int argc, const char* const* argv);
-
-#endif
 
 #endif

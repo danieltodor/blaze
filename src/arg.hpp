@@ -1,5 +1,4 @@
-#ifndef BLAZE_ARG_HPP_INCLUDED
-#define BLAZE_ARG_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -41,5 +40,3 @@ struct Args : public argparse::Args
     std::string &background = kwarg("b,background", "Background RGB color").set_default("0;0;0");
     std::string &previous_command = kwarg("p,previous-command", "Previous command").set_default("");
 };
-
-#endif

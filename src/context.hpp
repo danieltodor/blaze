@@ -1,5 +1,4 @@
-#ifndef BLAZE_CONTEXT_HPP_INCLUDED
-#define BLAZE_CONTEXT_HPP_INCLUDED
+#pragma once
 
 #include <string>
 #include <time.h>
@@ -20,5 +19,3 @@ struct Context
 
 // Create context
 Context get_context(int argc, char *argv[]);
-
-#endif

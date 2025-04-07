@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_USER_HPP_INCLUDED
-#define BLAZE_MODULES_USER_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -22,7 +21,5 @@ TEST_CASE("user")
     Context context;
     CHECK(user(context).length() > 0);
 }
-
-#endif
 
 #endif

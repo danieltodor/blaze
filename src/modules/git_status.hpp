@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_GIT_STATUS_HPP_INCLUDED
-#define BLAZE_MODULES_GIT_STATUS_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -74,7 +73,5 @@ TEST_CASE("git_status")
         CHECK(git_status(context).length() > 0);
     }
 }
-
-#endif
 
 #endif

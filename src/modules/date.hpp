@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_DATE_HPP_INCLUDED
-#define BLAZE_MODULES_DATE_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -41,7 +40,5 @@ TEST_CASE("date")
         CHECK(date(context) == "20:04:34");
     }
 }
-
-#endif
 
 #endif

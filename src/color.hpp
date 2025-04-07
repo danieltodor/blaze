@@ -1,5 +1,4 @@
-#ifndef BLAZE_COLOR_HPP_INCLUDED
-#define BLAZE_COLOR_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -40,5 +39,3 @@ std::string erase_until_end_of_screen(const Context &context);
 
 // Get sequence characters
 std::vector<std::string> get_sequence_characters(const Context &context);
-
-#endif

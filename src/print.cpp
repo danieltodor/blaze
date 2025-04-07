@@ -905,6 +905,7 @@ TEST_CASE("prepare_prompt")
     context.args.prompt = true;
     context.args.right_prompt = false;
     context.args.first_print = false;
+    context.config.directory.from_repository = false;
     context.HOME = "/X";
     context.PWD = "/PWD";
     Module directory;

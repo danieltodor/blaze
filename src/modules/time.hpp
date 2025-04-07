@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_TIME_HPP_INCLUDED
-#define BLAZE_MODULES_TIME_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -41,7 +40,5 @@ TEST_CASE("time")
         CHECK(time(context) == "20:04:34");
     }
 }
-
-#endif
 
 #endif

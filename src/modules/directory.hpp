@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_DIRECTORY_HPP_INCLUDED
-#define BLAZE_MODULES_DIRECTORY_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -96,7 +95,5 @@ TEST_CASE("directory")
         CHECK(directory(context) == "~/b/c/d/e");
     }
 }
-
-#endif
 
 #endif

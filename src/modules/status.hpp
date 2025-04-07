@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_STATUS_HPP_INCLUDED
-#define BLAZE_MODULES_STATUS_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -44,7 +43,5 @@ TEST_CASE("status")
         CHECK(status(context) == "-255");
     }
 }
-
-#endif
 
 #endif

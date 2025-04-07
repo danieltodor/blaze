@@ -44,9 +44,10 @@ DEPS = $(patsubst %.o, %.d, $(OBJS))
 INSTALL_DIR = ~/.local
 
 # --- Compiler attributes ---
-COMPILER = g++
+# Compiler
+COMPILER_FLAGS = g++
 # Language standard
-COMPILER_FLAGS = -std=c++17
+COMPILER_FLAGS += -std=c++17
 # Optimisations
 ifdef release
 COMPILER_FLAGS += -Os -flto=auto
@@ -77,22 +78,20 @@ COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
 COMPILER_FLAGS += -MMD -MP
 
 # --- Linker attributes ---
-LINKER = $(COMPILER)
 LINKER_FLAGS = $(COMPILER_FLAGS)
 
 # --- Stripper attributes ---
-STRIPPER = strip
-STRIPPER_FLAGS = --strip-all
+STRIPPER_FLAGS = strip --strip-all
 
 # --- Analysis attributes ---
-FILE_FLAGS =
-LDD_FLAGS =
-HEXDUMP_FLAGS = --canonical
-STRINGS_FLAGS =
-READELF_FLAGS = --all
-NM_FLAGS =
-SIZE_FLAGS =
-OBJDUMP_FLAGS = --disassemble --demangle --source-comment --wide --visualize-jumps --decompress --no-addresses \
+FILE_FLAGS = file
+LDD_FLAGS = ldd
+HEXDUMP_FLAGS = hexdump --canonical
+STRINGS_FLAGS = strings
+READELF_FLAGS = readelf --all
+NM_FLAGS = nm
+SIZE_FLAGS = size
+OBJDUMP_FLAGS = objdump --disassemble --demangle --source-comment --wide --visualize-jumps --decompress --no-addresses \
 				--no-show-raw-insn
 
 # --- Make attributes ---
@@ -110,32 +109,32 @@ else
 	@echo "Debug build finished"
 endif
 ifdef analyze
-	$(CMD_PREFIX)file $(FILE_FLAGS) $< > $<.file
-	$(CMD_PREFIX)ldd $(LDD_FLAGS) $< > $<.ldd
-	$(CMD_PREFIX)hexdump $(HEXDUMP_FLAGS) $< > $<.hexdump
-	$(CMD_PREFIX)strings $(STRINGS_FLAGS) $< > $<.strings
-	$(CMD_PREFIX)readelf $(READELF_FLAGS) $< > $<.readelf
-	$(CMD_PREFIX)nm $(NM_FLAGS) $< > $<.nm
-	$(CMD_PREFIX)size $(SIZE_FLAGS) $< > $<.size
+	$(CMD_PREFIX)$(FILE_FLAGS) $< > $<.file
+	$(CMD_PREFIX)$(LDD_FLAGS) $< > $<.ldd
+	$(CMD_PREFIX)$(HEXDUMP_FLAGS) $< > $<.hexdump
+	$(CMD_PREFIX)$(STRINGS_FLAGS) $< > $<.strings
+	$(CMD_PREFIX)$(READELF_FLAGS) $< > $<.readelf
+	$(CMD_PREFIX)$(NM_FLAGS) $< > $<.nm
+	$(CMD_PREFIX)$(SIZE_FLAGS) $< > $<.size
 endif
 
 $(BINARY): $(OBJS)
 	@echo "Linking..."
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(LINKER) $(LINKER_FLAGS) $^ -o $@
+	$(CMD_PREFIX)$(LINKER_FLAGS) $^ -o $@
 ifdef release
 ifndef MACOS
 	@echo "Stripping binary..."
-	$(CMD_PREFIX)$(STRIPPER) $(STRIPPER_FLAGS) $@ -o $@
+	$(CMD_PREFIX)$(STRIPPER_FLAGS) $@ -o $@
 endif
 endif
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%
 	@echo "Compiling: $<"
 	$(CMD_PREFIX)mkdir -p $(@D)
-	$(CMD_PREFIX)$(COMPILER) $(COMPILER_FLAGS) -o $@ -c $<
+	$(CMD_PREFIX)$(COMPILER_FLAGS) -o $@ -c $<
 ifdef analyze
-	$(CMD_PREFIX)objdump $(OBJDUMP_FLAGS) $@ > $@.objdump
+	$(CMD_PREFIX)$(OBJDUMP_FLAGS) $@ > $@.objdump
 endif
 
 clean:

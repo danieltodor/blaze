@@ -1,5 +1,4 @@
-#ifndef BLAZE_MODULES_HOST_HPP_INCLUDED
-#define BLAZE_MODULES_HOST_HPP_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -25,7 +24,5 @@ TEST_CASE("host")
     Context context;
     CHECK(host(context).length() > 0);
 }
-
-#endif
 
 #endif
