@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "src/types.hpp"
 #include "src/context.hpp"
 #include "src/util.hpp"
 
@@ -24,14 +25,14 @@ std::string git_status(const Context &context)
         }
     };
     std::string status = execute_command("git status --porcelain=v2 --branch --show-stash");
-    std::vector<std::string> ahead_behind = regex_find_all(status, {"(?<=^# branch\\.ab \\+).*?(?=\n)"});
+    StringVector ahead_behind = regex_find_all(status, {"(?<=^# branch\\.ab \\+).*?(?=\n)"});
     if (!ahead_behind.empty())
     {
         ahead_behind = split(ahead_behind.at(0), " -");
         add_status(std::stoul(ahead_behind.at(0)), config.git_status.ahead);
         add_status(std::stoul(ahead_behind.at(1)), config.git_status.behind);
     }
-    const std::vector<std::string> stashed = regex_find_all(status, {"(?<=^# stash )\\d+"});
+    const StringVector stashed = regex_find_all(status, {"(?<=^# stash )\\d+"});
     if (!stashed.empty())
     {
         add_status(std::stoul(stashed.at(0)), config.git_status.stashed);

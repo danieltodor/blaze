@@ -1,6 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 
-#include "src/test.hpp"
+#include "test.hpp"
 
 #ifdef TEST
 #include <cstdlib>

@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "src/config.hpp"
+#include "config.hpp"
 #include "src/util.hpp"
 
 // Read the user's config file
@@ -132,7 +132,7 @@ void load_values(const toml::value &data, Config &config)
 }
 
 // Sort modules in ascending order
-void sort_modules(std::vector<Module> &modules)
+void sort_modules(ModuleVector &modules)
 {
     std::unordered_map<std::string, int> sides = {
         {LEFT_ALIGNMENT, 1},
@@ -171,7 +171,7 @@ Config get_config()
     return config;
 }
 
-Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t index)
+Module *get_previous_module_in_group(ModuleVector &modules, const std::size_t index)
 {
     Module *previous = nullptr;
     if (index == 0)
@@ -186,7 +186,7 @@ Module *get_previous_module_in_group(std::vector<Module> &modules, const std::si
     return previous;
 }
 
-Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t index)
+Module *get_next_module_in_group(ModuleVector &modules, const std::size_t index)
 {
     Module *next = nullptr;
     if (index == modules.size() - 1)
@@ -201,9 +201,9 @@ Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t
     return next;
 }
 
-std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const int level)
+ModulePtrVector get_modules_on_level(ModuleVector &modules, const int level)
 {
-    std::vector<Module *> result;
+    ModulePtrVector result;
     for (Module &module : modules)
     {
         if (module.level < level)
@@ -222,9 +222,9 @@ std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const i
     return result;
 }
 
-bool contains_content_on_right(std::vector<Module> &modules, const int level)
+bool contains_content_on_right(ModuleVector &modules, const int level)
 {
-    std::vector<Module *> modules_on_level = get_modules_on_level(modules, level);
+    ModulePtrVector modules_on_level = get_modules_on_level(modules, level);
     for (const Module *module : modules_on_level)
     {
         if (module->align == RIGHT_ALIGNMENT)
@@ -258,7 +258,7 @@ TEST_CASE("read_data")
 
 TEST_CASE("sort_modules")
 {
-    std::vector<Module> modules;
+    ModuleVector modules;
 
     Module a;
     a.name = "a";
@@ -339,7 +339,7 @@ TEST_CASE("get_config")
 
 TEST_CASE("get_previous_module_in_group")
 {
-    std::vector<Module> modules;
+    ModuleVector modules;
 
     Module a;
     a.name = "a";
@@ -372,7 +372,7 @@ TEST_CASE("get_previous_module_in_group")
 
 TEST_CASE("get_next_module_in_group")
 {
-    std::vector<Module> modules;
+    ModuleVector modules;
 
     Module a;
     a.name = "a";
@@ -405,7 +405,7 @@ TEST_CASE("get_next_module_in_group")
 
 TEST_CASE("get_modules_on_level")
 {
-    std::vector<Module> modules;
+    ModuleVector modules;
 
     Module a;
     a.name = "a";
@@ -424,13 +424,13 @@ TEST_CASE("get_modules_on_level")
 
     SUBCASE("1")
     {
-        const std::vector<Module *> result = get_modules_on_level(modules, 1);
+        const ModulePtrVector result = get_modules_on_level(modules, 1);
         CHECK(result.size() == 1);
         CHECK(result[0]->name == "a");
     }
     SUBCASE("2")
     {
-        const std::vector<Module *> result = get_modules_on_level(modules, 2);
+        const ModulePtrVector result = get_modules_on_level(modules, 2);
         CHECK(result.size() == 2);
         CHECK(result[0]->name == "b");
         CHECK(result[1]->name == "c");
@@ -439,7 +439,7 @@ TEST_CASE("get_modules_on_level")
 
 TEST_CASE("contains_content_on_right")
 {
-    std::vector<Module> modules;
+    ModuleVector modules;
 
     Module a;
     a.name = "a";

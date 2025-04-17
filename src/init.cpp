@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-#include "src/init.hpp"
+#include "init.hpp"
 #include "src/util.hpp"
 
 // Prepare shell init string

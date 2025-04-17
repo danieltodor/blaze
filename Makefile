@@ -21,7 +21,7 @@ ifeq "$(KERNEL)" "Darwin"
 MACOS = y
 endif
 
-# --- Directory structure ---
+# --- Project structure ---
 # Name of the generated binary
 BIN_NAME = blaze
 # Directories to search for header files

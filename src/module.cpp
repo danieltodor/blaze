@@ -1,6 +1,6 @@
 #include <unordered_map>
 
-#include "src/module.hpp"
+#include "module.hpp"
 #include "src/modules/date.hpp"
 #include "src/modules/directory.hpp"
 #include "src/modules/duration.hpp"

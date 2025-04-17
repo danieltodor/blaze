@@ -1,6 +1,6 @@
 #include <unordered_map>
 
-#include "src/color.hpp"
+#include "color.hpp"
 #include "src/util.hpp"
 
 // Sequence parts
@@ -178,7 +178,7 @@ std::string erase_until_end_of_screen(const Context &context)
     return create_sequence(ERASE_UNTIL_END, context, false);
 }
 
-std::vector<std::string> get_sequence_characters(const Context &context)
+StringVector get_sequence_characters(const Context &context)
 {
     return {sequence_begin.at(context.args.shell), sequence_end.at(context.args.shell)};
 }
@@ -366,7 +366,7 @@ TEST_CASE("get_sequence_characters")
     SUBCASE("bash")
     {
         context.args.shell = "bash";
-        const std::vector<std::string> result = get_sequence_characters(context);
+        const StringVector result = get_sequence_characters(context);
         CHECK(result.size() == 2);
         CHECK(result.at(0) == "\001");
         CHECK(result.at(1) == "\002");
@@ -374,7 +374,7 @@ TEST_CASE("get_sequence_characters")
     SUBCASE("zsh")
     {
         context.args.shell = "zsh";
-        const std::vector<std::string> result = get_sequence_characters(context);
+        const StringVector result = get_sequence_characters(context);
         CHECK(result.size() == 2);
         CHECK(result.at(0) == "%{");
         CHECK(result.at(1) == "%}");

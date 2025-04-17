@@ -1,9 +1,8 @@
-#include <regex>
 #include <locale>
 #include <codecvt>
 
 #include "external/boost/regex.hpp"
-#include "src/util.hpp"
+#include "util.hpp"
 
 winsize get_winsize()
 {
@@ -12,7 +11,7 @@ winsize get_winsize()
     return win;
 }
 
-std::size_t get_length(const std::vector<std::string> &strings)
+std::size_t get_length(const StringVector &strings)
 {
     // TODO: For certain emojis/symbols, the returned length is not correct.
     // Maybe counting grapheme clusters would be a better approach.
@@ -50,9 +49,9 @@ std::size_t find_nth_occurrence(const std::string &string, const std::string &su
     }
 }
 
-std::vector<std::string> split(const std::string &string, const std::string &delimiter)
+StringVector split(const std::string &string, const std::string &delimiter)
 {
-    std::vector<std::string> result;
+    StringVector result;
     std::size_t from = 0;
     std::size_t to;
     const std::size_t delimiter_length = delimiter.length();
@@ -73,7 +72,7 @@ std::vector<std::string> split(const std::string &string, const std::string &del
     return result;
 }
 
-std::string join(const std::vector<std::string> &strings, const std::string &delimiter)
+std::string join(const StringVector &strings, const std::string &delimiter)
 {
     if (strings.empty())
     {
@@ -99,19 +98,19 @@ std::string multiply_string(const int number, const std::string &string)
     return result;
 }
 
-void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement)
+void regex_replace(std::string &string, const StringVector &patterns, const std::string &replacement)
 {
     const std::string pattern = join(patterns, "|");
     string = boost::regex_replace(string, boost::regex(pattern), replacement);
 }
 
-std::vector<std::string> regex_find_all(const std::string &string, const std::vector<std::string> &patterns)
+StringVector regex_find_all(const std::string &string, const StringVector &patterns)
 {
     if (string.empty() || patterns.empty())
     {
         return {};
     }
-    std::vector<std::string> result;
+    StringVector result;
     const std::string pattern = join(patterns, "|");
     boost::sregex_token_iterator current(string.begin(), string.end(), boost::regex(pattern));
     const boost::sregex_token_iterator end;
@@ -254,7 +253,7 @@ TEST_CASE("split")
 {
     SUBCASE("slash")
     {
-        const std::vector<std::string> result = split("a/s/d", "/");
+        const StringVector result = split("a/s/d", "/");
         CHECK(result.size() == 3);
         CHECK(result[0] == "a");
         CHECK(result[1] == "s");
@@ -262,7 +261,7 @@ TEST_CASE("split")
     }
     SUBCASE("newline")
     {
-        const std::vector<std::string> result = split("\na\ns\nd\n", "\n");
+        const StringVector result = split("\na\ns\nd\n", "\n");
         CHECK(result.size() == 5);
         CHECK(result[0] == "");
         CHECK(result[1] == "a");
@@ -313,23 +312,23 @@ TEST_CASE("regex_find_all")
 {
     SUBCASE("empty string")
     {
-        std::vector<std::string> result = regex_find_all("", {"123"});
+        StringVector result = regex_find_all("", {"123"});
         CHECK(result.size() == 0);
     }
     SUBCASE("empty pattern")
     {
-        std::vector<std::string> result = regex_find_all("abc", {});
+        StringVector result = regex_find_all("abc", {});
         CHECK(result.size() == 0);
     }
     SUBCASE("1")
     {
-        std::vector<std::string> result = regex_find_all("abc123def", {"123"});
+        StringVector result = regex_find_all("abc123def", {"123"});
         CHECK(result.size() == 1);
         CHECK(result[0] == "123");
     }
     SUBCASE("2")
     {
-        std::vector<std::string> result = regex_find_all("abc123def", {"\\d"});
+        StringVector result = regex_find_all("abc123def", {"\\d"});
         CHECK(result.size() == 3);
         CHECK(result[0] == "1");
         CHECK(result[1] == "2");

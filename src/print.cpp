@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "src/print.hpp"
+#include "print.hpp"
 #include "src/color.hpp"
 #include "src/module.hpp"
 #include "src/util.hpp"

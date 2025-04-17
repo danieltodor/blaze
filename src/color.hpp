@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-
+#include "src/types.hpp"
 #include "src/context.hpp"
 
 // Text modes
@@ -38,4 +37,4 @@ std::string move_cursor_up(const int lines, const Context &context);
 std::string erase_until_end_of_screen(const Context &context);
 
 // Get sequence characters
-std::vector<std::string> get_sequence_characters(const Context &context);
+StringVector get_sequence_characters(const Context &context);

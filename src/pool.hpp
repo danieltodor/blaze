@@ -1,3 +1,5 @@
+#pragma once
+
 #include "external/thread-pool/BS_thread_pool.hpp"
 
 #define THREAD_LIMIT 4U

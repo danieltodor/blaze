@@ -1,9 +1,7 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "external/toml/toml.hpp"
+#include "src/types.hpp"
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
 #define CONTROL_CHAR "`"
@@ -52,7 +50,7 @@ struct Duration
 struct GitBranch
 {
     bool show_when_detached = false;
-    std::vector<std::string> ignore;
+    StringVector ignore;
 };
 
 struct GitCommit
@@ -112,6 +110,8 @@ struct Module
     bool italic = false;
     bool underline = false;
 };
+using ModuleVector = std::vector<Module>;
+using ModulePtrVector = std::vector<Module *>;
 
 struct Config
 {
@@ -126,23 +126,23 @@ struct Config
     Date date;
     Time time;
     Status status;
-    std::vector<Module> modules;
+    ModuleVector modules;
 };
 
 // Read the user's config file, or set default values if there is no such file
 Config get_config();
 
 // Previous module in the current group. Same level, same side
-Module *get_previous_module_in_group(std::vector<Module> &modules, const std::size_t index);
+Module *get_previous_module_in_group(ModuleVector &modules, const std::size_t index);
 
 // Next module in the current group. Same level, same side
-Module *get_next_module_in_group(std::vector<Module> &modules, const std::size_t index);
+Module *get_next_module_in_group(ModuleVector &modules, const std::size_t index);
 
 // Modules on the current level
-std::vector<Module *> get_modules_on_level(std::vector<Module> &modules, const int level);
+ModulePtrVector get_modules_on_level(ModuleVector &modules, const int level);
 
 // At least one module on the right has content set
-bool contains_content_on_right(std::vector<Module> &modules, const int level);
+bool contains_content_on_right(ModuleVector &modules, const int level);
 
 // Vertical size of the displayed config
 int vertical_size(const Config &config);

@@ -1,33 +1,33 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include <time.h>
 #include <sys/ioctl.h>
+
+#include "src/types.hpp"
 
 // Terminal window size
 winsize get_winsize();
 
 // Number of displayed characters in the strings
-std::size_t get_length(const std::vector<std::string> &strings);
+std::size_t get_length(const StringVector &strings);
 
 // Find the start index of the nth occurrence of a substring in a string
 std::size_t find_nth_occurrence(const std::string &string, const std::string &substring, const std::size_t n, const bool reverse=false);
 
 // Split the string at delimiters
-std::vector<std::string> split(const std::string &string, const std::string &delimiter);
+StringVector split(const std::string &string, const std::string &delimiter);
 
 // Join the strings at delimiters
-std::string join(const std::vector<std::string> &strings, const std::string &delimiter);
+std::string join(const StringVector &strings, const std::string &delimiter);
 
 // Multiply string n times
 std::string multiply_string(const int number, const std::string &string);
 
 // Replace parts in-place
-void regex_replace(std::string &string, const std::vector<std::string> &patterns, const std::string &replacement);
+void regex_replace(std::string &string, const StringVector &patterns, const std::string &replacement);
 
 // Find all occurences
-std::vector<std::string> regex_find_all(const std::string &string, const std::vector<std::string> &patterns);
+StringVector regex_find_all(const std::string &string, const StringVector &patterns);
 
 // Strip whitespace from beginning/end of string
 void strip(std::string &string);
