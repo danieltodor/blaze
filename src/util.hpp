@@ -3,7 +3,7 @@
 #include <time.h>
 #include <sys/ioctl.h>
 
-#include "src/types.hpp"
+#include "types.hpp"
 
 // Terminal window size
 winsize get_winsize();

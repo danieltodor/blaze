@@ -1,7 +1,7 @@
 #include <locale>
 #include <codecvt>
 
-#include "external/boost/regex.hpp"
+#include "boost/regex.hpp"
 #include "util.hpp"
 
 winsize get_winsize()
@@ -25,9 +25,13 @@ std::size_t get_length(const StringVector &strings)
 
 std::size_t find_nth_occurrence(const std::string &string, const std::string &substring, const std::size_t n, const bool reverse)
 {
+    if (string.empty() || substring.empty() || n == 0)
+    {
+        return std::string::npos;
+    }
     std::size_t index = reverse ? string.length() - 1 : 0;
     const std::size_t end = reverse ? 0 : string.length() - 1;
-    const short sign = reverse ? -1 : 1;
+    const short increment = reverse ? -1 : 1;
     std::size_t count = 0;
     std::size_t substring_size = substring.length();
     while (count < n && index != end)
@@ -37,11 +41,11 @@ std::size_t find_nth_occurrence(const std::string &string, const std::string &su
         {
             count++;
         }
-        index += sign * 1;
+        index += increment;
     }
     if (count == n)
     {
-        return index - sign;
+        return index - increment;
     }
     else
     {
@@ -186,7 +190,10 @@ std::tm get_current_time()
 std::string format_time(const std::tm &time_structure, const std::string &format)
 {
     char buffer[128];
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wformat-nonliteral"
     std::strftime(buffer, sizeof(buffer), format.c_str(), &time_structure);
+    #pragma GCC diagnostic pop
     return buffer;
 }
 
@@ -196,7 +203,7 @@ bool is_number(const std::string &string)
     {
         return false;
     }
-    for (const unsigned char c : string)
+    for (const char c : string)
     {
         if (!std::isdigit(c))
         {
@@ -208,7 +215,7 @@ bool is_number(const std::string &string)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("get_winsize")
 {
@@ -227,10 +234,21 @@ TEST_CASE("get_length")
 
 TEST_CASE("find_nth_occurrence")
 {
+    SUBCASE("empty")
+    {
+        CHECK(find_nth_occurrence("", "", 0) == std::string::npos);
+        CHECK(find_nth_occurrence("a", "", 0) == std::string::npos);
+        CHECK(find_nth_occurrence("", "a", 0) == std::string::npos);
+        CHECK(find_nth_occurrence("", "", 0, true) == std::string::npos);
+        CHECK(find_nth_occurrence("a", "", 0, true) == std::string::npos);
+        CHECK(find_nth_occurrence("", "a", 0, true) == std::string::npos);
+    }
     SUBCASE("single character")
     {
         CHECK(find_nth_occurrence("abcdefg", "h", 1) == std::string::npos);
         CHECK(find_nth_occurrence("abcdefgh", "h", 2) == std::string::npos);
+        CHECK(find_nth_occurrence("abcdefg", "h", 1, true) == std::string::npos);
+        CHECK(find_nth_occurrence("abcdefgh", "h", 2, true) == std::string::npos);
         CHECK(find_nth_occurrence("abcdefg", "c", 1) == 2);
         CHECK(find_nth_occurrence("abcdefg", "c", 1, true) == 2);
         CHECK(find_nth_occurrence("abcdefcg", "c", 1, true) == 6);
@@ -241,6 +259,8 @@ TEST_CASE("find_nth_occurrence")
     {
         CHECK(find_nth_occurrence("aaabbbcccdddeeefffggg", "asd", 1) == std::string::npos);
         CHECK(find_nth_occurrence("aaabbbasdcccdddeeefffggg", "asd", 2) == std::string::npos);
+        CHECK(find_nth_occurrence("aaabbbcccdddeeefffggg", "asd", 1, true) == std::string::npos);
+        CHECK(find_nth_occurrence("aaabbbasdcccdddeeefffggg", "asd", 2, true) == std::string::npos);
         CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffggg", "asd", 1) == 15);
         CHECK(find_nth_occurrence("aaabbbcccdddeeeasdfffggg", "asd", 1, true) == 15);
         CHECK(find_nth_occurrence("aaabbbasdcccdddeeeasdfffggg", "asd", 1, true) == 18);

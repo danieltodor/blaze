@@ -1,17 +1,17 @@
 #include <unordered_map>
 
 #include "module.hpp"
-#include "src/modules/date.hpp"
-#include "src/modules/directory.hpp"
-#include "src/modules/duration.hpp"
-#include "src/modules/git_branch.hpp"
-#include "src/modules/git_commit.hpp"
-#include "src/modules/git_status.hpp"
-#include "src/modules/host.hpp"
-#include "src/modules/shell.hpp"
-#include "src/modules/status.hpp"
-#include "src/modules/time.hpp"
-#include "src/modules/user.hpp"
+#include "modules/date.hpp"
+#include "modules/directory.hpp"
+#include "modules/duration.hpp"
+#include "modules/git_branch.hpp"
+#include "modules/git_commit.hpp"
+#include "modules/git_status.hpp"
+#include "modules/host.hpp"
+#include "modules/shell.hpp"
+#include "modules/status.hpp"
+#include "modules/time.hpp"
+#include "modules/user.hpp"
 
 const std::unordered_map<std::string, std::string (*)(const Context &)> module_map
 {
@@ -40,7 +40,7 @@ std::string call_module(const std::string &name, const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("call_module")
 {

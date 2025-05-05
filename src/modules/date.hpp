@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "src/context.hpp"
-#include "src/util.hpp"
+#include "context.hpp"
+#include "util.hpp"
 
 // Current date
 std::string date(const Context &context)
@@ -14,7 +14,7 @@ std::string date(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("date")
 {

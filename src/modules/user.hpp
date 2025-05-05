@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "src/context.hpp"
-#include "src/util.hpp"
+#include "context.hpp"
+#include "util.hpp"
 
 // Current user
 std::string user(const Context &context)
@@ -14,7 +14,7 @@ std::string user(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("user")
 {

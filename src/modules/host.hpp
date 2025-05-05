@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "src/context.hpp"
-#include "src/util.hpp"
+#include "context.hpp"
+#include "util.hpp"
 
 // Hostname
 std::string host(const Context &context)
@@ -17,7 +17,7 @@ std::string host(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("host")
 {

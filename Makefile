@@ -25,7 +25,11 @@ endif
 # Name of the generated binary
 BIN_NAME = blaze
 # Directories to search for header files
-INCLUDE_DIRS = . external
+INCLUDE_DIRS = src external
+# Suppress warnings for these directories
+SYSTEM_DIRS = external
+# Libraries to link
+LIBRARIES =
 # Directory for the main source code
 SRC_DIR = src
 BUILD_DIR = build
@@ -52,7 +56,7 @@ COMPILER_FLAGS += -std=c++17
 ifdef release
 COMPILER_FLAGS += -Os -flto=auto
 else
-COMPILER_FLAGS += -g -O0
+COMPILER_FLAGS += -O0 -g3
 endif
 # Warnings
 ifdef release
@@ -74,6 +78,9 @@ COMPILER_FLAGS += $(addprefix -D, TEST)
 endif
 # Includes
 COMPILER_FLAGS += $(addprefix -I, $(INCLUDE_DIRS))
+COMPILER_FLAGS += $(addprefix -isystem, $(SYSTEM_DIRS))
+# Libraries
+COMPILER_FLAGS += $(addprefix -l, $(LIBRARIES))
 # Generate dependency files
 COMPILER_FLAGS += -MMD -MP
 

@@ -1,7 +1,7 @@
-#include "src/init.hpp"
-#include "src/print.hpp"
-#include "src/context.hpp"
-#include "src/test.hpp"
+#include "init.hpp"
+#include "print.hpp"
+#include "context.hpp"
+#include "test.hpp"
 
 int main(int argc, char *argv[])
 {

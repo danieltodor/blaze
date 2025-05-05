@@ -1,6 +1,6 @@
 #pragma once
 
-#include "external/thread-pool/BS_thread_pool.hpp"
+#include "thread-pool/BS_thread_pool.hpp"
 
 #define THREAD_LIMIT 4U
 
@@ -8,7 +8,7 @@ inline BS::thread_pool thread_pool(std::min(std::thread::hardware_concurrency(),
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("thread count")
 {

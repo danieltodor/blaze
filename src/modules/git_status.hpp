@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "src/types.hpp"
-#include "src/context.hpp"
-#include "src/util.hpp"
+#include "types.hpp"
+#include "context.hpp"
+#include "util.hpp"
 
 // Symbols indicating the current state of the repository
 std::string git_status(const Context &context)
@@ -56,7 +56,7 @@ std::string git_status(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("git_status")
 {

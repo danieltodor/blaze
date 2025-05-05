@@ -1,11 +1,11 @@
 #include <iostream>
 
 #include "print.hpp"
-#include "src/color.hpp"
-#include "src/module.hpp"
-#include "src/util.hpp"
-#include "src/config.hpp"
-#include "src/pool.hpp"
+#include "color.hpp"
+#include "module.hpp"
+#include "util.hpp"
+#include "config.hpp"
+#include "pool.hpp"
 
 // Virtual modules
 #define FIXED_MODULE "fixed"
@@ -236,7 +236,7 @@ void remove_surplus(Context &context)
             config.modules.erase(iterator--);
         }
     }
-    int i = 0;
+    std::size_t i = 0;
     for (auto iterator = config.modules.begin(); iterator != config.modules.end(); iterator++)
     {
         current_module = iterator.base();
@@ -412,7 +412,7 @@ void print_transient_prompt(Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("get_padding")
 {

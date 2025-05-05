@@ -1,6 +1,6 @@
 #include "context.hpp"
-#include "src/util.hpp"
-#include "src/pool.hpp"
+#include "util.hpp"
+#include "pool.hpp"
 
 Context get_context(int argc, char *argv[])
 {
@@ -41,7 +41,7 @@ Context get_context(int argc, char *argv[])
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("get_context")
 {

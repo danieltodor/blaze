@@ -1,8 +1,9 @@
 #include <algorithm>
 #include <unordered_map>
 
+#include "toml/toml.hpp"
 #include "config.hpp"
-#include "src/util.hpp"
+#include "util.hpp"
 
 // Read the user's config file
 toml::value read_data()
@@ -247,7 +248,7 @@ int vertical_size(const Config &config)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("read_data")
 {

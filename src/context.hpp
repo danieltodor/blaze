@@ -3,8 +3,8 @@
 #include <string>
 #include <time.h>
 
-#include "src/arg.hpp"
-#include "src/config.hpp"
+#include "arg.hpp"
+#include "config.hpp"
 
 struct Context
 {

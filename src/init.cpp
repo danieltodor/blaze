@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "init.hpp"
-#include "src/util.hpp"
+#include "util.hpp"
 
 // Prepare shell init string
 std::string prepare_shell_init(const Context &context)
@@ -35,7 +35,7 @@ void print_shell_init(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("prepare_shell_init")
 {

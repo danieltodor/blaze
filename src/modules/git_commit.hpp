@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "src/context.hpp"
-#include "src/util.hpp"
+#include "context.hpp"
+#include "util.hpp"
 
 // Commit hash
 std::string git_commit(const Context &context)
@@ -26,7 +26,7 @@ std::string git_commit(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("git_commit")
 {

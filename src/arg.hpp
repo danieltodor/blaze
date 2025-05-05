@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "external/argparse/argparse.hpp"
+#include "argparse/argparse.hpp"
 
 struct Args : public argparse::Args
 {

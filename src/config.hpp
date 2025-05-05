@@ -1,7 +1,6 @@
 #pragma once
 
-#include "external/toml/toml.hpp"
-#include "src/types.hpp"
+#include "types.hpp"
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
 #define CONTROL_CHAR "`"

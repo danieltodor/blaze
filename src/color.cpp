@@ -1,7 +1,7 @@
 #include <unordered_map>
 
 #include "color.hpp"
-#include "src/util.hpp"
+#include "util.hpp"
 
 // Sequence parts
 #define CONTROL_SEQUENCE_INTRODUCER "\033["
@@ -185,7 +185,7 @@ StringVector get_sequence_characters(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("create_sequence")
 {

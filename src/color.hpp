@@ -1,7 +1,7 @@
 #pragma once
 
-#include "src/types.hpp"
-#include "src/context.hpp"
+#include "types.hpp"
+#include "context.hpp"
 
 // Text modes
 #define BOLD 1

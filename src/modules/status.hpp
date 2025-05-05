@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "src/context.hpp"
+#include "context.hpp"
 
 // Exit status of the last command
 std::string status(const Context &context)
@@ -16,7 +16,7 @@ std::string status(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("status")
 {

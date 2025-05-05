@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 
-#include "src/context.hpp"
+#include "context.hpp"
 
 // Times in seconds
 #define HOUR 3600
@@ -62,7 +62,7 @@ std::string duration(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("duration")
 {

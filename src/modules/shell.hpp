@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "src/context.hpp"
+#include "context.hpp"
 
 // Currently active shell
 std::string shell(const Context &context)
@@ -12,7 +12,7 @@ std::string shell(const Context &context)
 
 // ----------------------------------- TESTS -----------------------------------
 #ifdef TEST
-#include "src/test.hpp"
+#include "test.hpp"
 
 TEST_CASE("shell")
 {
