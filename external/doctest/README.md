@@ -29,16 +29,11 @@
 
 **doctest** is a new C++ testing framework but is by far the fastest both in compile times (by [**orders of magnitude**](doc/markdown/benchmarks.md)) and runtime compared to other feature-rich alternatives. It brings the ability of compiled languages such as [**D**](https://dlang.org/spec/unittest.html) / [**Rust**](https://doc.rust-lang.org/book/second-edition/ch11-00-testing.html) / [**Nim**](https://nim-lang.org/docs/unittest.html) to have tests written directly in the production code thanks to a fast, transparent and flexible test runner with a clean interface.
 
-[![Standard](https://img.shields.io/badge/c%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
+[![Standard](https://img.shields.io/badge/c%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![download](https://img.shields.io/badge/download%20%20-link-blue.svg)](https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/503/badge)](https://bestpractices.coreinfrastructure.org/projects/503)
-[![Chat - Discord](https://img.shields.io/badge/chat-Discord-blue.svg)](https://discord.gg/PGXn9YmyF3)
 [![Try it online](https://img.shields.io/badge/try%20it-online-orange.svg)](https://godbolt.org/z/4s389Kbfs)
-<!--
-[![Language](https://img.shields.io/badge/language-C++-blue.svg)](https://isocpp.org/)
-[![documentation](https://img.shields.io/badge/documentation%20%20-online-blue.svg)](https://github.com/doctest/doctest/blob/master/doc/markdown/readme.md#reference)
--->
 
 [<img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" align="right">](https://www.patreon.com/onqtam)
 
@@ -110,6 +105,13 @@ Usage:
 - [FAQ](doc/markdown/faq.md)
 - [Build systems](doc/markdown/build-systems.md)
 - [Examples](examples)
+
+Bugs and feature proposals
+------------
+If you find a bug, report it!
+If you have an idea on how to improve the project, be it anything from better documentation to adding new features, consider preparing a **feature proposal**.
+We call it proposal because the word "request" has the wrong intention, no one will auto-magically fix it for you, but the idea can be discussed and accepted or rejected before **you** implement it.
+Please make sure to read through the [**Contributing**](CONTRIBUTING.md) page before submitting any issue, the triaging procedure is documented there.
 
 Contributing
 ------------
