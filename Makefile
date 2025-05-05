@@ -62,7 +62,9 @@ endif
 ifdef release
 COMPILER_FLAGS += -Wno-psabi -Wno-deprecated
 else
-COMPILER_FLAGS += -Wall -Wextra -Wpedantic -Wshadow
+COMPILER_FLAGS += -Wall -Wextra -Wpedantic -Wshadow -Wdouble-promotion -Wfloat-equal -Wcast-qual -Wimplicit-fallthrough \
+				  -Wuseless-cast -Wredundant-decls -Wold-style-cast -Wcast-align -Woverloaded-virtual -Wformat=2 \
+				  -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wnon-virtual-dtor
 endif
 # Instrumentation
 ifdef release

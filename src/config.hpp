@@ -41,9 +41,9 @@ struct Directory
 
 struct Duration
 {
-    float threshold = 2;
+    double threshold = 2;
     int precision = 1;
-    float fractional_until = 10;
+    double fractional_until = 10;
 };
 
 struct GitBranch

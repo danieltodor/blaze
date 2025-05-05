@@ -20,11 +20,11 @@ std::string duration(const Context &context)
         return time;
     };
     const Config &config = context.config;
-    const float precision = std::pow(10, -config.duration.precision);
+    const double precision = std::pow(10, -config.duration.precision);
     const double start_time = context.args.start_time;
     const double finish_time = context.args.finish_time;
     const double difference = round((finish_time - start_time) / precision) * precision;
-    if (difference < config.duration.threshold || start_time == 0 || finish_time == 0)
+    if (difference < config.duration.threshold || start_time <= 0 || finish_time <= 0)
     {
         return "";
     }
@@ -43,7 +43,7 @@ std::string duration(const Context &context)
         result += hours ? " " : "";
         result += std::to_string(minutes) + 'm';
     }
-    if (seconds || fractional)
+    if (seconds || fractional > 0)
     {
         result += hours || minutes ? " " : "";
         if (difference < config.duration.fractional_until)
