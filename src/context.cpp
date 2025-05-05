@@ -45,11 +45,33 @@ Context get_context(int argc, char *argv[])
 
 TEST_CASE("get_context")
 {
-    const int argc = 2;
-    const char *argv[] = {"name", "bash"};
-    Context context = get_context(argc, const_cast<char**>(argv));
-    CHECK(!context.HOME.empty());
-    CHECK(context.args.shell == "bash");
+    SUBCASE("easily testable values")
+    {
+        const int argc = 2;
+        const char *argv[] = {"name", "bash"};
+        Context context = get_context(argc, const_cast<char**>(argv));
+        CHECK(context.args.shell == "bash");
+        CHECK(!context.HOME.empty());
+        CHECK(!context.PWD.empty());
+        CHECK(context.git_repository_detected);
+        CHECK(!context.git_repository_detached);
+    }
+    SUBCASE("keyword arguments")
+    {
+        const int argc = 9;
+        const char *argv[] = {"name", "zsh", "--prompt", "--start-time", "5", "-e", "255", "-b", "1;1;1"};
+        Context context = get_context(argc, const_cast<char**>(argv));
+        // Set
+        CHECK(context.args.shell == "zsh");
+        CHECK(context.args.prompt);
+        CHECK(context.args.start_time == 5);
+        CHECK(context.args.status == 255);
+        CHECK(context.args.background == "1;1;1");
+        // Default
+        CHECK(!context.args.init);
+        CHECK(context.args.finish_time == 0);
+        CHECK(context.args.previous_command.empty());
+    }
 }
 
 #endif

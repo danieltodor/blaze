@@ -35,12 +35,15 @@
 #include <memory>              // for allocator, shared_ptr, __shared_ptr_ac...
 #include <optional>            // for optional, nullopt
 #include <stdexcept>           // for runtime_error, invalid_argument
+#include <filesystem>          // for getting program_name from path
 #include <string>              // for string, operator+, basic_string, char_...
 #include <type_traits>         // for declval, false_type, true_type, is_enum
 #include <utility>             // for move, pair
 #include <vector>              // for vector
+#include <codecvt>             // for std::wstring_convert
+#include <locale>              // for std::wstring_convert
 
-#if __has_include("magic_enum.hpp")
+#if __has_include(<magic_enum.hpp>)
 #include <magic_enum.hpp>      // for enum_entries
 #define HAS_MAGIC_ENUM
 #endif
@@ -48,6 +51,7 @@
 #define ARGPARSE_VERSION 4
 
 namespace argparse {
+    class Args;
     using std::cout, std::cerr, std::endl, std::setw, std::size_t;
 
     template<typename T> struct is_vector : public std::false_type {};
@@ -71,7 +75,26 @@ namespace argparse {
     }
 
     template<typename T> std::string toString(const T &v) {
-        if constexpr (has_ostream_operator<T>::value) {
+        if constexpr (std::is_convertible<T, std::wstring>::value) {
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996) // C4996 is the typical MSVC deprecation warning
+#endif
+            return std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(v);
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+        } else if constexpr (has_ostream_operator<T>::value) {
             return static_cast<std::ostringstream &&>((std::ostringstream() << std::boolalpha << v)).str();       // https://github.com/stan-dev/math/issues/590#issuecomment-550122627
         } else {
             return "unknown";
@@ -98,10 +121,12 @@ namespace argparse {
 
     template<typename T> inline T get(const std::string &v);
     template<> inline std::string get(const std::string &v) { return v; }
+    template<> inline std::wstring get(const std::string &v) { return std::wstring(v.begin(), v.end()); }
     template<> inline char get(const std::string &v) { return v.empty()? throw std::invalid_argument("empty string") : v.size() > 1?  v.substr(0,2) == "0x"? (char)std::stoul(v, nullptr, 16) : (char)std::stoi(v) : v[0]; }
     template<> inline int get(const std::string &v) { return std::stoi(v); }
     template<> inline short get(const std::string &v) { return std::stoi(v); }
     template<> inline long get(const std::string &v) { return std::stol(v); }
+    template<> inline long long get(const std::string &v) { return std::stol(v); }
     template<> inline bool get(const std::string &v) { return to_lower(v) == "true" || v == "1"; }
     template<> inline float get(const std::string &v) { return std::stof(v); }
     template<> inline double get(const std::string &v) { return std::stod(v); }
@@ -109,6 +134,7 @@ namespace argparse {
     template<> inline unsigned int get(const std::string &v) { return std::stoul(v); }
     template<> inline unsigned short get(const std::string &v) { return std::stoul(v); }
     template<> inline unsigned long get(const std::string &v) { return std::stoul(v); }
+    template<> inline unsigned long long get(const std::string &v) { return std::stoul(v); }
 
     template<typename T> inline T get(const std::string &v) { // remaining types
         if constexpr (is_vector<T>::value) {
@@ -189,12 +215,12 @@ namespace argparse {
     };
 
     struct Entry {
-        enum ARG_TYPE {ARG, KWARG, FLAG} ftype;
+        enum ARG_TYPE {ARG, KWARG, FLAG} type;
 
         Entry(ARG_TYPE type, const std::string& key, std::string help, std::optional<std::string> implicit_value=std::nullopt) :
-                ftype(type),
+                type(type),
                 keys_(split(key)),
-                fhelp(std::move(help)),
+                help(std::move(help)),
                 implicit_value_(std::move(implicit_value)) {
         }
 
@@ -235,7 +261,7 @@ namespace argparse {
 
     private:
         std::vector<std::string> keys_;
-        std::string fhelp;
+        std::string help;
         std::optional<std::string> value_;
         std::optional<std::string> implicit_value_;
         std::optional<std::string> default_str_;
@@ -248,7 +274,7 @@ namespace argparse {
         [[nodiscard]] std::string _get_keys() const {
             std::stringstream ss;
             for (size_t i = 0; i < keys_.size(); i++)
-                ss << (i? "," : "") << (ftype == ARG? "" : (keys_[i].size() > 1 ? "--" : "-")) + keys_[i];
+                ss << (i? "," : "") << (type == ARG? "" : (keys_[i].size() > 1 ? "--" : "-")) + keys_[i];
             return ss.str();
         }
 
@@ -257,9 +283,9 @@ namespace argparse {
                 this->value_ = value;
                 datap->convert(value);
             } catch (const std::invalid_argument &e) {
-                error = "Invalid argument, could not convert \"" + value + "\" for " + _get_keys() + " (" + fhelp + ")";
+                error = "Invalid argument, could not convert \"" + value + "\" for " + _get_keys() + " (" + help + ")";
             } catch (const std::runtime_error &e) {
-                error = "Invalid argument \"" + value + "\" for " + _get_keys() + " (" + fhelp + "). Error: " + e.what();
+                error = "Invalid argument \"" + value + "\" for " + _get_keys() + " (" + help + "). Error: " + e.what();
             }
         }
 
@@ -271,7 +297,7 @@ namespace argparse {
             } else if (default_str_.has_value()) {   // in cases where a string is provided to the `set_default` function
                 _convert(default_str_.value());
             } else {
-                error = "Argument missing: " + _get_keys() + " (" + fhelp + ")";
+                error = "Argument missing: " + _get_keys() + " (" + help + ")";
             }
         }
 
@@ -286,16 +312,41 @@ namespace argparse {
         friend class Args;
     };
 
+    struct SubcommandEntry {
+        std::shared_ptr<Args> subargs;
+        std::string subcommand_name;
+
+        explicit SubcommandEntry(std::string subcommand_name) : subcommand_name(std::move(subcommand_name)) {}
+
+        template<typename T> operator T &() {
+            static_assert(std::is_base_of_v<Args, T>, "Subcommand type must be a derivative of argparse::Args");
+
+            std::shared_ptr<T> res = std::make_shared<T>();
+            res->program_name = subcommand_name;
+            subargs = res;
+            return *(T*)(subargs.get());
+        }
+
+        // Force an ambiguous error when not using a reference.
+        template <typename T> operator T() {} // When you get here  because you received an error, make sure all parameters of argparse are references (e.g. with `&`)
+    };
+
     class Args {
     private:
         size_t _arg_idx = 0;
-        std::string program_name;
         std::vector<std::string> params;
         std::vector<std::shared_ptr<Entry>> all_entries;
         std::map<std::string, std::shared_ptr<Entry>> kwarg_entries;
         std::vector<std::shared_ptr<Entry>> arg_entries;
+        std::map<std::string, std::shared_ptr<SubcommandEntry>> subcommand_entries;
+        bool has_options() {
+            return std::find_if(all_entries.begin(), all_entries.end(), [](auto e) { return e->type != Entry::ARG; }) != all_entries.end();
+        };
 
     public:
+        std::string program_name;
+        bool is_valid = false;
+
         virtual ~Args() = default;
 
         /* Add a positional argument, the order in which it is defined equals the order in which they are being read.
@@ -304,7 +355,19 @@ namespace argparse {
          * Returns a reference to the Entry, which will collapse into the requested type in `Entry::operator T()`
          */
         Entry &arg(const std::string &help) {
-            std::shared_ptr<Entry> entry = std::make_shared<Entry>(Entry::ARG, "arg_" + std::to_string(_arg_idx++), help);
+            return arg("arg_" + std::to_string(_arg_idx), help);
+        }
+
+        /* Add a *named* positional argument, the order in which it is defined equals the order in which they are being read.
+         * key : The name of the argument, otherwise arg_<position> will be used
+         * help : Description of the variable
+         *
+         * Returns a reference to the Entry, which will collapse into the requested type in `Entry::operator T()`
+         */
+        Entry &arg(const std::string& key, const std::string &help) {
+            std::shared_ptr<Entry> entry = std::make_shared<Entry>(Entry::ARG, key, help);
+            // Increasing _arg_idx, so that arg2 will be arg_2, irregardless of whether it is preceded by other positional arguments
+            _arg_idx++;
             arg_entries.emplace_back(entry);
             all_entries.emplace_back(entry);
             return *entry;
@@ -336,22 +399,47 @@ namespace argparse {
             return kwarg(key, help, "true").set_default<bool>(false);
         }
 
+        /* Add a a subcommand
+         * command : name of the subcommand, e.g. 'commit', if you wish to implement a function like 'git commit'
+         *
+         * Returns a reference to the Entry, which will collapse into the requested type in `Entry::operator T()`
+         * Expected type *Must* be an std::shared_ptr of derivative of the argparse::Args class
+         */
+        SubcommandEntry &subcommand(const std::string &command) {
+            std::shared_ptr<SubcommandEntry> entry = std::make_shared<SubcommandEntry>(command);
+            subcommand_entries[command] = entry;
+            return *entry;
+        }
+
         virtual void welcome() {}       // Allow to overwrite the `welcome` function to add a welcome-message to the help output
         virtual void help() {
             welcome();
             cout << "Usage: " << program_name << " ";
             for (const auto &entry : arg_entries)
                 cout << entry->keys_[0] << ' ';
-            cout << " [options...]" << endl;
+            if (has_options()) cout << " [options...]";
+            if (!subcommand_entries.empty()) {
+                cout << " [SUBCOMMAND: ";
+                for (const auto &[subcommand, subentry]: subcommand_entries) {
+                    cout << subcommand << ", ";
+                }
+                cout << "]";
+            }
+            cout << endl;
             for (const auto &entry : arg_entries) {
-                cout << setw(17) << entry->keys_[0] << " : " << entry->fhelp << entry->info() << endl;
+                cout << setw(17) << entry->keys_[0] << " : " << entry->help << entry->info() << endl;
             }
 
-            cout << endl << "Options:" << endl;
+            if (has_options()) cout << endl << "Options:" << endl;
             for (const auto &entry : all_entries) {
-                if (entry->ftype != Entry::ARG) {
-                    cout << setw(17) << entry->_get_keys() << " : " << entry->fhelp << entry->info() << endl;
+                if (entry->type != Entry::ARG) {
+                    cout << setw(17) << entry->_get_keys() << " : " << entry->help << entry->info() << endl;
                 }
+            }
+
+            for (const auto &[subcommand, subentry] : subcommand_entries) {
+                cout << endl << endl << bold("Subcommand: ") << bold(subcommand) << endl;
+                subentry->subargs->help();
             }
         }
 
@@ -369,13 +457,27 @@ namespace argparse {
         }
 
         /* parse all parameters and also check for the help_flag which was set in this constructor
-         * Upon error, it will print the error and exit immediately.
+         * Upon error, it will print the error and exit immediately if validation_action is ValidationAction::EXIT_ON_ERROR
          */
         void parse(int argc, const char* const *argv, const bool &raise_on_error) {
-            program_name = argv[0];
+            auto parse_subcommands = [&]() -> int {
+                for (int i = 1; i < argc; i++) {
+                    for (auto &[subcommand, subentry] : subcommand_entries) {
+                        if (subcommand == argv[i]) {
+                            subentry->subargs->parse(argc - i, argv + i, raise_on_error);
+                            return i;
+                        }
+                    }
+                }
+                return argc;
+            };
+            argc = parse_subcommands();   // argc_ is the number of arguments that should be parsed after the subcommand has finished parsing
+
+            program_name = std::filesystem::path(argv[0]).stem().string();
             params = std::vector<std::string>(argv + 1, argv + argc);
 
-            bool& _help = flag("help", "print help");
+            std::string help_keys = kwarg_entries.count("h") ? "?,help" : "?,h,help";
+            bool& _help = flag(help_keys, "print help");
 
             auto is_value = [&](const size_t &i) -> bool {
                 return params.size() > i && (params[i][0] != '-' || (params[i].size() > 1 && std::isdigit(params[i][1])));  // check for number to not accidentally mark negative numbers as non-parameter
@@ -405,7 +507,10 @@ namespace argparse {
                         entry->error = "No value provided for: " + key;
                     }
                 } else {
-                    cerr << "unrecognised commandline argument: " << key << endl;
+                    if (raise_on_error)
+                        throw std::runtime_error("unrecognised commandline argument :  " + key);
+                    else
+                        cerr << "unrecognised commandline argument :  " << key << endl;
                 }
             };
             auto add_param = [&](size_t &i, const size_t &start) {
@@ -450,7 +555,7 @@ namespace argparse {
                 if (flat_idx < arguments_flat.size() && flat_idx >= arg_i) {
                     if (arg_entries[arg_entries.size() - arg_j]->_is_multi_argument) {
                         std::stringstream s;  // Combine multiple arguments into 1 comma-separated string for parsing
-                        copy(&arguments_flat[arg_i],&arguments_flat[flat_idx + 1], std::ostream_iterator<std::string>(s,","));
+                        copy(&arguments_flat[arg_i],&arguments_flat[flat_idx] + 1, std::ostream_iterator<std::string>(s,","));
                         std::string value = s.str();
                         value.back() = '\0'; // remove trailing ','
                         arg_entries[arg_i]->_convert(value);
@@ -473,13 +578,34 @@ namespace argparse {
             }
 
             validate(raise_on_error);
+            is_valid = true;
         }
 
         void print() const {
             for (const auto &entry : all_entries) {
-                std::string snip = entry->ftype == Entry::ARG ? "(" + (entry->fhelp.size() > 10 ? entry->fhelp.substr(0, 7) + "..." : entry->fhelp) + ")" : "";
+                std::string snip = entry->type == Entry::ARG ? "(" + (entry->help.size() > 10 ? entry->help.substr(0, 7) + "..." : entry->help) + ")" : "";
                 cout << setw(21) << entry->_get_keys() + snip << " : " << (entry->is_set_by_user? bold(entry->value_.value_or("null")) : entry->value_.value_or("null")) << endl;
             }
+
+            for (const auto &[subcommand, subentry] : subcommand_entries) {
+                if (subentry->subargs->is_valid) {
+                    cout << endl << "--- Subcommand: " << subcommand << endl;
+                    subentry->subargs->print();
+                }
+            }
+        }
+
+        virtual int run() {return 0;}       // For automatically running subcommands
+        int run_subcommands() {
+            for (const auto &[subcommand, subentry] : subcommand_entries) {
+                if (subentry->subargs->is_valid) {
+                    return subentry->subargs->run();
+                }
+            }
+
+            std::cerr << "No subcommand provided" << std::endl;
+            help();
+            return -1;
         }
     };
 
