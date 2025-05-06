@@ -98,6 +98,7 @@ void load_values(const toml::value &data, Config &config)
     {
         const toml::array module_array = toml::find(data, "module").as_array();
         config.modules.clear();
+        config.modules.reserve(module_array.size());
         try
         {
             for (const toml::value &module_data : module_array)
