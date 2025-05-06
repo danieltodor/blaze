@@ -24,7 +24,7 @@ toml::value read_data()
             data = toml::parse(path);
             break;
         }
-        catch (const std::runtime_error &err)
+        catch (...)
         {
         }
     }
@@ -39,7 +39,7 @@ void set_value(const toml::value &data, T &target, Keys&&... keys)
     {
         target = toml::find<T>(data, keys...);
     }
-    catch (const std::out_of_range &err)
+    catch (...)
     {
     }
 }
@@ -123,11 +123,11 @@ void load_values(const toml::value &data, Config &config)
                 config.modules.push_back(current);
             }
         }
-        catch (const std::out_of_range &err)
+        catch (...)
         {
         }
     }
-    catch (const std::out_of_range &err)
+    catch (...)
     {
     }
 }
@@ -164,7 +164,7 @@ Config get_config()
     Config config;
     toml::value data = read_data();
     set_default_values(config);
-    if (!data.is_uninitialized())
+    if (!data.is_empty())
     {
         load_values(data, config);
     }
@@ -252,9 +252,9 @@ int vertical_size(const Config &config)
 
 TEST_CASE("read_data")
 {
-    // Read user's config file
+    // Read users config file
     const toml::value data = read_data();
-    CHECK(data.is_uninitialized() == false);
+    CHECK(data.is_empty() == false);
 }
 
 TEST_CASE("sort_modules")
