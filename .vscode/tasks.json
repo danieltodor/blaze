@@ -10,6 +10,21 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "compiledb create compile_commands.json",
+            "type": "shell",
+            "options": {
+                "shell": {
+                    "args": ["-i"]
+                }
+            },
+            "command": "compiledb",
+            "args": ["--no-build", "make"],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
         }
     ]
 }

@@ -4,6 +4,10 @@
 # VS Code files
 /.vscode/settings.json
 
+# Clang tools
+/.cache
+/compile_commands.json
+
 # Other
 /TODO.md
 /benchmark.py
