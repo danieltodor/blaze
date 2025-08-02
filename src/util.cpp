@@ -1,6 +1,3 @@
-#include <locale>
-#include <codecvt>
-
 #include "boost/regex.hpp"
 #include "util.hpp"
 
@@ -13,12 +10,83 @@ winsize get_winsize()
 
 std::size_t get_length(const StringVector &strings)
 {
-    // TODO: For certain emojis/symbols, the returned length is not correct.
-    // Maybe counting grapheme clusters would be a better approach.
+    // Naive approach of counting grapheme clusters in emojis
+    // Might return incorrect length on some
+    #define ZWJ 0x200D
+    const auto is_combining_mark = [](const unsigned int codepoint)
+    {
+        return (codepoint >= 0x0300 && codepoint <= 0x036F) ||
+               (codepoint >= 0x1AB0 && codepoint <= 0x1AFF) ||
+               (codepoint >= 0x1DC0 && codepoint <= 0x1DFF) ||
+               (codepoint >= 0x20D0 && codepoint <= 0x20FF) ||
+               (codepoint >= 0xFE20 && codepoint <= 0xFE2F);
+    };
+    const auto next_codepoint = [](const std::string &string, std::size_t &index)
+    {
+        unsigned char character = string[index];
+        unsigned int result;
+        if (character < 0x80)
+        {
+            result = string[index++];
+        }
+        else if ((character >> 5) == 0x6)
+        {
+            result = ((string[index] & 0x1F) << 6) | (string[index + 1] & 0x3F);
+            index += 2;
+        }
+        else if ((character >> 4) == 0xE)
+        {
+            result = ((string[index] & 0x0F) << 12) | ((string[index + 1] & 0x3F) << 6) | (string[index + 2] & 0x3F);
+            index += 3;
+        }
+        else if ((character >> 3) == 0x1E)
+        {
+            result = ((string[index] & 0x07) << 18) | ((string[index + 1] & 0x3F) << 12) |
+                     ((string[index + 2] & 0x3F) << 6) | (string[index + 3] & 0x3F);
+            index += 4;
+        }
+        else
+        {
+            // Invalid UTF-8, skip one byte
+            result = string[index++];
+        }
+        return result;
+    };
     std::size_t length = 0;
     for (const std::string &string : strings)
     {
-        length += std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(string).length();
+        std::size_t index = 0;
+        bool in_zero_width_joiner_sequence = false;
+        while (index < string.length())
+        {
+            unsigned int codepoint = next_codepoint(string, index);
+            if (is_combining_mark(codepoint))
+            {
+                continue;
+            }
+            else if (!in_zero_width_joiner_sequence)
+            {
+                ++length;
+            }
+            if (index < string.length())
+            {
+                std::size_t lookahead_index = index;
+                codepoint = next_codepoint(string, lookahead_index);
+                if (codepoint == ZWJ)
+                {
+                    in_zero_width_joiner_sequence = true;
+                    index = lookahead_index;
+                }
+                else
+                {
+                    in_zero_width_joiner_sequence = false;
+                }
+            }
+            else
+            {
+                in_zero_width_joiner_sequence = false;
+            }
+        }
     }
     return length;
 }
@@ -219,6 +287,7 @@ bool is_number(const std::string &string)
 
 TEST_CASE("get_winsize")
 {
+    // It can fail if the terminal window is small
     CHECK(get_winsize().ws_col > 10);
     CHECK(get_winsize().ws_row > 10);
 }
@@ -229,7 +298,17 @@ TEST_CASE("get_length")
     CHECK(get_length({"abc"}) == 3);
     CHECK(get_length({"abc", "def"}) == 6);
     CHECK(get_length({"abc", "def", "123"}) == 9);
+    CHECK(get_length({"abcéáőúűóü,./;'[]|()_+="}) == 23);
+    CHECK(get_length({"éáő", "űóü", "ú"}) == 7);
+    CHECK(get_length({""}) == 1);
     CHECK(get_length({""}) == 1);
+    CHECK(get_length({"⌛︎"}) == 2); // Still acceptable for now
+    CHECK(get_length({"⚠"}) == 1);
+    CHECK(get_length({""}) == 1);
+    CHECK(get_length({""}) == 1);
+    CHECK(get_length({"👩‍👩‍👦‍👦"}) == 1);
+    CHECK(get_length({"👩‍👩‍👦"}) == 1);
+    CHECK(get_length({"👩"}) == 1);
 }
 
 TEST_CASE("find_nth_occurrence")

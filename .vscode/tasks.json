@@ -5,13 +5,13 @@
             "label": "make build project",
             "type": "shell",
             "command": "make",
-            "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
         },
         {
+            // pip install compiledb
             "label": "compiledb create compile_commands.json",
             "type": "shell",
             "options": {
@@ -19,12 +19,7 @@
                     "args": ["-i"]
                 }
             },
-            "command": "compiledb",
-            "args": ["--no-build", "make"],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            }
+            "command": "compiledb --no-build make"
         }
     ]
 }

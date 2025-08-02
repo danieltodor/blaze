@@ -1,0 +1,9 @@
+{
+    "[cpp]": {
+        "editor.suggest.insertMode": "insert"
+    },
+    "files.associations": {
+        "*.s": "asm-intel-x86-generic",
+        "*.objdump": "asm-intel-x86-generic"
+    }
+}

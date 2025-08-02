@@ -1,11 +1,7 @@
 # Build files
 /build
 
-# VS Code files
-/.vscode/settings.json
-
 # Clang tools
-/.cache
 /compile_commands.json
 
 # Other
