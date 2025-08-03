@@ -13,7 +13,7 @@
 // Execution time of the last command (wall time)
 std::string duration(const Context &context)
 {
-    auto subtract_time = [](double &from, const int unit)
+    const auto subtract_time = [](double &from, const int unit)
     {
         int time = floor(from / unit);
         from -= time * unit;

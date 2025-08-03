@@ -302,10 +302,17 @@ TEST_CASE("get_length")
     CHECK(get_length({"éáő", "űóü", "ú"}) == 7);
     CHECK(get_length({""}) == 1);
     CHECK(get_length({""}) == 1);
-    CHECK(get_length({"⌛︎"}) == 2); // Still acceptable for now
+    CHECK(get_length({"⌛︎"}) == 2); // This is correct as it requires 2 positions when displayed
     CHECK(get_length({"⚠"}) == 1);
     CHECK(get_length({""}) == 1);
     CHECK(get_length({""}) == 1);
+    CHECK(get_length({""}) == 1);
+    CHECK(get_length({""}) == 1);
+    CHECK(get_length({""}) == 1);
+    CHECK(get_length({"╭─"}) == 2); // 2 separate symbol
+    CHECK(get_length({"╰─"}) == 2); // 2 separate symbol
+    CHECK(get_length({"─╮"}) == 2); // 2 separate symbol
+    CHECK(get_length({"─╯"}) == 2); // 2 separate symbol
     CHECK(get_length({"👩‍👩‍👦‍👦"}) == 1);
     CHECK(get_length({"👩‍👩‍👦"}) == 1);
     CHECK(get_length({"👩"}) == 1);

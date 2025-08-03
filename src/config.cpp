@@ -141,7 +141,7 @@ void sort_modules(ModuleVector &modules)
         {RIGHT_ALIGNMENT, 2},
         {RP_ALIGNMENT, 3}
     };
-    auto compare = [&sides](const Module &a, const Module &b)
+    const auto compare = [&sides](const Module &a, const Module &b)
     {
         std::string a_value = "", b_value = "";
         a_value += std::to_string(a.level) + std::to_string(sides[a.align]) + std::to_string(a.position);

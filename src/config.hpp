@@ -3,7 +3,7 @@
 #include "types.hpp"
 
 // Character that is unlikely to be used. Easy to check if the user changed the default.
-#define CONTROL_CHAR "`"
+#define CONTROL_CHAR ":"
 // Alignments
 #define LEFT_ALIGNMENT "left"
 #define RIGHT_ALIGNMENT "right"
