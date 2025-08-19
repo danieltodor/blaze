@@ -1,17 +1,19 @@
+#include <memory>
+
 #include "context.hpp"
 #include "util.hpp"
 #include "pool.hpp"
 
 Context get_context(int argc, char *argv[])
 {
-    Args args;
+    std::unique_ptr<Args> args;
     Config config;
     bool git_repository_detected = false;
     bool git_repository_detached = false;
     thread_pool.detach_task(
         [&args, argc, argv]
         {
-            args = std::move(argparse::parse<Args>(argc, argv));
+            args = std::make_unique<Args>(argparse::parse<Args>(argc, argv));
         }
     );
     thread_pool.detach_task(
@@ -28,7 +30,7 @@ Context get_context(int argc, char *argv[])
     );
     thread_pool.wait();
     Context context = {
-        args,
+        *args,
         config,
         get_env("HOME"),
         get_env("PWD"),

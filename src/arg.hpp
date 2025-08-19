@@ -6,28 +6,6 @@
 
 struct Args : public argparse::Args
 {
-    Args() = default;
-
-    ~Args() = default;
-
-    Args(const Args &obj) = default;
-
-    Args & operator = (Args &&obj)
-    {
-        shell = obj.shell;
-        init = obj.init;
-        prompt = obj.prompt;
-        right_prompt = obj.right_prompt;
-        transient_prompt = obj.transient_prompt;
-        first_print = obj.first_print;
-        start_time = obj.start_time;
-        finish_time = obj.finish_time;
-        status = obj.status;
-        background = obj.background;
-        previous_command = obj.previous_command;
-        return *this;
-    }
-
     std::string &shell = arg("Current shell");
     bool &init = flag("init", "Init current shell").set_default(false);
     bool &prompt = flag("prompt", "Print prompt").set_default(false);
