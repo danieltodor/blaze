@@ -7,10 +7,6 @@
 #include "config.hpp"
 #include "pool.hpp"
 
-// Virtual modules
-#define FIXED_MODULE "fixed"
-#define SEPARATOR_MODULE "separator"
-
 // Padding before/after the module
 std::string get_padding(const Config &config, const Module *current_module)
 {
