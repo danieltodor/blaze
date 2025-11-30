@@ -32,7 +32,7 @@ _blaze_get_first_print() {
 }
 
 _blaze_save_previous_command() {
-    echo "$(history 1 | cut -c 8-)" > $_blaze_previous_command_file
+    echo "$(fc -ln -1 | sed 's/^[[:space:]]*//')" > $_blaze_previous_command_file
 }
 
 _blaze_get_previous_command() {
