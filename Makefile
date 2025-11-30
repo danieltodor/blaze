@@ -1,5 +1,3 @@
-KERNEL = $(shell uname -s)
-
 # --- User flags ---
 # Echo commands
 verbose =
@@ -14,11 +12,6 @@ ifdef verbose
 CMD_PREFIX =
 else
 CMD_PREFIX = @
-endif
-
-# Detect macOS
-ifeq "$(KERNEL)" "Darwin"
-MACOS = y
 endif
 
 # --- Project structure ---
@@ -132,10 +125,8 @@ $(BINARY): $(OBJS)
 	$(CMD_PREFIX)mkdir -p $(@D)
 	$(CMD_PREFIX)$(LINKER_FLAGS) $^ -o $@
 ifdef release
-ifndef MACOS
 	@echo "Stripping binary..."
 	$(CMD_PREFIX)$(STRIPPER_FLAGS) $@ -o $@
-endif
 endif
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%

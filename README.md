@@ -1,5 +1,5 @@
 # Blaze
-**A customizable and informative prompt for bash, fish, zsh, on linux and macOS.**
+**A customizable and informative prompt for bash, fish, zsh, on linux distributions.**
 
 **Features: easily configurable, transient prompt, git integration, command execution time,
 exit status, user defined modules, and more.**
