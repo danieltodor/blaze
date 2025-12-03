@@ -11,8 +11,7 @@ _blaze_get_start_time() {
 }
 
 _blaze_save_status() {
-    local exit_code=$?
-    echo ${exit_code:-0} > $_blaze_status_file # Default to 0 in case of ""
+    echo $? > $_blaze_status_file
 }
 
 _blaze_get_status() {

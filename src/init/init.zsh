@@ -11,8 +11,7 @@ _blaze_preexec() {
 }
 
 _blaze_precmd() {
-    local exit_code=$?
-    _blaze_status=${exit_code:-0} # Default to 0 in case of ""
+    _blaze_status=$?
     _blaze_finish_time=$(_blaze_get_current_time)
 }
 
